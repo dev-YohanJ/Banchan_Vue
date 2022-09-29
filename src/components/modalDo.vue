@@ -51,7 +51,7 @@ export default {
         alert('삭제 성공')
         store.dispatch('display', false)
         router.push({
-          name : 'Board_List'
+          name : 'Main'
         })
       }
     }
