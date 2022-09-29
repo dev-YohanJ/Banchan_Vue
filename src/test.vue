@@ -1,5 +1,7 @@
 <template>
 
+  반갑습니다
+
   <div>안녕하세요</div>
 
   Subin Test
