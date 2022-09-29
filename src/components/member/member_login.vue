@@ -6,7 +6,7 @@
       <!-- Icon -->
       <div class="fadeIn first">
         <img
-          
+          src="../member/finallogo.png"
           id="icon"
           alt="User Icon"
         />
