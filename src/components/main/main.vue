@@ -10,13 +10,43 @@
             <h2>오늘의 반찬</h2>
         </div>
     </div>
-    <div class="content">
-        <img src="@/assets/img/food/jeyuk.jpg">
-        <img src="@/assets/img/food/tofu.jpg">
-        <img src="@/assets/img/food/namul_1.jpg">
-    </div>
-    <div>
-        <span>테스트</span>
+    <div class="banchans">
+		<div class="banchan">
+			<div>
+        		<img src="@/assets/img/food/jeyuk.jpg">
+			</div>
+			<div>
+				<div>제육볶음</div>
+				<div>6.000원</div>
+			</div>
+			<div>
+				서울시 종로구 이화동
+			</div>
+		</div>
+		<div class="banchan">
+			<div>
+        		<img src="@/assets/img/food/tofu.jpg">
+			</div>
+			<div>
+				<div>두부조림</div>
+				<div>3.000원</div>
+			</div>
+			<div>
+				서울시 송파구 오금동
+			</div>
+		</div>
+		<div class="banchan">
+			<div>
+        		<img src="@/assets/img/food/namul_1.jpg">
+			</div>
+			<div>
+				<div>시금치무침</div>
+				<div>2.000원</div>
+			</div>
+			<div>
+				서울시 종로구 이화동
+			</div>
+		</div>
     </div>
 
 </template>
@@ -93,14 +123,28 @@ export default {
 	padding: 35px 0 0 0;
 }
 
-.content{
+.banchans{
     text-align: center;
+	margin:auto;
+	
 } 
 
-.content > img{
+.banchan{
+	display:inline-block;
+	margin:auto;
+	
+}
+
+.banchan > div> img{
     padding: 5px;
-    width:310px;
+    width:300px;
     height: 230px;
+	object-fit: cover;
+}
+
+.banchan > div {
+	white-space: nowrap;
+	text-align:center;
 }
 
 
