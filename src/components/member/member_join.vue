@@ -1,75 +1,78 @@
 <template>
   <form @submit.prevent="joinProcess">
-   <h1>회원가입</h1>
-   <hr>
-   <b>아이디</b>
-   <input  type="text"
-          v-model="join.id"
-          placeholder="Enter id"
-          required
-          maxLength="12">
-   <span :class="id_color">{{id_message}}</span>
-   
-   <b>비밀번호</b>
-   <input  type="password"
-          placeholder="Enter password"
-          v-model.lazy="join.password"
-          required>
+    <h1>회원가입</h1>
+    <b>아이디</b>
+    <input  type="text"
+            v-model="join.id"
+            placeholder="아이디"
+            required
+            maxLength="12">
+    <span :class="id_color" class="msg">{{id_message}}</span>
+    
+    <b>비밀번호</b>
+    <input  type="password"
+            maxlength="30"
+            placeholder="비밀번호"
+            v-model="join.password"
+            required>
+    <span :class="pass_color" class="msg">{{pass_message}}</span>
 
-  <b>비밀번호 확인</b>
-   <input  type="password"
-          placeholder="Enter password"
-          v-model.lazy="pw_check"
-          required>
+    <b>비밀번호 확인</b>
+    <input  type="password"
+            placeholder="비밀번호 확인"
+            v-model="pw_check"
+            required>
+    <span :class="pass_check_color" class="msg">{{pass_check_message}}</span>
 
-  <b></b>
-   <input  type="text"
-          maxLength ="15"
-          placeholder="Enter name"
-          v-model.lazy="join.name"
-          required>
+    <b>이름</b>
+    <input  type="text"
+            maxLength ="15"
+            placeholder="이름"
+            v-model="join.name"
+            required>
+    <span :class="name_color" class="msg">{{name_message}}</span>
 
-   <b>이름</b>
-   <input  type="text"
-          maxLength ="15"
-          placeholder="Enter name"
-          v-model.lazy="join.name"
-          required>
-   
-   <b>전화번호</b>
-  <input  type="number"
-          placeholder="예) 010-1234-5678"
-          pattern="010-[0-9]{3,4}-[0-9]{4}"
-          
-          v-model="join.phone"
-          required>
-   
-   <b>이메일</b>
-   <input  type="text"
-          placeholder="Enter email"
-          v-model="join.email"
-          required >
-   <span :class="email_color">{{email_message}}</span>
+    <b>닉네임</b>
+    <input  type="text"
+            maxLength ="20"
+            placeholder="닉네임"
+            v-model.lazy="join.nickname"
+            required>
+    <span :class="nick_color" class="msg">{{nick_message}}</span>
 
-  <b>주소
-        <input class="focus:outline-none focus:ring focus:border-blue-600 border-b-2 border-black pt-2 px-2 mb-3 mr-10"  
-            type="text" id="sample4_postcode" name="post_number" placeholder="우편번호" readonly required>
-        <button class="border-2 border-gray-400 rounded bg-gray-100 p-1 inline-block"
-            type="button" @click="addressApi">검색</button><br>
+    <b>전화번호</b>
+    <input  type="text"
+            placeholder="예) 01012345678"
+            maxlength="11" 
+            v-model.lazy="join.phone"
+            required>
+    <span :class="phone_color" class="msg">{{phone_message}}</span>
+    <b>이메일</b>
+    <input  type="text"
+            placeholder="이메일"
+            v-model="join.email"
+            required >
+    <span :class="email_color">{{email_message}}</span>
 
-        <input class="mr-10 focus:outline-none focus:ring focus:border-blue-600 border-b-2 border-black pt-2 px-2 mb-3"   
-            type="text" id="sample4_roadAddress" name="address1" placeholder="도로명주소" readonly>
-        <span id="guide" style="color:#999;display:none"></span>
+    <b>주소
+          <input class="focus:outline-none focus:ring focus:border-blue-600 border-b-2 border-black pt-2 px-2 mb-3 mr-10"  
+              type="number" name="post_number" placeholder="우편번호" v-model="post" maxlength="5" readonly>
+          <button class="border-2 border-gray-400 rounded bg-gray-100 p-1 inline-block"
+              type="button" @click="addressApi">검색</button><br>
 
-        <input class="focus:outline-none focus:ring focus:border-blue-600 border-b-2 border-black pt-2 px-2"   
-            type="text" id="sample4_detailAddress" name="address4" placeholder="상세주소" required>
-    </b>
+          <input class="mr-10 focus:outline-none focus:ring focus:border-blue-600 border-b-2 border-black pt-2 px-2 mb-3"   
+              type="text" name="address1" placeholder="도로명주소" v-model="roadaddr" maxlength="30" readonly>
+          <span id="guide" style="color:#999;display:none"></span>
+
+          <input class="focus:outline-none focus:ring focus:border-blue-600 border-b-2 border-black pt-2 px-2"   
+              type="text" id="sample4_detailAddress" name="address4" placeholder="상세주소" maxlength="30" required>
+      </b>
 
       <div class="clearfix">
-         <button type="submit" class="submitbtn">회원가입</button>
-         <button type="reset" class="cancelbtn">다시작성</button>
+        <button type="submit" class="submitbtn">회원가입</button>
+        <button type="reset" class="cancelbtn">돌아가기</button>
       </div>
-        </form>
+  </form> 
 </template>
 
 <script>
@@ -82,7 +85,8 @@ export default {
      id:'', 
      password:'',
      name: '',
-     phone:'010',
+     nickname:'',
+     phone:'',
      email:'',
      address:''
    });
@@ -91,6 +95,19 @@ export default {
     const email_message=ref('');
     const id_color=ref('');
     const email_color=ref('');
+    const pass_message=ref('');
+    const pass_color=ref('');
+    const pass_check_message=ref('');
+    const pass_check_color=ref('');
+    const name_color=ref('');
+    const name_message=ref('');
+    const nick_color=ref('');
+    const nick_message=ref('');
+    const phone_color=ref('');
+    const phone_message=ref('');
+
+    const post = ref('');
+    const roadaddr = ref('');
 
     const pw_check = ref('');
     
@@ -114,19 +131,102 @@ export default {
       }
     }; //idcheck end
 
+    const nickcheck = async () => {
+      try {
+        const res = await axios.get("members/nickcheck", { params: { nickname: join.value.nickname } });
+        console.log("res.data = " + res.data);
+        if (res.data == 1) {
+          nick_message.value = "이미 사용중인 닉네임 입니다.";
+          nick_color.value = "red";
+        } else {
+          nick_message.value = "사용가능한 닉네임 입니다.";
+          nick_color.value = "green";
+        }
+      } catch (err) {
+        console.log("err" + err);
+      }
+    }; //nickcheck end
+
     watch(
       () => join.value.id,
-      (next, prev) => {
-        console.log("watch(id):" + prev + "=>" + next);
+      () => {
         var pattern = /^\w{5,12}$/;
         if (!pattern.test(join.value.id)) {
-          id_message.value = "영문자 숫자 _로 5~12자 가능합니다.";
+          id_message.value = "영문자,숫자,_로 5-12자 가능합니다.";
           id_color.value = "red";
         } else {
           idcheck();
         }
       }
     );
+
+    watch(
+      () => join.value.password,
+      () => {
+        var pattern = /^(?=.*[a-zA-z])(?=.*[0-9])(?=.*[$`~!@$!%*#^?&\\(\\)\-_=+]).{8,20}$/
+        if (!pattern.test(join.value.password)) {
+          pass_message.value = "영문,숫자,특수문자를 조합하여 입력해주세요.(8-20자)";
+          pass_color.value = "red";
+        } else {
+          pass_message.value = "영문,숫자,특수문자를 조합하여 입력해주세요.(8-20자)";
+          pass_color.value = "green";
+
+        }
+      }
+    );
+
+    watch(
+      () => pw_check.value,
+      () => {
+        if (pass_color.value == "red") {
+          pass_check_message.value = "비밀번호를 형식에 맞게 입력하세요.";
+          pass_check_color.value = "red";
+        } else {
+            if (join.value.password != pw_check.value) {
+            pass_check_message.value = "비밀번호가 일치하지 않습니다.";
+            pass_check_color.value = "red";
+          } else {
+            pass_check_message.value = "비밀번호가 일치합니다.";
+            pass_check_color.value = "green";
+          }
+        }
+      }
+    )
+
+    watch(
+      () => join.value.name,
+      () => {
+        var pattern = /^[가-힣]{2,}$/
+        if (!pattern.test(join.value.name)) {
+          name_message.value = "한글로 입력해주세요.";
+          name_color.value = "red";
+        } else {
+          name_color.value = "green";
+        }
+      }
+    )
+
+    watch(
+      () => join.value.nickname,
+      () => {
+        nickcheck(); // 바꿀 예정 데이터베이스 조회해야 함
+      }
+    );
+
+    watch(
+      () => join.value.phone,
+      () => {
+        console.log(join.value.phone)
+        var pattern = /^[0-9]{11}$/
+        if (!pattern.test(join.value.phone)) {
+          phone_message.value = "형식에 맞게 입력해주세요.";
+          phone_color.value = "red";
+        } else {
+          phone_message.value = "사용 가능한 번호입니다.";
+          phone_color.value = "green";
+        }
+      }
+    )
 
     watch(
       ()=>join.value.email,
@@ -149,6 +249,9 @@ export default {
         alert("비밀번호를 확인하세요");
       } else if (email_color.value == "red") {
         alert("email을 확인하세요");
+      } else if (post.value == '') {
+        console.log(post.value)
+        alert("주소 검색을 확인하세요")
       } else {
         try {
           const res = await axios.post("members/new", join.value);
@@ -189,8 +292,8 @@ export default {
                 }
 
                 // 우편번호와 주소 정보를 해당 필드에 넣는다.
-                document.getElementById('sample4_postcode').value = data.zonecode;
-                document.getElementById("sample4_roadAddress").value = roadAddr;
+                post.value = data.zonecode;
+                roadaddr.value = roadAddr;
 
                 var guideTextBox = document.getElementById("guide");
                 // 사용자가 '선택 안함'을 클릭한 경우, 예상 주소라는 표시를 해준다.
@@ -213,7 +316,9 @@ export default {
 
     return {
       join, id_message, id_color, email_message, email_color, joinProcess, pw_check,
-      addressApi
+      addressApi, pass_message, pass_color, pass_check_message, pass_check_color,
+      name_color, name_message, nick_color, nick_message, phone_message, phone_color,
+      post, roadaddr
     }
   }
 
@@ -223,8 +328,8 @@ export default {
 <style scoped>
 .red{color:red}
 .green{color:green}
- input[type=text] + span{   position: relative;
-        top: -20px;
+ .msg {   position: relative;
+          top: -20px;
  }
 form {font-family: Arial, Helvetica, sans-serif;}
 * {box-sizing: border-box}
@@ -272,7 +377,7 @@ button {
     padding: 14px 20px;
     margin: 8px 0;
     border: none;
-    cursor: pointer; /* 손가락 커서 모양 */
+    cursor: pointer;
     width: 100%;
     opacity: 0.9;
 }
@@ -285,7 +390,6 @@ button:focus{
    outline:none;
 }
 
-/* 취소 버튼*/
 .cancelbtn {
     padding: 14px 20px;
     background-color: #f44336;
@@ -297,9 +401,9 @@ button:focus{
 }
 form {
     background-color: #fefefe;
-    margin: 5% auto 15% auto; /* 5% from the top, 15% from the bottom and centered */
-    border: 1px solid lightgray;
-    width: 600px; /* Could be more or less, depending on screen size */
+    margin: 5% auto 15% auto; 
+    border: 0px;
+    width: 600px; 
     padding: 16px;
 }
 
@@ -307,17 +411,15 @@ hr {
     border: 1px solid #f1f1f1;
     margin-bottom: 25px;
 }
- 
 
-
-/* Clear floats */
 .clearfix::after {
     content: "";
     clear: both;
     display: table; 
 }
 
-h1{text-align:center}
+h1{text-align:center;
+  margin-bottom: 40px;}
 
 b {
    width: 100%;
@@ -325,5 +427,4 @@ b {
 }
 
 span{display:inline-block;margin-top:-20px;font-size:10px}
-
 </style>

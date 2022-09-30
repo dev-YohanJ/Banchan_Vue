@@ -30,9 +30,19 @@
 <div class="header_top">
     <div></div>
     <div class="header_bar">
-        <router-link class="nav-link" :to="{name:'Main'}"><i class="fa fa-user"></i> 로그인 </router-link>
+        <router-link class="nav-link" :to="{name:'Login'}"><i class="fa fa-user"></i> 로그인 </router-link>
             |
-        <router-link class="nav-link" :to="{name:'Main'}">회원가입</router-link>
+        <router-link class="nav-link" :to="{name:'Join'}">회원가입</router-link>
+    </div>
+        <div class="header_bar" v-else-if="parent_id == 'admin'">
+        <div class="nav-link" @click="logout">{{parent_id}}님(로그아웃)</div>
+            |
+        <router-link class="nav-link" :to="{name:'Main'}">관리자</router-link>
+    </div>
+    <div class="header_bar" v-else-if="parent_id">
+        <div class="nav-link" @click="logout">{{parent_id}}님(로그아웃)</div>
+            |
+        <router-link class="nav-link" :to="{name:'Main'}">정보수정</router-link>
     </div>
 </div>
 <div class="container">
@@ -48,7 +58,7 @@
         </div>
         <div class="float-right">
                 <!-- 로그인 후 이용 가능 -->
-                <router-link class="tab" :to="{name:'Main'}"><i class="fa fa-cutlery"></i> 판매하기 </router-link> <!-- Product_New -->
+                <router-link class="tab" :to="{name:'Product_Write'}"><i class="fa fa-cutlery"></i> 판매하기 </router-link> <!-- Product_New -->
                 <router-link class="tab" :to="{name:'Main'}"><i class="fa fa-user"></i> 마이페이지 </router-link> <!-- Mypage -->
                 <router-link class="tab" :to="{name:'Main'}"><i class="fa fa-comments"></i> 채팅 </router-link> <!-- Chat -->
             </div>
@@ -137,17 +147,13 @@ export default {
 
         return {logout, menu, state, mouseDown}
 
-        
-    
-
   }
 
-    
 }
 </script>
 
 <style  scoped>
-@import "@/assets/css/bootstrap.min.css";
+/* @import "@/assets/css/bootstrap.min.css"; */
 @import "@/assets/css/elegant-icons.css"; /*아이콘*/
 @import "@/assets/css/font-awesome.min.css"; /*아이콘*/
 @import "@/assets/css/style.css";
