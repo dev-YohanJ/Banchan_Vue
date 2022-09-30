@@ -24,7 +24,7 @@
             context.emit("parent_getSession");
  -->
   <Nav :parent_id="id" /> <!-- (3) -->
-  <div class="contatiner">
+  <div class="container">
     <router-view
         @parent_getSession="getSession"
         :parent_id="id" />
@@ -65,9 +65,8 @@ export default {
                 try{
                     const res = await axios.get("getSession");
                     id.value=res.data;
-                    console.log("여기는 App_1.vue getSession:" + id.value)
+                    console.log("여기는 App.vue getSession:" + id.value)
                     if(id.value==''){ //null은 값으로 빈문자열로 리턴
-                        //route의 이름이 'Login'인 경로로 이동합니다.
                         router.push({
                             name:'Main'
                         });
