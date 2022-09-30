@@ -170,9 +170,10 @@ export default {
         } else {
           pass_message.value = "영문,숫자,특수문자를 조합하여 입력해주세요.(8-20자)";
           pass_color.value = "green";
+
         }
       }
-    )
+    );
 
     watch(
       () => pw_check.value,
@@ -352,7 +353,7 @@ input[type=number]::-webkit-inner-spin-button {
 
 
 input[type=radio]{
-	width: 5%;
+   width: 5%;
     display: inline-block;
     border: none;
 }
@@ -410,8 +411,6 @@ hr {
     border: 1px solid #f1f1f1;
     margin-bottom: 25px;
 }
- 
-
 
 .clearfix::after {
     content: "";
@@ -423,8 +422,8 @@ h1{text-align:center;
   margin-bottom: 40px;}
 
 b {
-	width: 100%;
-	display: block
+   width: 100%;
+   display: block
 }
 
 span{display:inline-block;margin-top:-20px;font-size:10px}

@@ -14,7 +14,7 @@ module.exports = ({
   indexPath: "C:/Users/Yohan/Desktop/Spring-boot/Vue_Board/src/main/resources/templates/index.html",
 
   //기본 시작 경로 - <link rel="icon" href="<%= BASE_URL %>icecream.ico>"의 <%= BASE_URL %>에 해당 값
-  publicPath: "/vue/",
+  publicPath: "/banchan/",
 
   lintOnSave: false
 })
