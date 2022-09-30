@@ -6,7 +6,7 @@
       <!-- Icon -->
       <div class="fadeIn first">
         <img
-          
+          src="@/assets/img/logo.png"
           id="icon"
           alt="User Icon"
         />
