@@ -36,7 +36,6 @@
 
      <section class="test">
        <div v-on:click="kakaoLoginBtn">
-         <img src="../../assets/kakao.png"/>
           <br />
       </div>
       </section>
