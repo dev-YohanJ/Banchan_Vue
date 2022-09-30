@@ -1,7 +1,8 @@
 import {createRouter, createWebHistory} from 'vue-router';
 import Main from '../pages/main/main.vue';
-// import Login from '../component/member/member_login.vue';
-// import Join from '../component/member/member_join.vue';
+import Login from '../components/member/member_login.vue';
+import Join from '../components/member/member_join.vue';
+import Product_Write from '../components/board/item_write.vue';
 // import Board_List from '../pages/board/board_list.vue';
 // import Board_Detail from '../pages/board/board_detail.vue';
 // import Board_Write from '../component/board/board_write.vue';
@@ -27,16 +28,21 @@ const router = createRouter({
 		name : 'Main',
 		component : Main
 	},
-	// {
-	// 	path:'/banchan/login',
-	// 	name : 'Login',
-	// 	component : Login
-	// },
-	// {
-	// 	path:'/banchan/join',
-	// 	name : 'Join',
-	// 	component : Join
-	// },
+	{
+		path:'/banchan/login',
+		name : 'Login',
+		component : Login
+	},
+	{
+		path:'/banchan/join',
+		name : 'Join',
+		component : Join
+	},
+	{
+		path:'/banchan/product_new',
+		name : 'Product_Write',
+		component : Product_Write
+	},
 	// {
 	// 	path:'/banchan/notices/list',
 	// 	name : 'Board_List',
