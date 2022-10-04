@@ -71,6 +71,7 @@ export default {
           url: '/v1/user/unlink',
           success: function (response) {
             console.log(response)
+            
           },
           fail: function (error) {
             console.log(error)
@@ -170,7 +171,7 @@ export default {
                     }
 
                     router.push({
-                        name: "Board_List"
+                        name: "Main"
                     });
                 }
             } catch (err) {
