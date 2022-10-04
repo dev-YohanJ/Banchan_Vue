@@ -6,7 +6,7 @@
       <!-- Icon -->
       <div class="fadeIn first">
         <img
-          
+          src="@/assets/img/logo.png"
           id="icon"
           alt="User Icon"
         />
@@ -36,7 +36,7 @@
 
      <section class="test">
        <div v-on:click="kakaoLoginBtn">
-         <img src="../../assets/kakao.png"/>
+          <img src="../../assets/kakao.png"/>
           <br />
       </div>
       </section>
