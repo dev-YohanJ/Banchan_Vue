@@ -1,16 +1,14 @@
 <template>
 <div class="container">
-  <Board_List/>
+  <Main/>
 </div>
 </template>
 
 <script>
-import Board_List from '../../components/main/main.vue'
-
-import {useRouter} from 'vue-router'
+import Main from '../../components/main/main.vue'
 export default {
     components: {
-        Board_List
+        Main
     },
     props:{
         parent_id:{
@@ -26,16 +24,7 @@ export default {
         //<router-view @parent_getSession="getSession" :parent_id="id" />
         context.emit("parent_getSession");
 
-        const router = useRouter();
-        const goWrite=()=>{
-            router.push({
-                name:'Board_Write',
-                params:{id:props.parent_id}
-            });
-        }
-
         return{
-            goWrite
         }
     }
 }

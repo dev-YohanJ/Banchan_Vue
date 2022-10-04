@@ -4,6 +4,8 @@ import Login from '../components/member/member_login.vue';
 import Join from '../components/member/member_join.vue';
 import Product_Write from '../components/board/item_write.vue';
 import Mypage from '../components/mypage/mypage.vue';
+import Notice_List from '../pages/admin/notice_list.vue';
+import Notice_Detail from '../pages/admin/notice_detail.vue'
 // import Board_List from '../pages/board/board_list.vue';
 // import Board_Detail from '../pages/board/board_detail.vue';
 // import Board_Write from '../component/board/board_write.vue';
@@ -48,6 +50,16 @@ const router = createRouter({
 		path: '/banchan/mypage',
 		name: 'Mypage',
 		component: Mypage
+	},
+	{
+		path: '/banchan/notice/list',
+		name: 'Notice_List',
+		component: Notice_List
+	},
+	{
+		path: '/banchan/notice/:num/detail',
+		name: 'Notice_Detail',
+		component: Notice_Detail
 	},
 	// {
 	// 	path:'/banchan/notices/list',
