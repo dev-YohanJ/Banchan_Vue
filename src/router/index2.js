@@ -3,6 +3,7 @@ import Main from '../pages/main/main.vue';
 import Login from '../components/member/member_login.vue';
 import Join from '../components/member/member_join.vue';
 import Product_Write from '../components/board/item_write.vue';
+import Mypage from '../components/mypage/mypage.vue';
 // import Board_List from '../pages/board/board_list.vue';
 // import Board_Detail from '../pages/board/board_detail.vue';
 // import Board_Write from '../component/board/board_write.vue';
@@ -42,6 +43,11 @@ const router = createRouter({
 		path:'/banchan/product_new',
 		name : 'Product_Write',
 		component : Product_Write
+	},
+	{
+		path: '/banchan/mypage',
+		name: 'Mypage',
+		component: Mypage
 	},
 	// {
 	// 	path:'/banchan/notices/list',
