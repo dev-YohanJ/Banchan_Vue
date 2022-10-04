@@ -29,19 +29,20 @@
         @parent_getSession="getSession"
         :parent_id="id" />
   </div>
-  <Footer />
+  <div class="footer container">
+    <Footer />
+  </div>
 </template>
 
 <script>
 import {ref} from 'vue';
 import {useRouter} from 'vue-router';
 import axios from './axios/axiossetting.js';
-import Nav2 from './components/navDo.vue'; // (1) './component/navDo.vue'에 있는 컴포넌트를 Nav2로 사용합니다.
-import Footer2 from './components/footDo.vue'; // (1) './component/navDo.vue'에 있는 컴포넌트를 Nav2로 사용합니다.
+import Nav from './components/navDo.vue'; // (1) './component/navDo.vue'에 있는 컴포넌트를 Nav2로 사용합니다.
+import Footer from './components/footDo.vue'; // (1) './component/navDo.vue'에 있는 컴포넌트를 Nav2로 사용합니다.
 export default {
     components:{ // (2) templete에서 사용할 컴포넌트의 정보를 작성하는 속성입니다.(컴포넌트 등록)
-        'Nav':Nav2, //'template에서 사용할 컴포넌트이름':컴포넌트내용
-        'Footer':Footer2 //'template에서 사용할 컴포넌트이름':컴포넌트내용
+        Nav, Footer
     },
     setup() {
         const id = ref('');
@@ -84,6 +85,5 @@ export default {
 }
 </script>
 
-<style>
-
+<style scoped>
 </style>
