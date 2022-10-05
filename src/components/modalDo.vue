@@ -40,7 +40,7 @@ export default {
     }
     
     const goDelete = async ()=>{
-      const res = await axios.delete(`boards/${num}`,{params:
+      const res = await axios.delete(`notice/${num}`,{params:
                                       {password:BOARD_PASS.value}
                                     })
       if(res.data == 0){
@@ -51,7 +51,7 @@ export default {
         alert('삭제 성공')
         store.dispatch('display', false)
         router.push({
-          name : 'Main'
+          name : 'Notice_List'
         })
       }
     }

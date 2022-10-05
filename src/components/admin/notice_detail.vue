@@ -25,9 +25,8 @@
 		  	</tr>
 			  <tr>
 				  <td colspan=2>
-						<div class="group" 
-                v-if="board.board_NAME == parent_id || parent_id == 'admin'">
-              <router-link :to="{name:'Notice_List'}">
+						<div class="group" v-if="parent_id == 'admin'">
+              <router-link :to="{name:'Notice_Update'}">
                 <button class="btn btn-warning">수정</button>
               </router-link>
               <button class="btn btn-danger" @click="showModal">삭제</button>

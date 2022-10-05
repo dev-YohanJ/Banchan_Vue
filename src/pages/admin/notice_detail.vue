@@ -1,6 +1,6 @@
 <template>
   <Notice_Detail :parent_id="parent_id"/>
-  <!-- <Modal/> -->
+  <Modal/>
   <!-- <Comment :parent_id="parent_id"/> -->
 </template>
 
@@ -10,7 +10,7 @@ import Modal from '../../components/modalDo.vue'
 //import Comment from '../../components/commentDo.vue'
 export default {
   components: {
-    Notice_Detail
+    Notice_Detail, Modal
   },
   props: {
     parent_id:{

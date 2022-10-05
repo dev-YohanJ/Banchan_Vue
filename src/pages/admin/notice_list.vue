@@ -2,6 +2,7 @@
     <Sidebar/>
     <Notice_List/>
     <Paging/>
+    <button class="btn btn-primary" @click="goWrite">글쓰기</button>
 </template>
 
 <script>
@@ -29,7 +30,7 @@ export default {
     const router = useRouter()
     const goWrite = ()=>{
       router.push({
-        name:'Board_Write',
+        name:'Notice_Write',
         params:{id:props.parent_id}
       })
     }
