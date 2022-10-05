@@ -22,17 +22,18 @@
                 <div class="pic">
                     <div class="user-warp">
                         <div class="user-image">
-                            <img class="icon" src="../../assets/basic.jpg">
+                            <img class="icon" src="../../assets/basic.jpg"> 
                         </div>
                         <div class="user-text">
-                            <img class="profile" src="../../assets/profile.png">
+                                <img v-if="profile==''" class="profile" src="../../assets/profile.png"> <!-- ../../assets/profile.png -->
+                                <img v-else class="profile" src="C:\upload\{{}}">
                         </div>
                     </div>
                 </div>
                 <div>
                     <label>
                         <div class="profile" type="button">프로필 수정</div>    
-                        <input type="file" v-show="false" @change="update">
+                        <input type="file" v-show="false" @change="change">
                     </label>
                 </div>
             </div>
@@ -68,22 +69,42 @@ export default {
     setup(props, context) {
         context.emit("parent_getSession");
         const fileName = ref("");
-        const member = ref({});
+        const member = ref({
+            pic_original : '',
+            nickname : '',
+            content : '',
+        });
         let file = '';
         const router = useRouter();
-        const id = props.parent_id;
-        let check = 0;
 
-        const update = async(event) => {
-        // 미리보기 함수 호출
-            
+        const load = async(evnet) => {
+            try {
+                const res = await axios.search('members', )
+
+            } catch(err) {
+                console.log(err)
+                console.log("여기는 에러")
+            }
+        }
+        
+
+        const profile = ref('');
+
+        const change = async(event) => {
+            const id = props.parent_id;
+        
+            console.log("id="+ id);
+
             file = event.target.files[0];
             fileName.value = file.name;
+            console.log(fileName.value);
+
+            // 미리보기 함수
+            profile.value = URL.createObjectURL(file);
 
             let frm = new FormData();
             if (file !='' && fileName.value != null) { // let file = ''; 초기값 상태가 아닌지 확인합니다.
                 frm.append("uploadfile", file);
-                frm.append("check", fileName.value);
                 frm.append("id", id);
 
                 try {
@@ -105,8 +126,10 @@ export default {
 
         } // update end
 
+
+
         return {
-            update
+            change, profile
         }
     }
 }
@@ -135,6 +158,11 @@ export default {
     width: 100px;
     height: 100%;
     transform: translate( -50%, -50%);
+}
+.profile {
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
 }
 .row {
     margin-left: 15px;
