@@ -4,6 +4,11 @@ import Login from '../components/member/member_login.vue';
 import Join from '../components/member/member_join.vue';
 import Product_Write from '../components/board/item_write.vue';
 import Mypage from '../components/mypage/mypage.vue';
+import Wish from '../components/mypage/wish.vue';
+import Buy from '../components/mypage/buy.vue';
+import Sell from '../components/mypage/sell.vue';
+import Update from '../components/mypage/update';
+import Secession from '../components/mypage/secession';
 // import Board_List from '../pages/board/board_list.vue';
 // import Board_Detail from '../pages/board/board_detail.vue';
 // import Board_Write from '../component/board/board_write.vue';
@@ -48,6 +53,31 @@ const router = createRouter({
 		path: '/banchan/mypage',
 		name: 'Mypage',
 		component: Mypage
+	},
+	{
+		path: '/banchan/wish',
+		name: 'Wish',
+		component: Wish
+	},
+	{
+		path: '/banchan/buy',
+		name: 'Buy',
+		component: Buy
+	},
+	{
+		path: '/banchan/sell',
+		name: 'Sell',
+		component: Sell
+	},
+	{
+		path: '/banchan/update',
+		name: 'Update',
+		component: Update
+	},
+	{
+		path: '/banchan/secession',
+		name: 'Secession',
+		component: Secession // 회원탈퇴
 	},
 	// {
 	// 	path:'/banchan/notices/list',
