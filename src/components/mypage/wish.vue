@@ -7,8 +7,8 @@
                     <aside>
                         <h3>오늘의 반찬</h3>
                         <ul class="nav nav-pills flex-column">
-                            <li><router-link class="nav-item nav-link active bg-danger" :to="{name:'Mypage'}">마이페이지</router-link></li>
-                            <li><router-link class="nav-item nav-link" :to="{name:'Wish'}">찜 목록</router-link></li>
+                            <li><router-link class="nav-item nav-link" :to="{name:'Mypage'}">마이페이지</router-link></li>
+                            <li><router-link class="nav-item nav-link active bg-danger" :to="{name:'Wish'}">찜 목록</router-link></li>
                             <li><router-link class="nav-item nav-link" :to="{name:'Buy'}">구매 목록</router-link></li>
                             <li><router-link class="nav-item nav-link" :to="{name:'Sell'}">판매 목록</router-link></li>
                             <li><router-link class="nav-item nav-link" :to="{name:'Update'}">개인정보수정</router-link></li>

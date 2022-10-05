@@ -36,7 +36,7 @@
     <input  type="text"
             maxLength ="20"
             placeholder="닉네임"
-            v-model.lazy="join.nickname"
+            v-model="join.nickname"
             required>
     <span :class="nick_color" class="msg">{{nick_message}}</span>
 
@@ -62,10 +62,9 @@
 
           <input class="mr-10 focus:outline-none focus:ring focus:border-blue-600 border-b-2 border-black pt-2 px-2 mb-3"   
               type="text" name="address1" placeholder="도로명주소" v-model="roadaddr" maxlength="30" readonly>
-          <span id="guide" style="color:#999;display:none"></span>
 
           <input class="focus:outline-none focus:ring focus:border-blue-600 border-b-2 border-black pt-2 px-2"   
-              type="text" id="sample4_detailAddress" name="address4" placeholder="상세주소" maxlength="30" required>
+              type="text" id="sample4_detailAddress" name="address4" v-model="detailaddr" placeholder="상세주소" maxlength="30" required>
       </b>
 
       <div class="clearfix">
@@ -108,10 +107,16 @@ export default {
 
     const post = ref('');
     const roadaddr = ref('');
+    const detailaddr = ref('');
 
     const pw_check = ref('');
     
     const router = useRouter();
+
+    const addr = ()=> {
+      join.value.address = roadaddr.value + "/" + detailaddr.value
+      console.log(join.value.address);
+    }
 
     const idcheck = async () => {
       try {
@@ -201,15 +206,23 @@ export default {
           name_message.value = "한글로 입력해주세요.";
           name_color.value = "red";
         } else {
+          name_message.value = "올바르게 입력되었습니다.";
           name_color.value = "green";
         }
       }
     )
-
+    
     watch(
       () => join.value.nickname,
       () => {
-        nickcheck(); // 바꿀 예정 데이터베이스 조회해야 함
+        var pattern = /^(?=.*[a-z0-9가-힣])[a-z0-9가-힣]{2,12}$/;
+        if (!pattern.test(join.value.nickname)) {
+          nick_message.value = "한글,영문자,숫자로 2~12자까지 가능합니다.";
+          nick_color.value = "red";
+        } else {
+          nickcheck();
+        }
+        
       }
     );
 
@@ -217,7 +230,7 @@ export default {
       () => join.value.phone,
       () => {
         console.log(join.value.phone)
-        var pattern = /^[0-9]{11}$/
+        var pattern = /^010[0-9]{8}$/
         if (!pattern.test(join.value.phone)) {
           phone_message.value = "형식에 맞게 입력해주세요.";
           phone_color.value = "red";
@@ -242,6 +255,13 @@ export default {
         } // else end
     }) // watch end
 
+    watch(
+      ()=> detailaddr.value,
+      () => {
+        addr();
+      }
+    )
+
     const joinProcess = async () => {
       if (id_color.value == "red") {
         alert("아이디를 확인하세요");
@@ -250,7 +270,6 @@ export default {
       } else if (email_color.value == "red") {
         alert("email을 확인하세요");
       } else if (post.value == '') {
-        console.log(post.value)
         alert("주소 검색을 확인하세요")
       } else {
         try {
@@ -294,22 +313,6 @@ export default {
                 // 우편번호와 주소 정보를 해당 필드에 넣는다.
                 post.value = data.zonecode;
                 roadaddr.value = roadAddr;
-
-                var guideTextBox = document.getElementById("guide");
-                // 사용자가 '선택 안함'을 클릭한 경우, 예상 주소라는 표시를 해준다.
-                if(data.autoRoadAddress) {
-                    var expRoadAddr = data.autoRoadAddress + extraRoadAddr;
-                    guideTextBox.innerHTML = '(예상 도로명 주소 : ' + expRoadAddr + ')';
-                    guideTextBox.style.display = 'block';
-
-                } else if(data.autoJibunAddress) {
-                    var expJibunAddr = data.autoJibunAddress;
-                    guideTextBox.innerHTML = '(예상 지번 주소 : ' + expJibunAddr + ')';
-                    guideTextBox.style.display = 'block';
-                } else {
-                    guideTextBox.innerHTML = '';
-                    guideTextBox.style.display = 'none';
-                }
             }
         }).open();
     }       
@@ -318,7 +321,7 @@ export default {
       join, id_message, id_color, email_message, email_color, joinProcess, pw_check,
       addressApi, pass_message, pass_color, pass_check_message, pass_check_color,
       name_color, name_message, nick_color, nick_message, phone_message, phone_color,
-      post, roadaddr
+      post, roadaddr, detailaddr
     }
   }
 
