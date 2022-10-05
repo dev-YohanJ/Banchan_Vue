@@ -29,21 +29,21 @@
 <!-- 헤더 -->
 <div class="header_top">
     <div></div>
-    <div class="header_bar">
+    <div class="header_bar" v-if="!parent_id">
         <router-link class="nav-link" :to="{name:'Login'}"><i class="fa fa-user"></i> 로그인 </router-link>
             |
         <router-link class="nav-link" :to="{name:'Join'}">회원가입</router-link>
     </div>
-    <!-- <div class="header_bar" v-else-if="parent_id == 'admin'">
+    <div class="header_bar" v-else-if="parent_id == 'admin'">
         <div class="nav-link" @click="logout">{{parent_id}}님(로그아웃)</div>
             |
-        <router-link class="nav-link" :to="{name:'Main'}">관리자</router-link>
+        <router-link class="nav-link" :to="{name:'Notice_List'}">관리자 기능</router-link>
     </div>
     <div class="header_bar" v-else-if="parent_id">
         <div class="nav-link" @click="logout">{{parent_id}}님(로그아웃)</div>
             |
         <router-link class="nav-link" :to="{name:'Main'}">정보수정</router-link>
-    </div> -->
+    </div>
 </div>
 <div class="container">
     <div class="row">

@@ -2,7 +2,7 @@
   <ul class="pagination">
     <li v-if="currentpage > 1" class="page-item">
       <a style="cursor: pointer" class="page-link" @click="getList(currentpage-1)">
-        Previous
+        이전
       </a>
     </li>
     <li 
@@ -13,7 +13,7 @@
       <a style="cursor: pointer" class="page-link" @click="getList(page)">{{page}}</a>
     </li>
     <li v-if="maxpage > currentpage" class="page-item">
-      <a style="cursor: pointer" class="page-link" @click="getList(currentpage+1)">Next</a>
+      <a style="cursor: pointer" class="page-link" @click="getList(currentpage+1)">다음</a>
     </li>
   </ul>
 </template>

@@ -69,7 +69,7 @@
       <div class="form-group">
         <label for="board_content">내용</label>
         <textarea
-          v-model.lazy="board.content"
+          v-model.lazy="board.description"
           rows="10"
           class="form-control"
           placeholder="구매자에게 필요한 정보를 입력해주세요."
@@ -85,6 +85,52 @@
           placeholder="알레르기 성분을 골라주세요."
           required>
       </div>
+
+      <div class="comp_hashtag" @click="setHashtags" ref="group">
+        <p class="help" v-if="helpVisible">{{ defaultPlaceholder }}</p>
+
+        <!-- Hashtags -->
+        <div class="tags" v-if="!helpVisible">
+        <input
+            type="text"
+            class="fake"
+            ref="fake"
+            @keydown.backspace.prevent="deleteTag(focusIndex)"
+            @keydown.delete.prevent="deleteTag(focusIndex)"
+        />
+        <span
+            class="tag"
+            v-for="(row, index) in tags"
+            :key="index"
+            :class="{ active: row.select }"
+            @click="selectTag(index)"
+            >{{ row.value }}</span
+        >
+        </div>
+        <!--// Hashtags -->
+
+        <div class="inp" v-show="!helpVisible">
+        <input
+            type="text"
+            ref="input"
+            v-model.trim="value"
+            @focus="initSelect"
+            @keydown.space.prevent="addHashTags"
+            @keydown.enter.prevent="addHashTags"
+            @keydown.backspace="initErrorMsg"
+            @keydown.delete="initErrorMsg"
+            placeholder="태그입력"
+        />
+        </div>
+
+        <transition
+        enter-active-class="animate__animated animate__fadeInDown animate__faster"
+        leave-active-class="animate__animated animate__fadeOut"
+        >
+        <p class="noti" v-if="this.errorMsg">{{ errorMsg }}</p>
+        </transition>
+      </div>
+
       <div class="form-group">
         <button type="submit" class="btn btn-primary">등록</button>
         <button type="reset" class="btn btn-danger">취소</button>
@@ -98,30 +144,189 @@ import {ref} from 'vue'
 import {useRouter} from 'vue-router'
 import axios from '../../axios/axiossetting.js'
 export default {
-  data() {
-      return {
-
-          files: [], //업로드용 파일
-          filesPreview: [],
-          uploadImageIndex: 0 // 이미지 업로드를 위한 변수
-      }
+    data() {
+    return {
+      defaultPlaceholder: this.placeholder
+        ? this.placeholder
+        : "#추천태그 #특수문자제외",
+      errorMsg: null,
+      focusIndex: null,
+      helpVisible: true,
+      tags: [],
+      value: "",
+    };
   },
   methods: {
-      imageUpload() {
-          console.log(this.$refs.files.files);
+    setVisible() {
+      return (this.helpVisible = false);
+    },
+    async setHashtags() {
+      if (this.tags.length > 0) {
+        return;
+      }
+
+      const result = await this.setVisible();
+
+      if (!result) this.$refs.input.focus();
+    },
+
+    addTag() {
+      this.tags.push({ value: this.value, select: false });
+      return true;
+    },
+    unselectTag() {
+      this.tags.forEach((tag) => (tag.select = false));
+    },
+    selectTag(idx) {
+      if (this.tags.some((tag) => tag.select)) {
+        this.unselectTag();
+      }
+
+      this.tags[idx].select = !this.tags[idx].select;
+
+      if (!this.tags[idx].select) {
+        this.initSelectIndex();
+        return;
+      }
+
+      this.$refs.fake.focus();
+      this.focusIndex = idx;
+    },
+    deleteTag(idx) {
+      if (idx === null) {
+        return;
+      }
+
+      this.initSelectIndex();
+      this.tags.splice(idx, 1);
+    },
+
+    initSelect() {
+      if (!this.tags.some((tag) => tag.select)) {
+        return;
+      }
+
+      this.unselectTag();
+      this.initSelectIndex();
+    },
+    initSelectIndex() {
+      this.focusIndex = null;
+    },
+    initErrorMsg() {
+      this.errorMsg = null;
+    },
+    validate() {
+      if (this.tags.some((tag) => tag.value === this.value)) {
+        return "중복된 단어를 입력하셨습니다.";
+      }
+
+      const regex = /[~!@#$%^&*()+|<>?:{},.="':;/-]/;
+      if (regex.test(this.value)) {
+        return "특수문자는 태그로 등록할 수 없습니다.";
+      }
+
+      return false;
+    },
+    async addHashTags(event) {
+      // CASE 공백
+      if (event.target.value === "") {
+        this.initErrorMsg();
+        event.target.focus();
+        return;
+      }
+      // CASE 유효성(중복,특문)
+      const resultMsg = await this.validate();
+      if (resultMsg) {
+        this.errorMsg = resultMsg;
+        this.$refs.input.focus();
+        return;
+      }
+
+      await this.addTag();
+
+      this.errorMsg = null;
+      this.value = null;
+      this.$refs.input.focus();
+    },
+  },
+  mounted() {},
+
+
+
+/* add */ 
+  props: {
+    parent_id: {
+      type: String,
+      required: true
+    }
+  },
+  emits:['parent_getSession'],
+
+  setup(props, context){
+    context.emit('parent_getSession')
+    const board = ref({
+      fileName:'',
+      description:'',
+      price:'',
+      subject:'',
+      allergy:''
+    })
+    let file=''
+    const router = useRouter()
+
+    const change = event => {
+      file = event.target.files[0]
+      board.value.fileName = file.name
+    }
+
+    const add = async () => {
+      console.log('하하')
+      let frm = new FormData()
+      // frm.append('uploadfile', file)
+      frm.append('seller', props.parent_id)
+      frm.append('name', board.value.subject)
+      frm.append('price', board.value.price)
+      frm.append('description', board.value.description)
+      frm.append('allergy', board.value.allergy)
+      console.log(board.value.subject, board.value.price, board.value.description, board.value.allergy, props.parent_id);
+
+      try{
+        const res = await axios.post('product_new', frm,
+          {headers:
+            {'Content-Type':'multipart/form-data;charset=UTF-8'}
+          }
+          )
+        console.log(res.data)
+        router.push({
+          name : 'Main'
+        })
+      }catch(err){
+        console.log('여기는 오류')
+        console.log(err)
+      }
+    }
+
+
+    // 파일 업로드
+    const files = ref([]) //업로드용 파일
+    const filesPreview = ref([])
+    let uploadImageIndex = 0 // 이미지 업로드를 위한 변수
+    
+    const imageUpload = () => {
+          console.log(files);
 
           // this.files = [...this.files, this.$refs.files.files];
           //하나의 배열로 넣기
           let num = -1;
-          for (let i = 0; i < this.$refs.files.files.length; i++) {
-              this.files = [
-                  ...this.files,
+          for (let i = 0; i < files.length; i++) {
+              files = [
+                  ...files,
                   //이미지 업로드
                   {
                       //실제 파일
-                      file: this.$refs.files.files[i],
+                      file: files.files[i],
                       //이미지 프리뷰
-                      preview: URL.createObjectURL(this.$refs.files.files[i]),
+                      preview: URL.createObjectURL(files.files[i]),
                       //삭제및 관리를 위한 number
                       number: i
                   }
@@ -133,12 +338,12 @@ export default {
               //   { file: URL.createObjectURL(this.$refs.files.files[i]), number: i }
               // ];
           }
-          this.uploadImageIndex = num + 1; //이미지 index의 마지막 값 + 1 저장
-          console.log(this.files);
+          uploadImageIndex = num + 1; //이미지 index의 마지막 값 + 1 저장
+          console.log(files);
           // console.log(this.filesPreview);
-      },
+      }
 
-      imageAddUpload() {
+      const imageAddUpload = () => {
           console.log(this.$refs.files.files);
 
           if(this.uploadImageIndex < 3){
@@ -166,65 +371,142 @@ export default {
           console.log(this.files);
           // console.log(this.filesPreview);
           }
-      },
-      fileDeleteButton(e) {
+      }
+
+      const fileDeleteButton = (e) => {
           const name = e.target.getAttribute('name');
           this.files = this.files.filter(data => data.number !== Number(name));
           // console.log(this.files);
-      },
-  },
-
-  setup(props, context){
-    // context.emit('parent_getSession')
-    const board = ref({
-      fileName:'',
-      content:'',
-      price:'',
-      subject:'',
-      allergy:''
-    })
-    let file=''
-    const router = useRouter()
-
-    const change = event => {
-      file = event.target.files[0]
-      board.value.fileName = file.name
-    }
-
-    const add = async () => {
-      console.log('하하')
-      let frm = new FormData()
-      // frm.append('uploadfile', file)
-      frm.append('name', board.value.subject)
-      frm.append('price', board.value.price)
-      frm.append('description', board.value.content)
-      frm.append('allergy', board.value.allergy)
-      // frm.append('BOARD_PASS', board.value.pass)
-      // frm.append('BOARD_NAME', props.parent_id)
-      console.log(board.value.subject, board.value.price, board.value.content, board.value.allergy);
-
-      try{
-        const res = await axios.post('product_new', frm,
-          {headers:
-            {'Content-Type':'multipart/form-data;charset=UTF-8'}
-          }
-          )
-        console.log(res.data)
-        router.push({
-          name : 'Main'
-        })
-      }catch(err){
-        console.log('여기는 오류')
-        console.log(err)
       }
-    }
-
-
 
     return {
       board, change, add
+      , files, filesPreview, uploadImageIndex, imageUpload, imageAddUpload, fileDeleteButton
     }
-  }
+  },
+
+//   props: {
+//         placeholder: {
+//             type: String,
+//         }
+//     },
+
+//     setup(props){
+//         console.log(props.placeholder)
+//         const defaultPlaceholder = props.placeholder
+//             ? this.placeholder
+//             : "#추천태그 #특수문자제외"
+//         const errorMsg = null
+//         const focusIndex = null
+//         let helpVisible = true
+//         const tags = ref([])
+//         const value = ""
+
+//         const setVisible = () => {
+//         return (helpVisible = false);
+//         }
+        
+//         const setHashtags = async() => {
+//         if (tags.length > 0) {
+//             return;
+//         }
+
+//         const result = await setVisible();
+
+//         if (!result) this.$refs.input.focus();
+//         }
+
+//         const addTag = () => {
+//         this.tags.push({ value: this.value, select: false });
+//         return true;
+//         }
+
+//         const unselectTag = () => {
+//         this.tags.forEach((tag) => (tag.select = false));
+//         }
+
+//         const selectTag = (idx) => {
+//         if (this.tags.some((tag) => tag.select)) {
+//             this.unselectTag();
+//         }
+
+//         this.tags[idx].select = !this.tags[idx].select;
+
+//         if (!this.tags[idx].select) {
+//             this.initSelectIndex();
+//             return;
+//         }
+
+//         this.$refs.fake.focus();
+//         this.focusIndex = idx;
+//         }
+
+//         const deleteTag = (idx) => {
+//         if (idx === null) {
+//             return;
+//         }
+
+//         this.initSelectIndex();
+//         this.tags.splice(idx, 1);
+//         }
+
+//         const initSelect = () => {
+//         if (!this.tags.some((tag) => tag.select)) {
+//             return;
+//         }
+
+//         this.unselectTag();
+//         this.initSelectIndex();
+//         }
+
+//         const initSelectIndex = () => {
+//         this.focusIndex = null;
+//         }
+
+//         const initErrorMsg = () => {
+//         this.errorMsg = null;
+//         }
+
+//         const validate = () => {
+//         if (this.tags.some((tag) => tag.value === this.value)) {
+//             return "중복된 단어를 입력하셨습니다.";
+//         }
+
+//         const regex = /[~!@#$%^&*()+|<>?:{},.="':;/-]/;
+//         if (regex.test(this.value)) {
+//             return "특수문자는 태그로 등록할 수 없습니다.";
+//         }
+
+//         return false;
+//         }
+
+//         const addHashTags = async(event) => {
+//         // CASE 공백
+//         if (event.target.value === "") {
+//             this.initErrorMsg();
+//             event.target.focus();
+//             return;
+//         }
+//         // CASE 유효성(중복,특문)
+//         const resultMsg = await this.validate();
+//         if (resultMsg) {
+//             this.errorMsg = resultMsg;
+//             this.$refs.input.focus();
+//             return;
+//         }
+
+//         await this.addTag();
+
+//         this.errorMsg = null;
+//         this.value = null;
+//         this.$refs.input.focus();
+//         }
+        
+//         return{
+//             defaultPlaceholder, errorMsg, focusIndex, helpVisible, tags, value, 
+//         setVisible, setHashtags, addTag, unselectTag, selectTag, deleteTag, initSelect, initSelectIndex, initErrorMsg, validate, addHashTags
+//         }
+//     }
 }
 </script>
 
@@ -525,6 +807,142 @@ button {
 .container{
   margin: 50px;
 }
+
+/* 해시태그 */
+.comp_hashtag {
+  position: relative;
+  width: 100%;
+  padding: 5px 10px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  min-height: 40px;
+  margin: 100px auto;
+  text-align: left;
+  box-sizing: border-box;
+}
+
+  .noti {
+    position: absolute;
+    left: 0;
+    top: 100%;
+    font-size: 12px;
+    margin-top: 5px;
+    padding: 0 5px;
+    border-radius: 4px;
+    border: 1px solid #ea2136;
+    color: #ea2136;
+    text-align: left;
+    line-height: 2;
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+  }
+
+  .help {
+    padding: 0;
+    margin: 0;
+    line-height: 30px;
+    font-weight: 300;
+    font-size: 14px;
+    color: #ccc;
+    vertical-align: top;
+  }
+
+  .tags {
+    position: relative;
+    overflow: hidden;
+    display: inline-block;
+    vertical-align: top;
+    margin-bottom: -6px;
+  }
+
+    .fake {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      left: -1px;
+      right: -1px;
+      padding: 0;
+      border: 0;
+      outline: none;
+      -webkit-appearance: none;
+      -webkit-text-size-adjust: none;
+    }
+    .tag {
+      display: inline-block;
+      position: relative;
+      margin: 0 5px 6px 0;
+      padding: 0 5px;
+      line-height: 30px;
+      border-radius: 5px;
+      background-color: #eee;
+      vertical-align: top;
+      word-wrap: break-word;
+      word-break: break-all;
+      font-size: 13px;
+      text-align: left;
+    }
+      .tag:hover:after {
+        display: block;
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        box-sizing: border-box;
+        border: 1px solid #aaa;
+        content: "";
+        border-radius: 5px;
+      }
+
+      .tag:before {
+        display: inline;
+        content: "#";
+      }
+
+      .tag.active {
+        background-color: #656565;
+        color: #fff;
+      }
+        .tag:hover:after {
+          display: none;
+        }
+
+  .inp {
+    display: inline-block;
+    overflow: hidden;
+    height: 30px;
+    width: 150px;
+    vertical-align: top;
+    font-family: "Noto Sans KR", "Malgun Gothic", "굴림", Gulim, "돋움", Dotum,
+      Sans-serif;
+  }
+
+    .inp:before {
+      display: inline;
+      position: relative;
+      top: -1px;
+      content: "#";
+      color: #3e3e3e;
+      margin-right: 2px;
+      vertical-align: top;
+      line-height: 30px;
+    }
+
+    .inp > input {
+      width: 135px;
+      height: 28px;
+      vertical-align: top;
+      color: #3e3e3e;
+      -webkit-appearance: none;
+      -webkit-text-size-adjust: none;
+      padding: 0;
+      border: 0;
+      outline: none;
+      vertical-align: top;
+      font-family: "Noto Sans KR", "Malgun Gothic", "굴림", Gulim, "돋움", Dotum,
+        Sans-serif;
+    }
+
+
 
 /* 파일 */
 .file-label {
