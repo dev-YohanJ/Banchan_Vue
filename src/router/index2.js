@@ -11,6 +11,8 @@ import Update from '../components/mypage/update';
 import Secession from '../components/mypage/secession';
 import Notice_List from '../pages/admin/notice_list.vue';
 import Notice_Detail from '../pages/admin/notice_detail.vue'
+import Notice_Write from '../pages/admin/notice_write.vue';
+import Notice_Update from '../pages/admin/notice_update.vue';
 // import Board_List from '../pages/board/board_list.vue';
 // import Board_Detail from '../pages/board/board_detail.vue';
 // import Board_Write from '../component/board/board_write.vue';
@@ -19,7 +21,7 @@ import Notice_Detail from '../pages/admin/notice_detail.vue'
 // import Member_Update from '../component/member/member_update.vue';
 // import Member_List from '../pages/member/member_list.vue';
 // import Member_Info from '../component/member/member_info.vue';
-// import Error_404 from '../component/error/404Do.vue';
+import Error_404 from '../components/error/404Do.vue';
 const router = createRouter({
 	history : createWebHistory(),
 	routes : [
@@ -91,6 +93,16 @@ const router = createRouter({
 		name: 'Notice_Detail',
 		component: Notice_Detail
 	},
+	{
+		path:'/banchan/notice/write/:id',
+		name : 'Notice_Write',
+		component : Notice_Write
+	},
+	{
+		path:'/banchan/notice/:num/edit',
+		name : 'Notice_Update',
+		component : Notice_Update
+	},
 	// {
 	// 	path:'/banchan/notices/list',
 	// 	name : 'Board_List',
@@ -136,11 +148,11 @@ const router = createRouter({
 	// 	path:'/:pathMatch(.*)*',
 	// 	redirect : '/banchan/404'
 	// },
-	// {
-	// 	path:'/banchan/404',
-	// 	name : '404',
-	// 	component : Error_404
-	// }
+	{
+		path:'/banchan/404',
+		name : '404',
+		component : Error_404
+	}
 ]
 });
 
