@@ -22,17 +22,18 @@
                 <div class="pic">
                     <div class="user-warp">
                         <div class="user-image">
-                            <img class="icon" src="../../assets/basic.jpg">
+                            <img class="icon" src="../../assets/basic.jpg"> 
                         </div>
                         <div class="user-text">
-                            <img class="profile" src="../../assets/profile.png">
+                                <img v-if="profile==''" class="profile" src="../../assets/profile.png"> <!-- ../../assets/profile.png -->
+                                <img v-else class="profile" :src="profile">
                         </div>
                     </div>
                 </div>
                 <div>
                     <label>
                         <div class="profile" type="button">프로필 수정</div>    
-                        <input type="file" v-show="false" @change="update">
+                        <input type="file" v-show="false" @change="change">
                     </label>
                 </div>
             </div>
@@ -72,13 +73,15 @@ export default {
         let file = '';
         const router = useRouter();
         const id = props.parent_id;
-        let check = 0;
+        const profile = ref('');
 
-        const update = async(event) => {
-        // 미리보기 함수 호출
-            
+        const change = async(event) => {
+
             file = event.target.files[0];
             fileName.value = file.name;
+
+            // 미리보기 함수
+            profile.value = URL.createObjectURL(file);
 
             let frm = new FormData();
             if (file !='' && fileName.value != null) { // let file = ''; 초기값 상태가 아닌지 확인합니다.
@@ -105,8 +108,10 @@ export default {
 
         } // update end
 
+
+
         return {
-            update
+            change, profile
         }
     }
 }
