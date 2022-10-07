@@ -17,38 +17,28 @@
                     </aside>
                 </div>
          </div>
-
+         <div>
+            <span>찜</span><span>10</span>
+            <hr class="cutline">
+            <div class="seldel">
+                <input type="checkbox" /><button>선택삭제</button>
+            </div>
             <div>
-                <div class="pic">
-                    <div class="user-warp">
-                        <div class="user-image">
-                            <img class="icon" src="../../assets/basic.jpg"> 
-                        </div>
-                        <div class="user-text">
-                                <img v-if="profile==''" class="profile" src="../../assets/profile.png"> <!-- ../../assets/profile.png -->
-                                <img v-else class="profile" :src="profile">
-                        </div>
+                <div class="list"> <!-- 반찬 + 가격정보 합치기 div-->
+                    <div class="banchan">
+                        <img src="@/assets/img/food/jeyuk.jpg">
+                    </div>
+                    <div class="info">
+                            <div class="title">제육볶음</div>
+                            <div><span class="price">6,000</span><span>원</span></div>
+                            <input class="checkbtn" type="checkbox" />
+                            <hr>
+                            <div class="address">서울시 종로구 이화동</div>
                     </div>
                 </div>
-                <div>
-                    <label>
-                        <div class="profile" type="button">프로필 수정</div>    
-                        <input type="file" v-show="false" @change="change">
-                    </label>
-                </div>
+                
             </div>
-            <div class="text-area">
-                <div class="nick-area">
-                    <span class="nick">닉네임입니다</span><button @click="add">수정</button>
-                </div>
-                <textarea   rows="10" cols="30"
-                    class="form-control"
-                    v-model.trim="content"
-                    maxlength="200"
-                    style="resize:none">
-                </textarea>
-                <button>소개글 수정</button>
-            </div>
+         </div>
       </div>
    </div>
 </template>
@@ -66,80 +56,75 @@ export default {
     },
     emits:['parent_getSession'],
 
+
     setup(props, context) {
-        context.emit("parent_getSession");
-        const fileName = ref("");
-        const member = ref({});
-        let file = '';
-        const router = useRouter();
-        const id = props.parent_id;
-        const profile = ref('');
-
-        const change = async(event) => {
-
-            file = event.target.files[0];
-            fileName.value = file.name;
-
-            // 미리보기 함수
-            profile.value = URL.createObjectURL(file);
-
-            let frm = new FormData();
-            if (file !='' && fileName.value != null) { // let file = ''; 초기값 상태가 아닌지 확인합니다.
-                frm.append("uploadfile", file);
-                frm.append("check", fileName.value);
-                frm.append("id", id);
-
-                try {
-                const res = await axios.patch('members',
-                frm
-                ,
-                {
-                    headers:
-                        { 'Content-Type' : 'multipart/form-data;charset=UTF-8' }
-                }
-                );
-
-                } catch(err) {
-                    console.log('여기는 오류');
-                    console.log(err);
-                }
-
-            }
-
-        } // update end
-
-
-
+    
         return {
-            change, profile
+           
         }
     }
 }
 </script>
 
 <style scoped>
-.pic {
-    width:310px;
-    height:310px;
-    margin-right: 30px;
+.title {
+    margin: 5px;
+}
+.price {
+    margin: 5px;
+}
+.checkbtn {
+    position: relative;
+    cursor: pointer;
+    width: 20px;
+    height: 20px;
+    margin-left: 170px;
+}
+hr {
+    margin-top: 40px;
+    margin-bottom: 3px;
+}
+.address {
+    font-size: 12px;
+}
+.info {
+    float: left;
+    width: 200px;
+    height: 150px;
     border: 1px solid #dddddd;
 }
-.user-warp {
-    widows: 100%;
-    position: relative;
+.seldel {
+    margin-bottom: 10px;
 }
-.user-warp img {
+img {
     width: 100%;
-    vertical-align: middle;
-}
-.user-text {
-    position: absolute;
-    top: 80%;
-    left: 50%;
-    border-radius: 50%;
-    width: 100px;
     height: 100%;
-    transform: translate( -50%, -50%);
+   object-fit: cover;
+}
+.banchan{
+   display:inline-block;
+   margin:auto;
+    width: 150px;
+    height: 150px;
+   float: left;
+}
+button {
+    margin-left: 10px;
+    border: 1px solid #dddddd;
+    outline: 0px;
+}
+input[type=checkbox] {
+    position: relative;
+    top: 6px;
+    cursor: pointer;
+    width: 20px;
+    height: 20px;
+}
+.cutline {
+    width: 907px;
+    background: brown;
+    margin-top: 0px;
+    margin-bottom: 10px;
 }
 .row {
     margin-left: 15px;
@@ -150,10 +135,6 @@ export default {
 h3 {
     margin: 10px 30px 0px 0px;
 }
-.introduce {
-    border: 1px solid #dddddd;
-}
-.mybody {
-    float:right;
-}
+
+
 </style>
