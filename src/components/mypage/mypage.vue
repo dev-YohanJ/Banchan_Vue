@@ -26,7 +26,7 @@
                         </div>
                         <div class="user-text">
                                 <!-- <img v-if="profile==''" class="profile" src="../../assets/profile.png">  ../../assets/profile.png -->
-                                <img class="profile" :src="require(`C:/upload/2022-10-7/bbs2022107964202.jpg`)"/>
+                                <!-- <img class="profile" :src="require(`C:/upload/${date}/${pic}`)"/> -->
                         </div>
                         <div class="label">
                             <label>
@@ -87,8 +87,10 @@ export default {
 
         const split = ()=> {
             const abs = member.value.picture.split("\\");
-            date = abs.value[0];
-            pic = abs.value[1];
+            date.value = abs.value[1];
+            pic.value = abs.value[2];
+            console.log(date.value);
+            console.log(pic.value);
         }
 
         const nchange = ()=> {
@@ -96,6 +98,7 @@ export default {
                 btn.value = "확인";
             } else {
                 btn.value = "수정"
+                nick();
             }
         }
 
@@ -109,7 +112,7 @@ export default {
         }
        
         const load = async() => {
-            
+            console.log("load입니다");
             const id = props.parent_id;
             console.log("load() id="+ id);
             try {
@@ -143,15 +146,17 @@ export default {
         }
 
         watch( ()=> props.parent_id , ()=>{
+            console.log('watch-' + props.parent_id);
             if (props.parent_id) {
                 load();
             }
         });
-
-        watch( ()=> member.value.nickname, ()=> {
-            nick();
-        });
         
+
+
+        //props.parent_id 값이 있는 경우 info()를 호출합니다.
+        if(props.parent_id)
+           load(); 
 
         const profile = ref('');
 
@@ -195,7 +200,7 @@ export default {
 
 
         return {
-            member, btn, change, nchange, ichange, ibtn
+            member, btn, change, nchange, ichange, ibtn, date, pic
         }
     }
 }
