@@ -2,7 +2,7 @@ import {createRouter, createWebHistory} from 'vue-router';
 import Main from '../pages/main/main.vue';
 import Login from '../components/member/member_login.vue';
 import Join from '../components/member/member_join.vue';
-import Product_Write from '../components/board/item_write.vue';
+import Product_Write from '../components/item/item_write.vue';
 import Mypage from '../components/mypage/mypage.vue';
 import Wish from '../components/mypage/wish.vue';
 import Buy from '../components/mypage/buy.vue';
@@ -13,10 +13,9 @@ import Notice_List from '../pages/admin/notice_list.vue';
 import Notice_Detail from '../pages/admin/notice_detail.vue'
 import Notice_Write from '../pages/admin/notice_write.vue';
 import Notice_Update from '../pages/admin/notice_update.vue';
-// import Board_List from '../pages/board/board_list.vue';
-// import Board_Detail from '../pages/board/board_detail.vue';
-// import Board_Write from '../component/board/board_write.vue';
-// import Board_Update from '../component/board/board_update.vue';
+import Item_List from '../pages/item/item_list.vue';
+import Item_Detail from '../pages/item/item_detail.vue';
+import Item_Update from '../components/item/item_update.vue';
 // import Board_Reply from '../component/board/board_reply.vue';
 // import Member_Update from '../component/member/member_update.vue';
 // import Member_List from '../pages/member/member_list.vue';
@@ -103,27 +102,21 @@ const router = createRouter({
 		name : 'Notice_Update',
 		component : Notice_Update
 	},
-	// {
-	// 	path:'/banchan/notices/list',
-	// 	name : 'Board_List',
-	// 	component : Board_List		
-	// },
-	// {
-	// 	path:'/banchan/notices/:num/detail',
-	// 	name : 'Board_Detail',
-	// 	component : Board_Detail,
-
-	// },
-	// {
-	// 	path:'/banchan/notices/write/:id',
-	// 	name : 'Board_Write',
-	// 	component : Board_Write
-	// },
-	// {
-	// 	path:'/banchan/notices/:num/edit',
-	// 	name : 'Board_Update',
-	// 	component : Board_Update
-	// },
+	{
+		path:'/banchan/item/list',
+		name : 'Item_List',
+		component : Item_List		
+	},
+	{
+		path:'/banchan/item/:num/detail',
+		name : 'Item_Detail',
+		component : Item_Detail,
+	},
+	{
+		path:'/banchan/item/:num/edit',
+		name : 'Item_Update',
+		component : Item_Update
+	},
 	// {
 	// 	path:'/banchan/notices/:num/reply',
 	// 	name : 'Board_Reply',
