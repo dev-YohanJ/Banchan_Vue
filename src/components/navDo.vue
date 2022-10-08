@@ -74,11 +74,11 @@
             </div>
             <div class="categories-content">
                 <ul>
-                    <li><router-link class="categorie" :to="{name:'Main'}">볶음</router-link></li>
-                    <li><router-link class="categorie" :to="{name:'Main'}">조림</router-link></li>
-                    <li><router-link class="categorie" :to="{name:'Main'}">국/찌개/탕</router-link></li>
-                    <li><router-link class="categorie" :to="{name:'Main'}">김치/절임/젓갈</router-link></li>
-                    <li><router-link class="categorie" :to="{name:'Main'}">전/생선</router-link></li>
+                    <li><router-link class="categorie" :to="{name:'Item_List'}">볶음</router-link></li>
+                    <li><router-link class="categorie" :to="{name:'Item_List'}">조림</router-link></li>
+                    <li><router-link class="categorie" :to="{name:'Item_List'}">국/찌개/탕</router-link></li>
+                    <li><router-link class="categorie" :to="{name:'Item_List'}">김치/절임/젓갈</router-link></li>
+                    <li><router-link class="categorie" :to="{name:'Item_List'}">전/생선</router-link></li>
                 </ul>
             </div>
         </div>
