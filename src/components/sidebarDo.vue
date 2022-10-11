@@ -5,7 +5,7 @@
         <router-link class="list-group-item list-group-item-action list-group-item-light p-3" :to="{name:'Notice_List'}">공지사항</router-link>
         <router-link class="list-group-item list-group-item-action list-group-item-light p-3" :to="{name:'Main'}">문의게시판</router-link>
         <router-link class="list-group-item list-group-item-action list-group-item-light p-3" :to="{name:'Main'}">판매글 관리</router-link>
-        <router-link class="list-group-item list-group-item-action list-group-item-light p-3" :to="{name:'Main'}">회원 관리</router-link>
+        <router-link class="list-group-item list-group-item-action list-group-item-light p-3" :to="{name:'Member_List'}">회원 관리</router-link>
         <router-link class="list-group-item list-group-item-action list-group-item-light p-3" :to="{name:'Main'}">통계 조회</router-link>
     </div>
   </div>

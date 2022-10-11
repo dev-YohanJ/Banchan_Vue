@@ -2,7 +2,7 @@
     <Sidebar/>
     <Notice_List/>
     <Paging/>
-    <button class="btn btn-primary" @click="goWrite">글쓰기</button>
+    <button v-if="parent_id == 'admin'" class="btn btn-primary" @click="goWrite">글쓰기</button>
 </template>
 
 <script>
