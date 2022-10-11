@@ -21,7 +21,7 @@
             <span>찜</span><span>10</span>
             <hr class="cutline">
             <div class="seldel">
-                <input type="checkbox" /><button>선택삭제</button>
+                <input type="checkbox" v-model="isAll" @change="all" /><button>선택삭제</button>
             </div>
             <div>
                 <div class="list"> <!-- 반찬 + 가격정보 합치기 div-->
@@ -31,12 +31,47 @@
                     <div class="info">
                             <div class="title">제육볶음</div>
                             <div><span class="price">6,000</span><span>원</span></div>
-                            <input class="checkbtn" type="checkbox" />
+                            <input class="checkbtn" type="checkbox" v-model="selectedAllValue" />
                             <hr>
                             <div class="address">서울시 종로구 이화동</div>
                     </div>
                 </div>
-                
+                <div class="list"> <!-- 반찬 + 가격정보 합치기 div-->
+                    <div class="banchan">
+                        <img src="@/assets/img/food/jeyuk.jpg">
+                    </div>
+                    <div class="info">
+                            <div class="title">제육볶음</div>
+                            <div><span class="price">6,000</span><span>원</span></div>
+                            <input class="checkbtn" type="checkbox" v-model="selectedAllValue" />
+                            <hr>
+                            <div class="address">서울시 종로구 이화동</div>
+                    </div>
+                </div>
+                <div class="list"> <!-- 반찬 + 가격정보 합치기 div-->
+                    <div class="banchan">
+                        <img src="@/assets/img/food/jeyuk.jpg">
+                    </div>
+                    <div class="info">
+                            <div class="title">제육볶음</div>
+                            <div><span class="price">6,000</span><span>원</span></div>
+                            <input class="checkbtn" type="checkbox" v-model="selectedAllValue" />
+                            <hr>
+                            <div class="address">서울시 종로구 이화동</div>
+                    </div>
+                </div>
+                <div class="list"> <!-- 반찬 + 가격정보 합치기 div-->
+                    <div class="banchan">
+                        <img src="@/assets/img/food/jeyuk.jpg">
+                    </div>
+                    <div class="info">
+                            <div class="title">제육볶음</div>
+                            <div><span class="price">6,000</span><span>원</span></div>
+                            <input class="checkbtn" type="checkbox" v-model="selectedAllValue" />
+                            <hr>
+                            <div class="address">서울시 종로구 이화동</div>
+                    </div>
+                </div>
             </div>
          </div>
       </div>
@@ -44,7 +79,7 @@
 </template>
 
 <script>
-import {ref} from 'vue';
+import {ref, watch} from 'vue';
 import axios from '../../axios/axiossetting.js';
 import {useRouter} from 'vue-router';
 export default {
@@ -56,11 +91,24 @@ export default {
     },
     emits:['parent_getSession'],
 
-
     setup(props, context) {
-    
+        const selectedAllValue = ref([]);
+        const isAll = ref(false);
+
+        const all = ()=> {
+            if (isAll.value) {
+                selectedAllValue.value = true;
+            } else {
+                selectedAllValue.value = false;
+            }
+        }
+
+        watch(selectedAllValue, ()=>{
+            isAll.value = selectedAllValue.value.length==1 ? true : false;
+        })
+
         return {
-           
+           isAll, all, selectedAllValue
         }
     }
 }
@@ -99,14 +147,15 @@ hr {
 img {
     width: 100%;
     height: 100%;
-   object-fit: cover;
+    object-fit: cover;
 }
 .banchan{
-   display:inline-block;
-   margin:auto;
+    display:inline-block;
+    margin:auto;
     width: 150px;
     height: 150px;
-   float: left;
+    float: left;
+    margin-left: 60px;
 }
 button {
     margin-left: 10px;
