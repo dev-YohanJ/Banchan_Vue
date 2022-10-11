@@ -26,7 +26,7 @@
                         </div>
                         <div class="user-text">
                                 <!-- <img v-if="profile==''" class="profile" src="../../assets/profile.png">  ../../assets/profile.png -->
-                                <!-- <img class="profile" :src="require(`C:/upload/${date}/${pic}`)"/> -->
+                                <!-- <img class="profile" :src="require(`C:/upload/${member.picture}`)"/> -->
                         </div>
                         <div class="label">
                             <label>
@@ -74,24 +74,13 @@ export default {
     setup(props, context) {
         context.emit("parent_getSession");
         const fileName = ref("");
-        const member = ref({
-            id : "",
-            nickname : ""
-        });
+        const member = ref({});
         const btn = ref("수정");
         const ibtn = ref("소개글수정");
         const date = ref("");
         const pic = ref("");
         
         let file = '';
-
-        const split = ()=> {
-            const abs = member.value.picture.split("\\");
-            date.value = abs.value[1];
-            pic.value = abs.value[2];
-            console.log(date.value);
-            console.log(pic.value);
-        }
 
         const nchange = ()=> {
             if (btn.value == "수정") {
@@ -108,6 +97,7 @@ export default {
                 
             } else {
                 ibtn.value = "소개글수정";
+                // content();
             }
         }
        
@@ -118,9 +108,8 @@ export default {
             try {
                 const res = await axios.get(`members/${id}`)
                 member.value = res.data;
-                split();
-                console.log("date, pic= " + date + "/" + pic);
                 console.log(res.data);
+                console.log(member.value.picture)
                 if(member.value==null) {
                     console.log('null입니다.');
                     return;
@@ -133,12 +122,20 @@ export default {
 
         const nick = async() => {
             try {
-                const res = await axios.patch('members/nick', {
-                    id : member.value.id,
-                    nickname : member.value.nickname
-                })
+                const res = await axios.patch('members/nick', member.value)
                 if (res.data == 1) {
                     console.log("nick수정완료");
+                }
+            } catch(err) {
+                    console.log(err);
+            }
+        }
+
+        const content = async() => {
+            try {
+                const res = await axios.patch('members/content', member.value)
+                if (res.data == 1) {
+                    console.log("content수정완료");
                 }
             } catch(err) {
                     console.log(err);
