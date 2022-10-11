@@ -6,10 +6,10 @@
         <div class="room-deal-information-container">
       <div class="room-deal-information-title">사진 등록</div>
       <div class="room-file-upload-wrapper">
-          <div v-if="uploadImageIndex<1" class="room-file-upload-example-container">
+          <div v-if="!files.length" class="room-file-upload-example-container">
               <div class="room-file-upload-example">
                   <div class="room-file-notice-item">
-                    최소 1장 이상의 이미지를 등록해주세요.(최대 3장까지 가능합니다.)
+                    <span class="red">최소 1장 이상</span>의 이미지를 등록해주세요.(최대 3장까지 가능합니다.)
                     <br>이미지 한 장당 10MB 까지 등록이 가능합니다.
                   </div>
                   <div class="room-file-notice-item room-file-upload-button">
@@ -25,17 +25,15 @@
                   <div class="file-preview-wrapper-upload">
                       <div class="image-box">
                           <label for="file">추가 사진 등록</label>
-                          <input type="file" id="file" @change="imageUpload" multiple />
+                          <input type="file" id="file"  @change="imageAddUpload" multiple />
                       </div>
+                      <!-- <div class="file-close-button" @click="fileDeleteButton" :name="file.number">x</div> -->
                   </div>
                   <div v-for="(file, index) in files" :key="index" class="file-preview-wrapper">
-                      <div class="file-close-button" @click="fileDeleteButton" :name="files.number">
+                      <div class="file-close-button" @click="fileDeleteButton" :name="file.number">
                           x
                       </div>
                       <img :src="file.preview" />
-                  </div>
-                  <div v-for="(item, index) in filesPreview" :key="index" class="preview">
-                        <img :src="item.url" class="preview_img">
                   </div>
               </div>
           </div>
@@ -49,7 +47,7 @@
           v-model.lazy="board.subject"
           maxlength="100"
           class="form-control"
-          placeholder="제목을 입력해주세요."
+          placeholder="상품 제목을 입력해주세요."
           required>
       </div>
       <div class="form-group">
@@ -59,11 +57,11 @@
           v-model.lazy="board.price"
           maxlength="100"
           class="form-control"
-          placeholder="가격을 입력해주세요."
+          placeholder="숫자만 입력해주세요."
           required>
       </div>
       <div class="form-group">
-        <label for="board_content">내용</label>
+        <label for="board_content">내용설명</label>
         <textarea
           v-model.lazy="board.description"
           rows="10"
@@ -109,62 +107,52 @@ export default {
   setup(props, context){
     context.emit('parent_getSession')
 
-    let uploadfiles=''
-    let file=''
     const files=ref([]);
     const filesPreview = ref([]);
     const uploadImageIndex=ref(0);
     const imageUpload = (event)=> {
-      uploadfiles = event.target.files;
-      //하나의 배열로 넣기
-      let num = -1;
-      for (let i = 0; i < event.target.files.length; i++) {
-        console.log(uploadfiles[i])
-          let eachFiles = event.target.files[i]
-            files.value = [
-              ...files.value,
-              {
-                  file: eachFiles,
-                  preview: URL.createObjectURL(eachFiles),
-                  number: i,
-              }
-            ]
-          num = i;
-          file = event.target.files[i]
-      }
-      board.value.fileName = file.name
-      uploadImageIndex.value = uploadImageIndex.value + num + 1; //이미지 index의 마지막 값 + 1 저장
-      console.log("등록인덱스:"+uploadImageIndex.value)
-      console.log(files.value);
-      // console.log(this.filesPreview);
-  }
+        let num = -1;
+        for (let i = 0; i < event.target.files.length; i++) {
+            let eachFiles = event.target.files[i]
+              files.value = [
+                ...files.value,
+                {
+                    file: eachFiles,
+                    preview: URL.createObjectURL(eachFiles),
+                    number: i,
+                }
+              ]
+            num = i;
+        }
+        uploadImageIndex.value = num + 1; //이미지 index의 마지막 값 + 1 저장
+        console.log(files.value);
+    }
 
-  // const imageAddUpload = (event) => {
-  //   //하나의 배열로 넣기c
-  //   let num = -1;
-  //     for (let i = 0; i < event.target.files.length; i++) {
-  //       let eachFiles = event.target.files[i]
-  //         files.value=[
-  //             ...files.value,
-  //               {
-  //               //실제 파일
-  //               file: eachFiles,
-  //               //이미지 프리뷰
-  //               preview: URL.createObjectURL(eachFiles),
-  //               //삭제및 관리를 위한 number
-  //               number: i,
-  //           }
-  //         ]
-  //       num = i;
-  //   }
-  //   uploadImageIndex.value = uploadImageIndex.value + num + 1;
-  // }
-    
+
+    const imageAddUpload = (event) => {
+        let num = -1;
+          for (let i = 0; i < event.target.files.length; i++) {
+            let eachFiles = event.target.files[i]
+              files.value=[
+                  ...files.value,
+                    {
+                    //실제 파일
+                    file: eachFiles,
+                    //이미지 프리뷰
+                    preview: URL.createObjectURL(eachFiles),
+                    //삭제및 관리를 위한 number
+                    number: i + uploadImageIndex.value,
+                }
+              ]
+            num = i;
+        }
+        uploadImageIndex.value = uploadImageIndex.value + num + 1;
+    }
+
     const fileDeleteButton = (e)=> {
         const name = e.target.getAttribute('name');
+        console.log(name)
         files.value = files.value.filter(data => data.number !== Number(name));
-        uploadImageIndex.value = uploadImageIndex.value - 1;
-        console.log("인덱스:"+uploadImageIndex.value)
     }
 
     const board = ref({
@@ -174,27 +162,29 @@ export default {
       subject:'',
     //   allergy:''
     })
-    // let file=''
     const router = useRouter()
 
-    // const change = event => {
-    //   file = event.target.files[0]
-    //   board.value.fileName = file.name
-    // }
 
     const add = async () => {
-      console.log('하하')
+      console.log("upload start");
       let frm = new FormData()
-      for(let i=0; i < uploadfiles.length; i++){
-          frm.append('uploadfile', uploadfiles[i])
+      if(files.value.length > 0){
+        for(let i=0; i<files.value.length;i++){
+                            //같은 이름으로 여러 번 올려야 합니다.
+            
+            console.log(files.value[i].file.name);
+            frm.append("uploadfile", files.value[i].file); 
+        }
       }
       frm.append('seller', props.parent_id)
       frm.append('name', board.value.subject)
       frm.append('price', board.value.price)
       frm.append('description', board.value.description)
     //   frm.append('allergy', board.value.allergy)
-      if(uploadfiles.length<1){
+      if(files.value.length<1){
         alert("이미지를 등록해주세요.");
+      } else if(isNaN(board.value.price)==true){
+        alert("숫자만 입력해주세요.");
       }
 
 
@@ -216,7 +206,7 @@ export default {
 
     return {
         board, add, 
-        fileDeleteButton,imageUpload,
+        fileDeleteButton,imageUpload,imageAddUpload,
         files,//업로드용 파일
         filesPreview,
         uploadImageIndex // 이미지 업로드를 위한 변수
@@ -556,6 +546,25 @@ button{
 .buttons{
   display: flex;
   justify-content: space-between;
+}
+
+h3{
+  font-weight: 700;
+}
+
+input, textarea{
+  border-radius:0;
+  margin: 0 0 30px 0;
+}
+
+label{
+  font-size:20px;
+  font-weight:600
+}
+
+.red{
+  color:#C64832;
+  font-weight:bold;
 }
 
 </style>

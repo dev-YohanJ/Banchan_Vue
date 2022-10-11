@@ -1,14 +1,14 @@
 <template>
-  <Item_Detail :parent_id="parent_id"/>
-  <!-- <Modal/> -->
+  <Item_Update :parent_id="parent_id"/>
+  <Modal/>
 </template>
 
 <script>
-import Item_Detail from '../../components/item/item_detail.vue'
+import Item_Update from '../../components/item/item_update.vue'
 import Modal from '../../components/item/modalDelete.vue'
 export default {
   components: {
-    Item_Detail
+    Item_Update, Modal
   },
   props: {
     parent_id:{

@@ -42,7 +42,7 @@
     <div class="header_bar" v-else-if="parent_id">
         <div class="nav-link" @click="logout">{{parent_id}}님(로그아웃)</div>
             |
-        <router-link class="nav-link" :to="{name:'Main'}">정보수정</router-link>
+        <router-link class="nav-link" :to="{name:'Mypage'}">정보수정</router-link>
     </div>
 </div>
 <div class="container">
