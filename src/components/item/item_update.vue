@@ -48,6 +48,7 @@
         <div></div>
         <div>
           <button type="submit" class="btn btn-danger">수정하기</button>
+          <button class="btn btn-danger" @click="showModal">삭제하기</button>
         </div>
       </div>
     </form>
@@ -57,6 +58,7 @@
 <script>
 import {ref} from 'vue'
 import {useRoute, useRouter} from 'vue-router'
+import {useStore} from 'vuex'
 import axios from '../../axios/axiossetting.js'
 export default {
   props: {
@@ -72,6 +74,7 @@ export default {
     const fileName = ref('')
     const board = ref({})
     let file = ''
+    const store = useStore()
     const router = useRouter()
     const num = useRoute().params.num
     let check = 0
@@ -89,10 +92,8 @@ export default {
           return
         }
         //"board_ORIGINAL":null로 전송된 경우 fileName.value=null이다.
-        fileName.value = board.value.board_ORIGINAL
+        fileName.value = board.value.board_Original
         console.log('파일이름 = ' + fileName.value)
-
-        board.value.board_PASS = ''
       }catch(err){
         console.log(err)
       }
@@ -108,18 +109,20 @@ export default {
 
     const update = async ()=>{
       let frm = new FormData()
-      // if(file!=''){ //let file='' 초기값 상태가 아닌지 확인한다. 즉, 파일을 선택하면 그 파일을 업로드한다.
-      //   frm.append('uploadfile', file)
-      // }
+      if(file!=''){ //let file='' 초기값 상태가 아닌지 확인한다. 즉, 파일을 선택하면 그 파일을 업로드한다.
+        frm.append('uploadfile', file)
+      }
       frm.append('seller', props.parent_id)
-      frm.append('name', board.value.subject)
+      frm.append('name', board.value.name)
       frm.append('price', board.value.price)
       frm.append('description', board.value.description)
+      frm.append('id', num)
 
-      // if(check==0 && fileName.value != null){ //기존파일 그대로인 경우
-      //   frm.append('check', fileName.value)
-      //   frm.append('image', board.value.image)
-      // }
+
+      if(check==0 && fileName.value != null){ //기존파일 그대로인 경우
+        frm.append('check', fileName.value)
+        frm.append('image', board.value.image)
+      }
 
       try{
         const res = await axios.patch('items', frm,
@@ -127,10 +130,8 @@ export default {
             {'Content-Type':'multipart/form-data;charset=UTF-8'}
           })
         console.log(`수정 응답 : ${res.data}`)
-        if(res.data=="Nopass"){
-          alert('비밀번호를 확인하세요')
-        }else if(res.data=='success'){
-          router.push({name : 'Board_Detail'})
+        if(res.data=='success'){
+          router.push({name : 'Item_Detail'})
         }else if(res.data=='fail'){
           console.log('수정 실패입니다.')
         }
@@ -145,11 +146,16 @@ export default {
     }
 
     const goDetail = ()=>{
-      router.push({name:'Board_Detail'})
+      router.push({name:'Item_Detail'})
     }
 
+    const showModal = ()=>{
+			//store에 값을 변경합니다.
+			store.dispatch('display', true);
+		}
+
     return {
-      fileName, board, change, update, remove, goDetail
+      fileName, board, change, update, remove, goDetail, showModal,
     }
   }
 }

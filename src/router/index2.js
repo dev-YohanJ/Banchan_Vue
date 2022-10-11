@@ -15,7 +15,7 @@ import Notice_Write from '../pages/admin/notice_write.vue';
 import Notice_Update from '../pages/admin/notice_update.vue';
 import Item_List from '../pages/item/item_list.vue';
 import Item_Detail from '../pages/item/item_detail.vue';
-import Item_Update from '../components/item/item_update.vue';
+import Item_Update from '../pages/item/item_update.vue';
 // import Board_Reply from '../component/board/board_reply.vue';
 // import Member_Update from '../component/member/member_update.vue';
 // import Member_List from '../pages/member/member_list.vue';
