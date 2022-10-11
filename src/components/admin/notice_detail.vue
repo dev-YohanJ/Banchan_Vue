@@ -3,7 +3,7 @@
 		<table class="table">
 			<thead>
         <tr>
-		  		<th colspan=2>MVC 게시판-view페이지</th>
+		  		<th colspan=2>공지사항</th>
 		  	</tr>
       </thead>
       <tbody>
