@@ -36,7 +36,7 @@ export default {
     }
     
     const goDelete = async ()=>{
-      const res = await axios.delete(`items`)
+      const res = await axios.delete(`items/${num}`)
         alert('삭제 성공')
         store.dispatch('display', false)
         router.push({

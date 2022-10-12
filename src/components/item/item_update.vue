@@ -1,7 +1,44 @@
 <template>
-  <div>
+  <div class="container">
     <form @submit.prevent="update">
       <h3>상품수정</h3><br>
+      <div class="form-group">
+        <div class="room-deal-information-container">
+      <div class="room-deal-information-title">사진 등록</div>
+      <div class="room-file-upload-wrapper">
+        <div v-if="!files.length" class="room-file-upload-example-container">
+          <div class="room-file-upload-example">
+            <div class="room-file-notice-item">
+              <span class="red">최소 1장 이상</span>의 이미지를 등록해주세요.(최대 3장까지 가능합니다.)
+              <br>이미지 한 장당 10MB 까지 등록이 가능합니다.
+            </div>
+            <div class="room-file-notice-item room-file-upload-button">
+              <div class="image-box">
+                  <label for="file">이미지 등록</label>
+                  <input type="file" id="file" @change="imageUpload" multiple />
+              </div>
+            </div>
+          </div>
+        </div>
+        <div v-else class="file-preview-content-container">
+          <div class="file-preview-container">
+            <div class="file-preview-wrapper-upload">
+              <div class="image-box">
+                <label for="file">추가 사진 등록</label>
+                <input type="file" id="file"  @change="imageAddUpload" multiple />
+              </div>
+            </div>
+            <div v-for="(file, index) in files" :key="index" class="file-preview-wrapper">
+              <div class="file-close-button" @click="fileDeleteButton" :name="file.number">
+                x
+              </div>
+              <img :src="file.preview" />
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+      </div>
       <div class="form-group">
         <label for="board_subject">제목</label>
         <input 
@@ -9,7 +46,7 @@
           v-model.lazy="board.name"
           maxlength="100"
           class="form-control"
-          placeholder="Enter board_subject"
+          placeholder="상품 제목을 입력해주세요."
           required>
       </div>
       <div class="form-group">
@@ -19,7 +56,7 @@
           v-model.lazy="board.price"
           maxlength="100"
           class="form-control"
-          placeholder="가격을 입력해주세요."
+          placeholder="숫자만 입력해주세요."
           required>
       </div>
       <div class="form-group">
@@ -29,6 +66,7 @@
           v-model.lazy="board.description"
           rows="10"
           class="form-control"
+          placeholder="구매자에게 필요한 정보를 입력해주세요."
           required></textarea>
       </div>
 
@@ -44,11 +82,11 @@
       </div>
 
 
-      <div class="form-group">
+      <div class="form-group buttons">
         <div></div>
         <div>
           <button type="submit" class="btn btn-danger">수정하기</button>
-          <button class="btn btn-danger" @click="showModal">삭제하기</button>
+          <button type="button" class="btn btn-danger" @click="showModal">삭제하기</button>
         </div>
       </div>
     </form>
@@ -79,6 +117,55 @@ export default {
     const num = useRoute().params.num
     let check = 0
 
+    const files=ref([]);
+    const filesPreview = ref([]);
+    const uploadImageIndex=ref(0);
+    const imageUpload = (event)=> {
+        let num = -1;
+        for (let i = 0; i < event.target.files.length; i++) {
+            let eachFiles = event.target.files[i]
+              files.value = [
+                ...files.value,
+                {
+                    file: eachFiles,
+                    preview: URL.createObjectURL(eachFiles),
+                    number: i,
+                }
+              ]
+            num = i;
+        }
+        uploadImageIndex.value = num + 1; //이미지 index의 마지막 값 + 1 저장
+        console.log(files.value);
+    }
+
+
+    const imageAddUpload = (event) => {
+        let num = -1;
+          for (let i = 0; i < event.target.files.length; i++) {
+            let eachFiles = event.target.files[i]
+              files.value=[
+                  ...files.value,
+                    {
+                    //실제 파일
+                    file: eachFiles,
+                    //이미지 프리뷰
+                    preview: URL.createObjectURL(eachFiles),
+                    //삭제및 관리를 위한 number
+                    number: i + uploadImageIndex.value,
+                }
+              ]
+            num = i;
+        }
+        uploadImageIndex.value = uploadImageIndex.value + num + 1;
+    }
+
+    const fileDeleteButton = (e)=> {
+        const name = e.target.getAttribute('name');
+        console.log(name)
+        files.value = files.value.filter(data => data.number !== Number(name));
+    }
+
+
     const getDetail = async () => {
       try{
         console.log('num=' + num)
@@ -108,9 +195,15 @@ export default {
     }
 
     const update = async ()=>{
+      console.log("upload start");
       let frm = new FormData()
-      if(file!=''){ //let file='' 초기값 상태가 아닌지 확인한다. 즉, 파일을 선택하면 그 파일을 업로드한다.
-        frm.append('uploadfile', file)
+      if(files.value.length > 0){
+        for(let i=0; i<files.value.length;i++){
+                            //같은 이름으로 여러 번 올려야 합니다.
+            
+            console.log(files.value[i].file.name);
+            frm.append("uploadfile", files.value[i].file); 
+        }
       }
       frm.append('seller', props.parent_id)
       frm.append('name', board.value.name)
@@ -156,6 +249,10 @@ export default {
 
     return {
       fileName, board, change, update, remove, goDetail, showModal,
+      fileDeleteButton, imageUpload ,imageAddUpload, 
+      files,//업로드용 파일
+      filesPreview,
+      uploadImageIndex // 이미지 업로드를 위한 변수
     }
   }
 }
@@ -384,7 +481,7 @@ width: 100%; */
   
   .image-box label {
       display: inline-block;
-      padding: 10px 20px;
+      padding: 13px 30px 12px;
       background-color: #C64832;
       color: #fff;
       vertical-align: middle;
@@ -502,6 +599,7 @@ button{
   font-size:22px;
   border-radius: 0px;
   background-color:#C64832;
+  font-weight:bold;
 }
 
 .buttons{
@@ -511,6 +609,29 @@ button{
 
 h3{
   margin: 20px 0 0 0;
+}
+
+.container{
+  margin: 50px;
+}
+
+h3{
+  font-weight: 700;
+}
+
+input, textarea{
+  border-radius:0;
+  margin: 0 0 30px 0;
+}
+
+label{
+  font-size:20px;
+  font-weight:600
+}
+
+.red{
+  color:#C64832;
+  font-weight:bold;
 }
 
 </style>

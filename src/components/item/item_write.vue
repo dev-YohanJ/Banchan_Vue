@@ -1,45 +1,44 @@
 <template>
-<div class="container">
+  <div class="container">
     <form @submit.prevent="add">
       <h3>상품등록</h3><br>
       <div class="form-group">
         <div class="room-deal-information-container">
       <div class="room-deal-information-title">사진 등록</div>
       <div class="room-file-upload-wrapper">
-          <div v-if="!files.length" class="room-file-upload-example-container">
-              <div class="room-file-upload-example">
-                  <div class="room-file-notice-item">
-                    <span class="red">최소 1장 이상</span>의 이미지를 등록해주세요.(최대 3장까지 가능합니다.)
-                    <br>이미지 한 장당 10MB 까지 등록이 가능합니다.
-                  </div>
-                  <div class="room-file-notice-item room-file-upload-button">
-                      <div class="image-box">
-                          <label for="file">이미지 등록</label>
-                          <input type="file" id="file" @change="imageUpload" multiple />
-                      </div>
-                  </div>
+        <div v-if="!files.length" class="room-file-upload-example-container">
+          <div class="room-file-upload-example">
+            <div class="room-file-notice-item">
+              <span class="red">최소 1장 이상</span>의 이미지를 등록해주세요.(최대 3장까지 가능합니다.)
+              <br>이미지 한 장당 10MB 까지 등록이 가능합니다.
+            </div>
+            <div class="room-file-notice-item room-file-upload-button">
+              <div class="image-box">
+                  <label for="file">이미지 등록</label>
+                  <input type="file" id="file" @change="imageUpload" multiple />
               </div>
+            </div>
           </div>
-          <div v-else class="file-preview-content-container">
-              <div class="file-preview-container">
-                  <div class="file-preview-wrapper-upload">
-                      <div class="image-box">
-                          <label for="file">추가 사진 등록</label>
-                          <input type="file" id="file"  @change="imageAddUpload" multiple />
-                      </div>
-                      <!-- <div class="file-close-button" @click="fileDeleteButton" :name="file.number">x</div> -->
-                  </div>
-                  <div v-for="(file, index) in files" :key="index" class="file-preview-wrapper">
-                      <div class="file-close-button" @click="fileDeleteButton" :name="file.number">
-                          x
-                      </div>
-                      <img :src="file.preview" />
-                  </div>
+        </div>
+        <div v-else class="file-preview-content-container">
+          <div class="file-preview-container">
+            <div class="file-preview-wrapper-upload">
+              <div class="image-box">
+                <label for="file">추가 사진 등록</label>
+                <input type="file" id="file"  @change="imageAddUpload" multiple />
               </div>
+            </div>
+            <div v-for="(file, index) in files" :key="index" class="file-preview-wrapper">
+              <div class="file-close-button" @click="fileDeleteButton" :name="file.number">
+                x
+              </div>
+              <img :src="file.preview" />
+            </div>
           </div>
+        </div>
       </div>
+    </div>
   </div>
-      </div>
       <div class="form-group">
         <label for="board_subject">제목</label>
         <input 
@@ -82,7 +81,7 @@
       <div class="form-group buttons">
         <div></div>
         <div>
-          <button type="submit" class="btn btn-danger">등록</button>
+          <button type="submit" class="btn btn-danger">등록하기</button>
           <!-- <button type="reset" class="btn btn-danger">취소</button> -->
         </div>
       </div>
@@ -423,7 +422,7 @@ width: 100%; */
   
   .image-box label {
       display: inline-block;
-      padding: 10px 20px;
+      padding: 13px 30px 12px;
       background-color: #C64832;
       color: #fff;
       vertical-align: middle;
@@ -507,6 +506,7 @@ width: 100%; */
 
 button {
   margin-right: 1em;
+  font-weight: bold;
 }
 
 .container{
