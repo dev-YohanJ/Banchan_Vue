@@ -13,20 +13,23 @@
                             <li><router-link class="nav-item nav-link" :to="{name:'Sell'}">판매 목록</router-link></li>
                             <li><router-link class="nav-item nav-link" :to="{name:'Update'}">개인정보수정</router-link></li>
                             <li><router-link class="nav-item nav-link" :to="{name:'Secession'}">회원탈퇴</router-link></li>
+                            <li><router-link class="nav-item nav-link" :to="{name:'Mypage'}">공지사항</router-link></li>
+                            <li><router-link class="nav-item nav-link" :to="{name:'Mypage'}">문의게시판</router-link></li>
                         </ul>
                     </aside>
                 </div>
          </div>
 
-            <div>
+            <div style="margin-left: 40px;">
                 <div class="pic">
                     <div class="user-warp">
                         <div class="user-image">
                             <img class="icon" src="../../assets/basic.jpg"> 
                         </div>
                         <div class="user-text">
-                                <!-- <img v-if="profile==''" class="profile" src="../../assets/profile.png">  ../../assets/profile.png -->
-                                <!-- <img class="profile" :src="require(`C:/upload/${member.picture}`)"/> -->
+                                <img v-if="member.picture==null" class="profile" src="../../assets/profile.png"> <!--../../assets/profile.png -->
+                               
+                                <img v-if="member.picture" class="profile" :src="require(`C:/upload/${member.picture}`)"/>
                         </div>
                         <div class="label">
                             <label>
@@ -97,7 +100,7 @@ export default {
                 
             } else {
                 ibtn.value = "소개글수정";
-                // content();
+                content();
             }
         }
        
@@ -108,6 +111,7 @@ export default {
             try {
                 const res = await axios.get(`members/${id}`)
                 member.value = res.data;
+                member.value.picture = member.value.picture.substring(1);
                 console.log(res.data);
                 console.log(member.value.picture)
                 if(member.value==null) {
@@ -133,7 +137,7 @@ export default {
 
         const content = async() => {
             try {
-                const res = await axios.patch('members/content', member.value)
+                const res = await axios.patch('members/intro', member.value)
                 if (res.data == 1) {
                     console.log("content수정완료");
                 }
@@ -155,7 +159,6 @@ export default {
         if(props.parent_id)
            load(); 
 
-        const profile = ref('');
 
         const change = async(event) => {
 
@@ -165,8 +168,6 @@ export default {
             fileName.value = file.name;
             console.log(fileName.value);
 
-            // 미리보기 함수
-            profile.value = URL.createObjectURL(file);
 
             let frm = new FormData();
             if (file !='' && fileName.value != null) { // let file = ''; 초기값 상태가 아닌지 확인합니다.
