@@ -88,7 +88,7 @@
                     <router-link :to="{name:'Item_Update'}">
                       <button class="btn btn-danger modify">내 반찬 관리하기</button>
                     </router-link> 
-                    <button class="btn btn-danger" @click="showModal">삭제하기</button>
+                    <button class="btn btn-danger">끌어올리기</button>
                   </div>
                   <div class="group" v-else>
                     <router-link :to="{name:'Main'}">
@@ -142,19 +142,13 @@ export default {
     
     getDetail()
 
-
     const store = useStore()
     const count = computed(()=>{
       return store.state.count
     })
-
-    const showModal = ()=>{
-			//store에 값을 변경합니다.
-			store.dispatch('display', true);
-		}
     
     return {
-      board, count, showModal
+      board, count
     }
   }
 }
@@ -247,7 +241,7 @@ button{
 
 .modify{
   margin-left:10px;
-  padding: 13px 80px 12px;
+  padding: 13px 70px 12px;
   background: #FCAB01;
 }
 
