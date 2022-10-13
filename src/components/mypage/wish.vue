@@ -19,66 +19,31 @@
                     </aside>
                 </div>
          </div>
-         <div>
+         <div style="width: 900px;">
             <span>찜</span><span>10</span>
             <hr class="cutline">
             <div class="seldel">
                 <input type="checkbox" v-model="isAll" @click="all()" /><button>선택삭제</button>
             </div>
-            <div>
-                <div class="clearfix"> <!-- 상품 2개 한 줄 -->
+            <div style="clear:both">
+                <div class="clearfix" v-for="(item,index) in list" :key="index" > <!-- 상품 2개 한 줄 -->
                     <div class="list"> <!-- 반찬 + 가격정보 합치기 div-->
                         <div class="banchan">
                             <img src="@/assets/img/food/jeyuk.jpg">
                         </div>
                         <div class="info">
-                                <div class="title">제육볶음</div>
-                                <div><span class="price">6,000</span><span>원</span></div>
+                                <div class="title">{{item.name}}</div>
+                                <div><span class="price">{{item.price}}</span><span>원</span></div>
                                 <input class="checkbtn" type="checkbox" v-model="selectedAllValue[0]" />
                                 <hr>
-                                <div class="address">서울시 종로구 이화동</div>
-                        </div>
-                    </div>
-                    <div class="list"> <!-- 반찬 + 가격정보 합치기 div-->
-                        <div class="banchan">
-                            <img src="@/assets/img/food/jeyuk.jpg">
-                        </div>
-                        <div class="info">
-                                <div class="title">제육볶음</div>
-                                <div><span class="price">6,000</span><span>원</span></div>
-                                <input class="checkbtn" type="checkbox" v-model="selectedAllValue[1]" />
-                                <hr>
-                                <div class="address">서울시 종로구 이화동</div>
+                                <div class="address">{{item.location}}</div>
                         </div>
                     </div>
                 </div>
-                <div class="clearfix">
-                    <div class="list"> <!-- 반찬 + 가격정보 합치기 div-->
-                        <div class="banchan">
-                            <img src="@/assets/img/food/jeyuk.jpg">
-                        </div>
-                        <div class="info">
-                                <div class="title">제육볶음</div>
-                                <div><span class="price">6,000</span><span>원</span></div>
-                                <input class="checkbtn" type="checkbox" v-model="selectedAllValue[2]" />
-                                <hr>
-                                <div class="address">서울시 종로구 이화동</div>
-                        </div>
-                    </div>
-                    <div class="list"> <!-- 반찬 + 가격정보 합치기 div-->
-                        <div class="banchan">
-                            <img src="@/assets/img/food/jeyuk.jpg">
-                        </div>
-                        <div class="info">
-                                <div class="title">제육볶음</div>
-                                <div><span class="price">6,000</span><span>원</span></div>
-                                <input class="checkbtn" type="checkbox" v-model="selectedAllValue[3]" />
-                                <hr>
-                                <div class="address">서울시 종로구 이화동</div>
-                        </div>
-                    </div>
+                <div style="text-align: center; cursor: pointer;" id="message" @click="more">
+                    <img src="../../assets/plus.png" style="width:20px; height:20px;">
+                    {{message}}
                 </div>
-                <div style="text-align: center; margin-top: 30px; cursor: pointer;" id="message" @click="more">{{message}}</div>
             </div>
          </div>
       </div>
@@ -88,7 +53,6 @@
 <script>
 import {ref, watch} from 'vue';
 import axios from '../../axios/axiossetting.js';
-import {useRouter} from 'vue-router';
 export default {
     props: {
         parent_id: {
@@ -99,10 +63,13 @@ export default {
     emits:['parent_getSession'],
 
     setup(props, context) {
+        context.emit("parent_getSession");
         let page=1;
         const selectedAllValue = ref([false, false, false, false]);
         const isAll = ref(false);
         const message = ref('찜한 목록이 없습니다');
+        const list = ref({});
+        const listcount = ref(0);
 
         const all = ()=> {
             if (isAll.value) {
@@ -116,6 +83,45 @@ export default {
             }
         }
         
+
+        watch( ()=> props.parent_id , ()=>{
+            console.log('watch=' + props.parent_id);
+            if (props.parent_id) {
+                load(page);
+            }
+        });
+
+        const load = async(page) => {
+            console.log("load입니다");
+            const id = props.parent_id;
+            console.log("load() id="+ id);
+            try {
+                const res = await axios.get("wish", {params:{id : id, page:page}})
+                console.log(res.data);
+
+                if(res.data==null) {
+                    console.log('null입니다.');
+                    return;
+                }
+
+                list.value = res.data.item;
+                listcount.value = res.data.listcount;
+                if (listcount.value == 0) {
+                    message.value = "찜한 목록이 없습니다."
+                } else {
+                    if (listcount.value > list.value.length) {
+                        message.value = "찜 더보기";
+                    } else {
+                        message.value = "";
+                    }
+                } 
+
+            } catch(err) {
+                console.log(err)
+                console.log("여기는 에러")
+            }
+        }
+
         watch( selectedAllValue.value, ()=>{
             let count = 0;
             for(var i=0; i < selectedAllValue.value.length; i++) {
@@ -126,49 +132,30 @@ export default {
             isAll.value = selectedAllValue.value.length == count ? true : false;
         })
 
-        const getList = async(page)=>{
-            const id = props.parent_id;
-            console.log("getList() id="+ id);
-            try {
-                const res = await axios.get("members/", {params:{id : id, page:page}})
-                listcount.value = res.data.listcount;
-                list.value = res.data.list;
-
-                if (listcount.value == 0) {
-                    message.value = "등록된 댓글이 없습니다."
-                } else {
-                    if (listcount.value > list.value.length) {
-                        message.value = "더보기";
-                    } else {
-                        message.value = "";
-                    }
-
-                    count_message.value = "총 50자까지 가능합니다."
-
-                    //store에 저장
-                    store.dispatch('count', listcount.value);
-
-                } 
-            } catch (err) {
-                console.log(err);
-            }
-                
-        }
-
         const more = () => {
-            getList(++page);
+            load(++page);
         }
 
         return {
-           isAll, all, selectedAllValue, message, more
+           isAll, all, selectedAllValue, message, more, list
         }
     }
 }
 </script>
 
 <style scoped>
-.list {
+#message {
+    padding-top: 20px;
+    clear:both;
+}
+.clearfix {
     margin-top: 20px;
+}
+.clearfix:nth-child(even)  {
+    float:right;
+}
+.clearfix:nth-child(odd)  {
+    float:left;
 }
 .title {
     margin: 5px;
@@ -197,9 +184,6 @@ hr {
     height: 150px;
     border: 1px solid #dddddd;
     margin-right: 20px;
-}
-.seldel {
-    margin-bottom: 10px;
 }
 img {
     width: 100%;

@@ -147,7 +147,7 @@ export default {
         }
 
         watch( ()=> props.parent_id , ()=>{
-            console.log('watch-' + props.parent_id);
+            console.log('watch=' + props.parent_id);
             if (props.parent_id) {
                 load();
             }
