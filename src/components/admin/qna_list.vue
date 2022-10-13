@@ -14,7 +14,7 @@
 	  <table class="table table-striped">
 	    <thead>
 		    <tr>
-		      <th colspan=3>공지사항</th>
+		      <th colspan=3>문의게시판</th>
 		      <th>		
 		        <span>글 개수 : {{listcount}}</span>
 		      </th>
@@ -22,6 +22,7 @@
 		    <tr>
 		      <th><div>번호</div></th>
 		      <th><div>제목</div></th>
+          <th><div>글쓴이</div></th>
 		      <th><div>날짜</div></th>
 		      <th><div>조회수</div></th>
 		    </tr>
@@ -30,10 +31,11 @@
         <tr v-for="(item, index) in list" :key="index">
 		      <td>{{startnum-index}}</td>
 		      <td>
-            <router-link :to="{name:'Notice_Detail', params:{num:`${item.board_NUM}`}}">
+            <router-link :to="{name:'Qna_Detail', params:{num:`${item.board_NUM}`}}">
               <span>{{item.board_SUBJECT}}</span>
             </router-link>
           </td>
+          <td>{{item.board_ID}}</td>
 		      <td>{{item.board_DATE}}</td>
 		      <td>{{item.board_READCOUNT}}</td>
 		    </tr>
@@ -74,7 +76,7 @@ export default {
     
     const getList = async (page) => {
       try {
-        const res = await axios.get(`notice?page=${page}&limit=${limit.value}`)
+        const res = await axios.get(`qna?page=${page}&limit=${limit.value}`)
 
         list.value = res.data.boardlist
         listcount.value = res.data.listcount

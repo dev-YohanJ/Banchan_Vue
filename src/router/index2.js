@@ -13,6 +13,8 @@ import Notice_List from '../pages/admin/notice_list.vue';
 import Notice_Detail from '../pages/admin/notice_detail.vue'
 import Notice_Write from '../pages/admin/notice_write.vue';
 import Notice_Update from '../pages/admin/notice_update.vue';
+import Qna_List from '../pages/admin/qna_list.vue';
+import Qna_Detail from '../pages/admin/qna_detail.vue'
 import Item_List from '../pages/item/item_list.vue';
 import Item_Detail from '../pages/item/item_detail.vue';
 import Item_Update from '../pages/item/item_update.vue';
@@ -101,6 +103,16 @@ const router = createRouter({
 		path:'/banchan/notice/:num/edit',
 		name : 'Notice_Update',
 		component : Notice_Update
+	},
+	{
+		path: '/banchan/qna/list',
+		name: 'Qna_List',
+		component: Qna_List
+	},
+	{
+		path: '/banchan/qna/:num/detail',
+		name: 'Qna_Detail',
+		component: Qna_Detail
 	},
 	{
 		path:'/banchan/item/list',
