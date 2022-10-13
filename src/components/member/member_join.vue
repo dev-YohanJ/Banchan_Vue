@@ -52,7 +52,7 @@
             placeholder="이메일"
             v-model="join.email"
             required >
-    <span :class="email_color">{{email_message}}</span>
+    <span :class="email_color" class="msg">{{email_message}}</span>
 
     <b>주소
           <input class="focus:outline-none focus:ring focus:border-blue-600 border-b-2 border-black pt-2 px-2 mb-3 mr-10"  
