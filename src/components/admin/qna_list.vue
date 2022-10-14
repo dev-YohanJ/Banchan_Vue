@@ -22,6 +22,7 @@
 		    <tr>
 		      <th><div>번호</div></th>
 		      <th><div>제목</div></th>
+          <th><div>답변 여부</div></th>
           <th><div>글쓴이</div></th>
 		      <th><div>날짜</div></th>
 		      <th><div>조회수</div></th>
@@ -35,6 +36,8 @@
               <span>{{item.board_SUBJECT}}</span>
             </router-link>
           </td>
+          <td v-if="item.cnt == 0">미답변</td>
+          <td v-else>답변 완료</td>
           <td>{{item.board_ID}}</td>
 		      <td>{{item.board_DATE}}</td>
 		      <td>{{item.board_READCOUNT}}</td>

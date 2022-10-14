@@ -1,16 +1,16 @@
 <template>
   <Qna_Detail :parent_id="parent_id"/>
   <Modal/>
-  <!-- <Comment :parent_id="parent_id"/> -->
+  <Comment :parent_id="parent_id"/>
 </template>
 
 <script>
 import Qna_Detail from '../../components/admin/qna_detail.vue'
 import Modal from '../../components/modalDo_Qna.vue'
-//import Comment from '../../components/commentDo.vue'
+import Comment from '../../components/commentDo.vue'
 export default {
   components: {
-    Qna_Detail, Modal
+    Qna_Detail, Modal, Comment
   },
   props: {
     parent_id:{
