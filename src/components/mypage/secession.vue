@@ -39,8 +39,7 @@
 
 
 <script>
-import {ref, watch} from 'vue';
-import axios from '../../axios/axiossetting.js';
+import {useStore} from 'vuex';
 export default {
     props: {
         parent_id: {
@@ -49,6 +48,7 @@ export default {
         }
     },
     setup(props,context) {
+        const store = useStore();
         context.emit("parent_getSession");
         
         const showModal = ()=> {
