@@ -1,62 +1,15 @@
 <template>
-  <!-- <div>
-		<table class="table">
-			<thead>
-        <tr>
-		  		<th colspan=2>MVC 게시판-view페이지</th>
-		  	</tr>
-      </thead>
-      <tbody>
-		  	<tr>
-		  		<td>글쓴이</td>
-		  		<td>{{board.seller}}</td>
-		  	</tr>
-		  	<tr>
-		  		<td>제목</td>
-		  		<td>{{board.name}}</td>
-		  	</tr>
-        <tr>
-		  		<td>가격</td>
-		  		<td>{{board.price}}</td>
-		  	</tr>
-        <tr>
-		  		<td>내용</td>
-		  		<td>{{board.description}}</td>
-		  	</tr>
-				<tr>
-					<td>첨부파일</td>
-          <td v-if="board.image">
-            <div @click="download"><img class="attach" src="../../assets/attach.png">{{board.original}}</div>
-          </td>
-          <td v-else></td>
-				</tr>
-        <tr>
-				  <td colspan=2>
-						<div class="group" 
-                v-if="board.seller == parent_id || parent_id == 'admin'">
-              <router-link :to="{name:'Item_Update'}">
-                <button class="btn btn-warning">수정</button>
-              </router-link>
-              <button class="btn btn-danger" @click="showModal">삭제</button>
-            </div>
-            <div class="group" v-else>
-              <router-link :to="{name:'Main'}">
-                <button class="btn btn-danger">판매자에게 연락하기</button>
-              </router-link>
-              <router-link :to="{name:'Main'}">
-                <button class="btn btn-danger">찜</button>
-              </router-link>
-            </div>
-				  </td>
-			  </tr>
-      </tbody>
-		</table>
-  </div> -->
-
   <div class="container">
       <div class="row">
           <div class="col-lg-6 col-md-6">
-            <img src="@/assets/img/food/jeyuk.jpg" alt="">
+              <vueper-slides fade :touchable="false" fixed-height = "400px">
+                <vueper-slide
+                  v-for="(slide, i) in slides"
+                  :key="i"
+                  :image="slide.image" />
+              </vueper-slides>
+            <!-- <img v-if="image1" :src="require(`C:/upload/${image1}`)"/> 
+            {{image1}}  -->
           </div>
           <div class="col-lg-6 col-md-6">
               <div class="product__details__text">
@@ -111,6 +64,8 @@ import {ref, computed} from 'vue'
 import {useRoute, useRouter} from 'vue-router'
 import {useStore} from 'vuex'
 import axios from '../../axios/axiossetting.js'
+import { VueperSlides, VueperSlide } from 'vueperslides'
+import 'vueperslides/dist/vueperslides.css'
 export default {
   props: {
     parent_id: {
@@ -118,18 +73,37 @@ export default {
       required: true
     }
   },
+  components: { VueperSlides, VueperSlide },
   setup(){
     //board_list.vue에서 <router-link :to="{name:'Board_Detail', params:{num:`${item.board_NUM}`}}">로
     //이동할 때 사용된 파라미터 num을 가져온다.
     const num = useRoute().params.num
     const board = ref({})
     const router = useRouter()
+    let i = ref("")
+    let slides = ref([])
     const getDetail = async ()=>{
       try{
         const res = await axios.get(`items/${num}`)
         console.log(res.data)
         board.value = res.data.item
+        // 작성일
         board.value.regdate = board.value.regdate.slice(0, 10)
+
+        //이미지 불러오기
+        board.value.image = board.value.image.split(',')
+
+        console.log("length:"+board.value.image.length)
+        console.log(board.value.image)
+
+        for(i=0; i<board.value.image.length-1; i++){
+          console.log(board.value.image[i])
+          slides.value.push({
+            image: require(`C:/upload/${board.value.image[i]}`)
+          })
+        }
+      
+        
         if(board.value==null){
           console.log('null입니다.')
           router.push("{name:'404'}")
@@ -142,13 +116,14 @@ export default {
     
     getDetail()
 
+
     const store = useStore()
     const count = computed(()=>{
       return store.state.count
     })
-    
+
     return {
-      board, count
+      board, count, slides
     }
   }
 }
@@ -267,5 +242,10 @@ span{
 .zzim{
   padding: 13px 40px;
 }
+
+.vueperslide__content-wrapper{
+  height: 500px;
+}
+
 
 </style>
