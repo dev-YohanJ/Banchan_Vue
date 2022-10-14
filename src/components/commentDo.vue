@@ -52,7 +52,7 @@ export default {
     const content = ref('')
     const message = ref('등록된 댓글이 없습니다.')
     const button_message = ref('등록')
-    const count_message = ref('총 50자까지 가능합니다.')
+    const count_message = ref('답변 작성')
     let comment_num = 0
     const store = useStore()//board_detail에서 사용될 count를 보내기 위함
 
@@ -71,7 +71,7 @@ export default {
             message.value = ''
           }
         }
-        count_message.value = '총 50자까지 가능합니다.'
+        count_message.value = '문의 답변'
 
         store.dispatch('count', listcount.value)
       }catch(err){
