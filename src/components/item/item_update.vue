@@ -116,54 +116,12 @@ export default {
     const router = useRouter()
     const num = useRoute().params.num
     let check = 0
-
     const files=ref([]);
     const filesPreview = ref([]);
     const uploadImageIndex=ref(0);
-    const imageUpload = (event)=> {
-        let num = -1;
-        for (let i = 0; i < event.target.files.length; i++) {
-            let eachFiles = event.target.files[i]
-              files.value = [
-                ...files.value,
-                {
-                    file: eachFiles,
-                    preview: URL.createObjectURL(eachFiles),
-                    number: i,
-                }
-              ]
-            num = i;
-        }
-        uploadImageIndex.value = num + 1; //이미지 index의 마지막 값 + 1 저장
-        console.log(files.value);
-    }
-
-
-    const imageAddUpload = (event) => {
-        let num = -1;
-          for (let i = 0; i < event.target.files.length; i++) {
-            let eachFiles = event.target.files[i]
-              files.value=[
-                  ...files.value,
-                    {
-                    //실제 파일
-                    file: eachFiles,
-                    //이미지 프리뷰
-                    preview: URL.createObjectURL(eachFiles),
-                    //삭제및 관리를 위한 number
-                    number: i + uploadImageIndex.value,
-                }
-              ]
-            num = i;
-        }
-        uploadImageIndex.value = uploadImageIndex.value + num + 1;
-    }
-
-    const fileDeleteButton = (e)=> {
-        const name = e.target.getAttribute('name');
-        console.log(name)
-        files.value = files.value.filter(data => data.number !== Number(name));
-    }
+    let i = 0
+    let slides = ref([])
+    let uploadnum = -1
 
 
     const getDetail = async () => {
@@ -173,6 +131,37 @@ export default {
         const res = await axios.get('items/'+ num)
         console.log(res.data)
         board.value = res.data.item
+
+        //이미지 불러오기
+        board.value.image = board.value.image.split(',')
+
+        console.log("length:"+board.value.image.length)
+        console.log(board.value.image)
+
+        // for(i=0; i<board.value.image.length-1; i++){
+        //   console.log(board.value.image[i])
+        //   files.value.push({
+        //     file: board.value.image[i],
+        //     preview: require(`C:/upload/${board.value.image[i]}`),
+        //     number: i,
+        //   })
+        // }
+        uploadnum = -1;
+        for (let i = 0; i < board.value.image.length; i++) {
+          let eachFiles = board.value.image[i]
+            files.value = [
+              ...files.value,
+              {
+                  file: eachFiles,
+                  preview: require(`C:/upload/${board.value.image[i]}`),
+                  number: i,
+              }
+            ]
+          uploadnum = i;
+        }
+      uploadImageIndex.value = uploadnum + 1; //이미지 index의 마지막 값 + 1 저장
+      console.log(files.value);
+
         if(board.value==null){
           console.log('null입니다.')
           router.push("{name:'404'}")
@@ -246,6 +235,51 @@ export default {
 			//store에 값을 변경합니다.
 			store.dispatch('display', true);
 		}
+
+    const imageUpload = (event)=> {
+        // uploadnum = -1;
+        for (let i = 0; i < event.target.files.length; i++) {
+            let eachFiles = event.target.files[i]
+              files.value = [
+                ...files.value,
+                {
+                    file: eachFiles,
+                    preview: URL.createObjectURL(eachFiles),
+                    number: i,
+                }
+              ]
+            uploadnum = i;
+        }
+        uploadImageIndex.value = uploadnum + 1; //이미지 index의 마지막 값 + 1 저장
+        console.log(files.value);
+    }
+
+
+    const imageAddUpload = (event) => {
+        // uploadnum = -1;
+          for (let i = 0; i < event.target.files.length; i++) {
+            let eachFiles = event.target.files[i]
+              files.value=[
+                  ...files.value,
+                    {
+                    //실제 파일
+                    file: eachFiles,
+                    //이미지 프리뷰
+                    preview: URL.createObjectURL(eachFiles),
+                    //삭제및 관리를 위한 number
+                    number: i + uploadImageIndex.value,
+                }
+              ]
+            uploadnum = i;
+        }
+        uploadImageIndex.value = uploadImageIndex.value + uploadnum + 1;
+    }
+
+    const fileDeleteButton = (e)=> {
+        const name = e.target.getAttribute('name');
+        console.log(name)
+        files.value = files.value.filter(data => data.number !== Number(name));
+    }
 
     return {
       fileName, board, change, update, remove, goDetail, showModal,
