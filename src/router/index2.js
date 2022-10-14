@@ -23,6 +23,10 @@ import Member_List from '../pages/admin/member_list.vue';
 // import Member_Update from '../component/member/member_update.vue';
 // import Member_Info from '../component/member/member_info.vue';
 import Error_404 from '../components/error/404Do.vue';
+import Chat from '../components/chat/App.vue'
+import EnterRoom from '../components/chat/EnterRoom.vue'
+import ChatRoom from '../components/chat/ChatRoom.vue'
+
 const router = createRouter({
 	history : createWebHistory(),
 	routes : [
@@ -157,7 +161,22 @@ const router = createRouter({
 		path:'/banchan/404',
 		name : '404',
 		component : Error_404
-	}
+	},
+	{
+		path: '/banchan/chat',
+		name: 'Chat',
+		component: Chat
+	  },
+	  {
+		path: '/banchan/enterchat',
+		name: 'EnterRoom',
+		component: EnterRoom
+	  },
+	  {
+		path: '/banchan/chat-room/:username',
+		name: 'ChatRoom',
+		component: ChatRoom
+	  }, 
 ]
 });
 
