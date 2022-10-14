@@ -30,7 +30,7 @@
                 <div class="clearfix" v-for="(item,index) in list" :key="index" > <!-- 상품 2개 한 줄 -->
                     <div class="list"> <!-- 반찬 + 가격정보 합치기 div-->
                         <div class="banchan">
-                            <img v-if="item.image" :src="require(`C:/upload/${item.image}`)">
+                            <img v-if="item.image" :src="require(`C:/upload/${item.image[0]}`)">
                         </div>
                         <div class="info">
                                 <div class="title">{{item.name}}</div>
@@ -110,7 +110,7 @@ export default {
                 list.value = res.data.item;
                 selectedAllValue.value=[];
                 for (var i=0; i < list.value.length; i++) {
-                    list.value[i].image= list.value[i].image.replace(",", "");
+                    list.value[i].image= list.value[i].image.split(",");
                     console.log(list.value[i].image);
 
                     if(checksave.value.length == 0) {
@@ -136,7 +136,7 @@ export default {
                 console.log("listcount.value=" + listcount.value);
 
                 if (listcount.value == 0) {
-                    message.value = "찜한 목록이 없습니다."
+                    message.value = "찜한 목록이 없습니다"
                 } else {
                     if (listcount.value > list.value.length) {
                         message.value = "찜 더보기";
@@ -167,6 +167,9 @@ export default {
             console.log(checksave.value);
 
             isAll.value = list.value.length == count ? true : false;
+            if (count == 0) {
+                isAll.value = false;
+            }
         }, {deep:true})
 
         const more = () => {
@@ -192,6 +195,9 @@ export default {
                 try {
                     const res = await axios.delete("wish?" + item_id);
                     console.log(res.data);
+                    
+                    // 체크박스 기억 초기화
+                    checksave.value=[];
                     load(page);
                     
                 } catch(err) {
