@@ -97,6 +97,11 @@ export default {
         alert('내용을 입력하세요')
         return
       }
+
+      if(props.parent_id != 'admin'){
+        alert('관리자만 답변 가능합니다.')
+        return
+      }
       let res
 
       try{

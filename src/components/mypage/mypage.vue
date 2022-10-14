@@ -14,7 +14,7 @@
                             <li><router-link class="nav-item nav-link" :to="{name:'Update'}">개인정보수정</router-link></li>
                             <li><router-link class="nav-item nav-link" :to="{name:'Secession'}">회원탈퇴</router-link></li>
                             <li><router-link class="nav-item nav-link" :to="{name:'Notice_List'}">공지사항</router-link></li>
-                            <li><router-link class="nav-item nav-link" :to="{name:'Mypage'}">문의게시판</router-link></li>
+                            <li><router-link class="nav-item nav-link" :to="{name:'Qna_List'}">문의게시판</router-link></li>
                         </ul>
                     </aside>
                 </div>
