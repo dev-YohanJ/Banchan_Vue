@@ -15,13 +15,14 @@ import Notice_Write from '../pages/admin/notice_write.vue';
 import Notice_Update from '../pages/admin/notice_update.vue';
 import Qna_List from '../pages/admin/qna_list.vue';
 import Qna_Detail from '../pages/admin/qna_detail.vue'
+import Item_List_Admin from '../pages/admin/item_list_admin.vue';
+import Member_List from '../pages/admin/member_list.vue';
+import Member_Info from '../pages/admin/member_info.vue';
+import Member_Update from '../components/admin/member_update.vue';
 import Item_List from '../pages/item/item_list.vue';
 import Item_Detail from '../pages/item/item_detail.vue';
 import Item_Update from '../pages/item/item_update.vue';
-import Member_List from '../pages/admin/member_list.vue';
 // import Board_Reply from '../component/board/board_reply.vue';
-// import Member_Update from '../component/member/member_update.vue';
-// import Member_Info from '../component/member/member_info.vue';
 import Error_404 from '../components/error/404Do.vue';
 const router = createRouter({
 	history : createWebHistory(),
@@ -115,6 +116,26 @@ const router = createRouter({
 		component: Qna_Detail
 	},
 	{
+		path:'/banchan/admin/item/list',
+		name : 'Item_List_Admin',
+		component : Item_List_Admin		
+	},
+	{
+		path:'/banchan/users/list',
+		name : 'Member_List',
+		component : Member_List
+	},
+	{
+		path:'/banchan/users/:id/info',
+		name : 'Member_Info',
+		component : Member_Info
+	},
+	{
+		path:'/banchan/users/:id/edit',
+		name : 'Member_Update',
+		component : Member_Update
+	},
+	{
 		path:'/banchan/item/list',
 		name : 'Item_List',
 		component : Item_List		
@@ -129,26 +150,12 @@ const router = createRouter({
 		name : 'Item_Update',
 		component : Item_Update
 	},
-	{
-		path:'/banchan/users/list',
-		name : 'Member_List',
-		component : Member_List
-	},
 	// {
 	// 	path:'/banchan/notices/:num/reply',
 	// 	name : 'Board_Reply',
 	// 	component : Board_Reply
 	// },
-	// {
-	// 	path:'/banchan/users/edit',
-	// 	name : 'Member_Update',
-	// 	component : Member_Update
-	// },
-	// {
-	// 	path:'/banchan/users/:id/info',
-	// 	name : 'Member_Info',
-	// 	component : Member_Info
-	// },
+
 	// {
 	// 	path:'/:pathMatch(.*)*',
 	// 	redirect : '/banchan/404'

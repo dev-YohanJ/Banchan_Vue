@@ -1,18 +1,17 @@
 <template>
   <Sidebar/>
-  <Notice_List/>
+  <Item_List/>
   <Paging/>
-  <button v-if="parent_id == 'admin'" class="btn btn-primary" @click="goWrite">글쓰기</button>
 </template>
 
 <script>
 import Sidebar from '../../components/sidebarDo.vue'
-import Notice_List from '../../components/admin/notice_list.vue'
+import Item_List from '../../components/admin/item_list_admin.vue'
 import Paging from '../../components/pageDo.vue'
 import {useRouter} from 'vue-router'
 export default {
   components: {
-    Sidebar, Notice_List, Paging
+    Sidebar, Item_List, Paging
   },
   props: {
     parent_id:{
@@ -27,21 +26,21 @@ export default {
     //<router-view @parent_getSession="getSession" :parent_id="id" />
     context.emit('parent_getSession')
 
-    const router = useRouter()
-    const goWrite = ()=>{
-      router.push({
-        name:'Notice_Write',
-        params:{id:props.parent_id}
-      })
-    }
+    // const router = useRouter()
+    // const goWrite = ()=>{
+    //   router.push({
+    //     name:'Board_Write',
+    //     params:{id:props.parent_id}
+    //   })
+    // }
 
     return {
-      goWrite
+      // goWrite
     }
   }
 }
 </script>
 
-<style scoped>
+<style>
 
 </style>

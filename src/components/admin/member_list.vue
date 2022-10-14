@@ -41,6 +41,7 @@
 		    </tr>
 		    <tr>
 		      <th><div>번호</div></th>
+          <th><div>프로필 사진</div></th>
 		      <th><div>아이디</div></th>
 		      <th><div>이름</div></th>
 		      <th><div>삭제</div></th>
@@ -49,13 +50,19 @@
 	    <tbody>
         <tr v-for="(item, index) in list" :key="index">
 		      <td>{{startnum-index}}</td>
-		      <td>
-            <router-link :to="{name:'Member_List', params:{id:`${item.id}`}}">
+		      <td><img src="@/assets/profile.png"></td>
+          <td>
+            <router-link :to="{name:'Member_Info', params:{id:`${item.id}`}}">
               {{item.id}}
             </router-link>
           </td>
 		      <td>{{item.name}}</td>
-		      <td><button class="btn btn-danger btn-sm" @click="member_delete(item.id)">삭제</button></td>
+          <td>
+            <button class="btn btn-warning btn-sm">
+              <router-link :to="{name:'Member_Update', params:{id:`${item.id}`}}">수정</router-link>
+            </button>
+            <button class="btn btn-danger btn-sm" @click="member_delete(item.id)">삭제</button>
+          </td>
 		    </tr>
 	    </tbody>
 	  </table>

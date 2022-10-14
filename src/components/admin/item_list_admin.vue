@@ -1,6 +1,6 @@
 <template>
-  <!-- 게시글이 존재하는 경우 -->
-  <div v-if="listcount>0" class="component">  
+<!-- 게시글이 존재하는 경우 -->
+  <div v-if="listcount>0">
     <div class="rows">
 	    <span>줄보기</span>
 	    <select class="form-control" v-model="limit">
@@ -14,14 +14,15 @@
 	  <table class="table table-striped">
 	    <thead>
 		    <tr>
-		      <th colspan=3>공지사항</th>
-		      <th>		
-		        <span>글 개수 : {{listcount}}</span>
+		      <th colspan=3>판매글 목록(관리자 모드)</th>
+		      <th colspan=2>		
+		        <span>상품 개수 : {{listcount}}</span>
 		      </th>
 		    </tr>
 		    <tr>
 		      <th><div>번호</div></th>
 		      <th><div>제목</div></th>
+		      <th><div>작성자</div></th>
 		      <th><div>날짜</div></th>
 		      <th><div>조회수</div></th>
 		    </tr>
@@ -30,12 +31,13 @@
         <tr v-for="(item, index) in list" :key="index">
 		      <td>{{startnum-index}}</td>
 		      <td>
-            <router-link :to="{name:'Notice_Detail', params:{num:`${item.board_NUM}`}}">
-              <span>{{item.board_SUBJECT}}</span>
+            <router-link :to="{name:'Item_Detail', params:{num:`${item.id}`}}">
+              <span>{{item.name}}</span>
             </router-link>
           </td>
-		      <td>{{item.board_DATE}}</td>
-		      <td>{{item.board_READCOUNT}}</td>
+		      <td>{{item.seller}}</td>
+		      <td>{{item.regdate}}</td>
+		      <td>{{item.readcount}}</td>
 		    </tr>
 	    </tbody>
 	  </table>
@@ -74,7 +76,7 @@ export default {
     
     const getList = async (page) => {
       try {
-        const res = await axios.get(`notice?page=${page}&limit=${limit.value}`)
+        const res = await axios.get(`item?page=${page}&limit=${limit.value}`)
 
         list.value = res.data.boardlist
         listcount.value = res.data.listcount
