@@ -7,7 +7,7 @@
                     <aside>
                         <h3>오늘의 반찬</h3>
                         <ul class="nav nav-pills flex-column">
-                            <li><router-link class="nav-item nav-link active bg-danger" :to="{name:'Mypage'}">마이페이지</router-link></li>
+                            <li><router-link class="nav-item nav-link active" :to="{name:'Mypage'}">마이페이지</router-link></li>
                             <li><router-link class="nav-item nav-link" :to="{name:'Wish'}">찜 목록</router-link></li>
                             <li><router-link class="nav-item nav-link" :to="{name:'Buy'}">구매 목록</router-link></li>
                             <li><router-link class="nav-item nav-link" :to="{name:'Sell'}">판매 목록</router-link></li>
@@ -44,7 +44,7 @@
                 <div class="nick-area">
                     <span v-show="btn == '수정'" class="nick">{{member.nickname}}</span>
                     <input type="textarea" v-show="btn == '확인'" class="nick" v-model.lazy="member.nickname">
-                    <button style="margin-left: 10px;" @click="nchange">{{btn}}</button>
+                    <button style="margin-left: 10px; color:#212529;" @click="nchange">{{btn}}</button>
                 </div>
                 <div class="showintro" v-show="ibtn == '소개글수정'" style="margin-top:30px; margin-bottom:25px;">
                     {{member.intro}}
@@ -56,7 +56,7 @@
                     maxlength="300"
                     style="resize:none; margin-top:25px;">
                 </textarea>
-                <button @click="ichange">{{ibtn}}</button>
+                <button @click="ichange" style="color:#212529;">{{ibtn}}</button>
             </div>
       </div>
    </div>
@@ -111,9 +111,7 @@ export default {
             try {
                 const res = await axios.get(`members/${id}`)
                 member.value = res.data;
-                member.value.picture = member.value.picture.substring(1);
                 console.log(res.data);
-                console.log(member.value.picture)
                 if(member.value==null) {
                     console.log('null입니다.');
                     return;
@@ -205,6 +203,13 @@ export default {
 </script>
 
 <style scoped>
+.nav-link.active,
+  .show > .nav-link {
+    background: #c64832;
+}
+.active:hover {
+   background: #993423;
+}
 .showintro {
     width: 450px;
     height: 200px;

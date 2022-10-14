@@ -8,7 +8,7 @@
                         <h3>오늘의 반찬</h3>
                         <ul class="nav nav-pills flex-column">
                             <li><router-link class="nav-item nav-link" :to="{name:'Mypage'}">마이페이지</router-link></li>
-                            <li><router-link class="nav-item nav-link active bg-danger" :to="{name:'Wish'}">찜 목록</router-link></li>
+                            <li><router-link class="nav-item nav-link active" :to="{name:'Wish'}">찜 목록</router-link></li>
                             <li><router-link class="nav-item nav-link" :to="{name:'Buy'}">구매 목록</router-link></li>
                             <li><router-link class="nav-item nav-link" :to="{name:'Sell'}">판매 목록</router-link></li>
                             <li><router-link class="nav-item nav-link" :to="{name:'Update'}">개인정보수정</router-link></li>
@@ -20,28 +20,29 @@
                 </div>
          </div>
          <div style="width: 900px;">
-            <span>찜</span><span>10</span>
+            <span style="font-size:18px;">찜</span><span style="color: rgb(247, 47, 51); font-size:20px;">{{listcount}}</span>
             <hr class="cutline">
             <div class="seldel">
-                <input type="checkbox" v-model="isAll" @click="all()" /><button>선택삭제</button>
+                <input type="checkbox" v-model="isAll" @click="all()" /><button @click="wish_del"
+                        style="color:#212529;">선택삭제</button>
             </div>
             <div style="clear:both">
                 <div class="clearfix" v-for="(item,index) in list" :key="index" > <!-- 상품 2개 한 줄 -->
                     <div class="list"> <!-- 반찬 + 가격정보 합치기 div-->
                         <div class="banchan">
-                            <img src="@/assets/img/food/jeyuk.jpg">
+                            <img v-if="item.image" :src="require(`C:/upload/${item.image}`)">
                         </div>
                         <div class="info">
                                 <div class="title">{{item.name}}</div>
                                 <div><span class="price">{{item.price}}</span><span>원</span></div>
-                                <input class="checkbtn" type="checkbox" v-model="selectedAllValue[0]" />
+                                <input class="checkbtn" type="checkbox" v-model="selectedAllValue[index]" />
                                 <hr>
                                 <div class="address">{{item.location}}</div>
                         </div>
                     </div>
                 </div>
                 <div style="text-align: center; cursor: pointer;" id="message" @click="more">
-                    <img src="../../assets/plus.png" style="width:20px; height:20px;">
+                    <img src="../../assets/plus.png" class="plus" :style="{display:imgst}"> 
                     {{message}}
                 </div>
             </div>
@@ -65,11 +66,13 @@ export default {
     setup(props, context) {
         context.emit("parent_getSession");
         let page=1;
-        const selectedAllValue = ref([false, false, false, false]);
+        const selectedAllValue = ref([]);
         const isAll = ref(false);
         const message = ref('찜한 목록이 없습니다');
         const list = ref({});
         const listcount = ref(0);
+        const imgst = ref('none');
+        const checksave = ref([]);
 
         const all = ()=> {
             if (isAll.value) {
@@ -89,7 +92,7 @@ export default {
             if (props.parent_id) {
                 load(page);
             }
-        });
+        })
 
         const load = async(page) => {
             console.log("load입니다");
@@ -105,45 +108,116 @@ export default {
                 }
 
                 list.value = res.data.item;
+                selectedAllValue.value=[];
+                for (var i=0; i < list.value.length; i++) {
+                    list.value[i].image= list.value[i].image.replace(",", "");
+                    console.log(list.value[i].image);
+
+                    if(checksave.value.length == 0) {
+                        for(var j=0; j<list.value.length; j++) {
+                            checksave.value[j] = false;
+                        }
+                        
+                    }
+
+                    if(checksave.value.length > 0) {
+                        if (checksave.value.length <= list.value.length) {
+                        selectedAllValue.value.push(checksave.value[i]);
+                        } else {
+                            selectedAllValue.value.push(false);
+                        }
+                    }
+                    
+                }
+                // 체크박스 기억 초기화
+                checksave.value=[];
+
                 listcount.value = res.data.listcount;
+                console.log("listcount.value=" + listcount.value);
+
                 if (listcount.value == 0) {
                     message.value = "찜한 목록이 없습니다."
                 } else {
                     if (listcount.value > list.value.length) {
                         message.value = "찜 더보기";
+                        imgst.value = "inline";
                     } else {
                         message.value = "";
+                        imgst.value = "none";
                     }
                 } 
-
             } catch(err) {
                 console.log(err)
                 console.log("여기는 에러")
             }
         }
 
-        watch( selectedAllValue.value, ()=>{
+        if (props.parent_id) {
+                load(page);
+            }
+
+        watch( selectedAllValue, ()=>{
             let count = 0;
             for(var i=0; i < selectedAllValue.value.length; i++) {
                 if (selectedAllValue.value[i] == true) {
                     count++
                 }
             }
-            isAll.value = selectedAllValue.value.length == count ? true : false;
-        })
+            checksave.value = selectedAllValue.value;
+            console.log(checksave.value);
+
+            isAll.value = list.value.length == count ? true : false;
+        }, {deep:true})
 
         const more = () => {
             load(++page);
         }
 
+        const wish_del = async()=> {
+            const member_id = props.parent_id;
+            console.log("wish_del = "+ member_id);
+            console.log(checksave.value);
+
+            let item_id = "";
+            let frm=new FormData();
+            for(var i=0; i<checksave.value.length; i++) {
+                if(checksave.value[i] == true) {
+                   item_id += "item_id=" + list.value[i].id + "&";
+                }
+            }
+            console.log(item_id);
+            item_id += "member_id=" + member_id;
+            const answer = confirm("정말 삭제하시겠습니까?");
+            if(answer) {
+                try {
+                    const res = await axios.delete("wish?" + item_id);
+                    console.log(res.data);
+                    load(page);
+                    
+                } catch(err) {
+                    console.log(err)
+                }
+            }
+        }
+
         return {
-           isAll, all, selectedAllValue, message, more, list
+           isAll, all, selectedAllValue, message, more, list, imgst, wish_del, listcount
         }
     }
 }
 </script>
 
 <style scoped>
+.nav-link.active,
+  .show > .nav-link {
+    background: #c64832;
+}
+.active:hover {
+   background: #993423;
+}
+.plus {
+    width:20px; height:20px;
+}
 #message {
     padding-top: 20px;
     clear:both;
@@ -211,8 +285,8 @@ input[type=checkbox] {
     height: 20px;
 }
 .cutline {
-    width: 907px;
-    background: brown;
+    width: 900px;
+    background: rgb(255 255 255);
     margin-top: 0px;
     margin-bottom: 10px;
 }

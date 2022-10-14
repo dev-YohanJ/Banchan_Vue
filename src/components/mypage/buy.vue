@@ -48,6 +48,12 @@ export default {
 </script>
 
 <style scoped>
+.bg-danger {
+    background: #c64832 !important;
+}
+.bg-danger:hover {
+    background: #993423 !important;
+}
 .row {
     margin-left: 100px;
 }
