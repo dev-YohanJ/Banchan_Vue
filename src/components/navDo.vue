@@ -60,7 +60,7 @@
                 <!-- 로그인 후 이용 가능 -->
                 <router-link class="tab" :to="{name:'Product_Write'}"><i class="fa fa-cutlery"></i> 판매하기 </router-link> <!-- Product_New -->
                 <router-link class="tab" :to="{name:'Mypage'}"><i class="fa fa-user"></i> 마이페이지 </router-link> <!-- Mypage -->
-                <router-link class="tab" :to="{name:'Main'}"><i class="fa fa-comments"></i> 채팅 </router-link> <!-- Chat -->
+                <router-link class="tab" :to="{name:'Chat'}"><i class="fa fa-comments"></i> 채팅 </router-link> <!-- Chat -->
             </div>
     </div>
 

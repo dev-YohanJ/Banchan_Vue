@@ -24,6 +24,10 @@ import Item_Detail from '../pages/item/item_detail.vue';
 import Item_Update from '../pages/item/item_update.vue';
 // import Board_Reply from '../component/board/board_reply.vue';
 import Error_404 from '../components/error/404Do.vue';
+import Chat from '../components/chat/App.vue'
+import EnterRoom from '../components/chat/EnterRoom.vue'
+import ChatRoom from '../components/chat/ChatRoom.vue'
+
 const router = createRouter({
 	history : createWebHistory(),
 	routes : [
@@ -164,7 +168,22 @@ const router = createRouter({
 		path:'/banchan/404',
 		name : '404',
 		component : Error_404
-	}
+	},
+	{
+		path: '/banchan/chat',
+		name: 'Chat',
+		component: Chat
+	  },
+	  {
+		path: '/banchan/enterchat',
+		name: 'EnterRoom',
+		component: EnterRoom
+	  },
+	  {
+		path: '/banchan/chat-room/:username',
+		name: 'ChatRoom',
+		component: ChatRoom
+	  }, 
 ]
 });
 

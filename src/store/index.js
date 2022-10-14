@@ -5,7 +5,11 @@ export default createStore({
     display:false,
     obj:{},
     page:1,
-    limit:10
+    limit:10,
+    users: [],
+  },
+  getters: {
+    allUsers: state => state.users
   },
   mutations:{ 
     update_count(state, payload){
@@ -22,7 +26,13 @@ export default createStore({
     },
     update_limit(state, payload){
       state.limit = payload 
-    }
+    },
+    ADD_USER (state, user) {
+      state.users.push(user)
+    },
+    REMOVE_USER (state, user) {
+      state.users.splice(user, 1);
+    },
   },
   actions:{ 
     count(context, count){
@@ -39,6 +49,12 @@ export default createStore({
     },
     store_limit(context, limit){
       context.commit('update_limit', limit)
-    }
+    },
+    addUser({commit}, payload) {
+      commit('ADD_USER', payload)
+    },
+    removeUser({commit}, payload) {
+      commit('REMOVE_USER', payload)
+    },
   }
 })
