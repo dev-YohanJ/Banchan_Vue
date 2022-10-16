@@ -30,7 +30,7 @@
 			  <tr>
 				  <td colspan=2>
 						<div class="group" v-if="parent_id == 'admin'">
-              <router-link :to="{name:'Notice_Update'}">
+              <router-link :to="{name:'Qna_Update'}">
                 <button class="btn btn-warning">수정</button>
               </router-link>
               <button class="btn btn-danger" @click="showModal">삭제</button>

@@ -14,7 +14,9 @@ import Notice_Detail from '../pages/admin/notice_detail.vue'
 import Notice_Write from '../pages/admin/notice_write.vue';
 import Notice_Update from '../pages/admin/notice_update.vue';
 import Qna_List from '../pages/admin/qna_list.vue';
-import Qna_Detail from '../pages/admin/qna_detail.vue'
+import Qna_Detail from '../pages/admin/qna_detail.vue';
+import Qna_Write from '../pages/admin/qna_write.vue';
+import Qna_Update from '../pages/admin/qna_update.vue';
 import Item_List_Admin from '../pages/admin/item_list_admin.vue';
 import Member_List from '../pages/admin/member_list.vue';
 import Member_Info from '../pages/admin/member_info.vue';
@@ -118,6 +120,16 @@ const router = createRouter({
 		path: '/banchan/qna/:num/detail',
 		name: 'Qna_Detail',
 		component: Qna_Detail
+	},
+	{
+		path:'/banchan/qna/write/:id',
+		name : 'Qna_Write',
+		component : Qna_Write
+	},
+	{
+		path:'/banchan/qna/:num/edit',
+		name : 'Qna_Update',
+		component : Qna_Update
 	},
 	{
 		path:'/banchan/admin/item/list',

@@ -1,18 +1,14 @@
 <template>
     <Sidebar/>
-    <Qna_List/>
-    <Paging/>
-    <button class="btn btn-primary" @click="goWrite">글쓰기</button>
+    <Qna_Write :parent_id="id"/>
 </template>
 
 <script>
 import Sidebar from '../../components/sidebarDo.vue'
-import Qna_List from '../../components/admin/qna_list.vue'
-import Paging from '../../components/pageDo.vue'
-import {useRouter} from 'vue-router'
+import Qna_Write from '../../components/admin/qna_write.vue'
 export default {
   components: {
-    Sidebar, Qna_List, Paging
+    Sidebar, Qna_Write
   },
   props: {
     parent_id:{
@@ -26,18 +22,8 @@ export default {
     //부모 컴포넌트 App_1.vue에 있는 getSession을 호출한다.
     //<router-view @parent_getSession="getSession" :parent_id="id" />
     context.emit('parent_getSession')
-
-    const router = useRouter()
-    const goWrite = ()=>{
-      router.push({
-        name:'Qna_Write',
-        params:{id:props.parent_id}
-      })
-    }
-
-    return {
-      goWrite
-    }
+    const id = props.parent_id
+    return{id}
   }
 }
 </script>
