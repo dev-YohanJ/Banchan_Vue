@@ -11,7 +11,25 @@
 		    <option value=10 selected>10</option>
 	    </select>
 	  </div>
-	  <table class="table table-striped">
+    
+    <div class="container">
+      <div class="contents_all" v-for="(item, index) in list" :key="index">
+        <div class="picture">
+          <img v-if="item" :src="require(`C:/upload/${item.image}`)"/>
+        </div>
+        <div class="contents">
+          <router-link :to="{name:'Item_Detail', params:{num:`${item.id}`}}">
+            <div class="title">{{item.name}}</div>
+          </router-link>
+          <div class="content">
+            <div class="price">{{item.price}}원</div>
+            <div class="regdate">{{item.regdate}}</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+	  <!-- <table class="table table-striped">
 	    <thead>
 		    <tr>
 		      <th colspan=3>MVC 게시판 - list</th>
@@ -40,7 +58,8 @@
 		      <td>{{item.readcount}}</td>
 		    </tr>
 	    </tbody>
-	  </table>
+	  </table> -->
+  
   </div>
   <div v-else class="center">
     등록된 글이 없습니다.
@@ -85,6 +104,13 @@ export default {
         startnum.value = listcount.value-(currentpage-1)*limit.value
         console.log('page의 startnum.value = ' + startnum.value)
 
+        for (let i=0; i < list.value.length; i++) {
+          console.log(list.value[i].image)
+          list.value[i].image = list.value[i].image.split(',')
+          list.value[i].image = list.value[i].image[0]
+        }
+        console.log("이미지:"+list.value[0].image[0])
+
         const pagelist = ref([])
         for(let i=res.data.startpage; i<=res.data.endpage; i++){
           pagelist.value.push(i)
@@ -113,4 +139,39 @@ select.form-control{
 }
 .rows{text-align:right;}
 .center{text-align:center}
+
+.container{
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.contents_all{
+  width: 300px;
+  margin-right:11px;
+  margin-bottom: 11px;
+  border: 1px solid #dddddd;
+  display: block;
+  padding: 10px;
+}
+
+.title{
+  font-size:15px;
+  padding-bottom: 10px;
+  color: red;
+}
+
+.content{
+  display:flex;
+  justify-content: space-between;
+}
+
+.price{
+  font-size:18px;
+  font-weight:bold;
+}
+
+.regdate{
+  font-size:14px;
+  color: grey;
+}
 </style>
