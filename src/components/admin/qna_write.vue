@@ -1,7 +1,7 @@
 <template>
   <div>
     <form @submit.prevent="add">
-      <h2>공지사항 등록</h2>
+      <h2>문의사항 등록</h2>
       <div class="form-group">
         <label for="board_pass">비밀번호</label>
         <input 
@@ -23,7 +23,7 @@
           required>
       </div>
       <div class="form-group">
-        <label for="board_content">내용</label>
+        <label for="board_content">문의 내용</label>
         <textarea
           v-model.lazy="board.content"
           rows="10"
@@ -32,7 +32,7 @@
       </div>
       <div class="form-group">
         <button type="submit" class="btn btn-primary">등록</button>
-        <router-link :to="{name:'Notice_List'}"><button class="btn btn-danger">취소</button></router-link>
+        <router-link :to="{name:'Qna_List'}"><button class="btn btn-danger">취소</button></router-link>
       </div>
     </form>
   </div>
@@ -62,15 +62,16 @@ export default {
 
     const add = async () => {
       let frm = new FormData()
+      frm.append('BOARD_ID', props.parent_id)
       frm.append('BOARD_SUBJECT', board.value.subject)
       frm.append('BOARD_CONTENT', board.value.content)
       frm.append('BOARD_PASS', board.value.pass)
 
       try{
-        const res = await axios.post('notice/new', frm)
+        const res = await axios.post('qna/new', frm)
         console.log(res.data)
         router.push({
-          name : 'Notice_List'
+          name : 'Qna_List'
         })
       }catch(err){
         console.log(err)
