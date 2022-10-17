@@ -60,6 +60,16 @@
           required>
       </div>
       <div class="form-group">
+        <label for="board_location">거래지역</label>
+        <input 
+          type="text"
+          v-model.lazy="board.location"
+          maxlength="100"
+          class="form-control"
+          placeholder="거래 할 동네의 주소를 입력해주세요."
+          required>
+      </div>
+      <div class="form-group">
         <label for="board_content">내용설명</label>
         <textarea
           v-model.lazy="board.description"
@@ -178,6 +188,7 @@ export default {
       frm.append('seller', props.parent_id)
       frm.append('name', board.value.subject)
       frm.append('price', board.value.price)
+      frm.append('location', board.value.location)
       frm.append('description', board.value.description)
     //   frm.append('allergy', board.value.allergy)
       if(files.value.length<1){
