@@ -12,7 +12,7 @@
                             </div>
                             <label class="flex flex-col mt-4">
                               <span class= "px-1 text-gray-600 p-2">대화상대</span>
-                              <select  v-on:change="changeRoom($event)" class="form-select h-10 block w-full rounded">
+                              <select  v-on:change="changeRoom()" class="form-select h-10 block w-full rounded">
                                 <option value="Chat Room">테스트용</option>
                                 <!-- <option value="Stocks">Stocks</option>
                                 <option value="Real Estate">Real Estate</option>
@@ -34,39 +34,63 @@
 </template>
 
 <script>
+import {ref, watch, computed} from 'vue';
+import {useStore} from 'vuex';
 export default {
   name: 'EnterRoom',
-  
- data: () => ({
-   username: '',
-   selected: "Chat Room",
- }),
- computed: {
-        users() {
-            console.log(this.$store.state.users)
-            return this.$store.state.users
-            
-        }
+  props: {
+    parent_id:{
+      type:String,
+      required:false
     },
-  methods: {
-    changeRoom () {
-      this.selected = target.value
-    },
-    enterRoom () {
-      if (this.username === ''){
-        alert("아이디를 입력하세요.") 
-      }
-      if (this.users.includes(this.username)) {
-        alert("이미 사용중인 이름입니다.")
-      }
-      else {
-      this.$emit('child-room', this.selected)
-      this.$emit('user-to-room', this.username)
-      }
+    user:{
+      type:String,
     }
+  },
+  emits:['parent_getSession','child-room','user-to-room'],
+  setup(props, context){
+    console.log(props.parent_id)
+
+    let selected = ref("Chat Room");
+    let username = ref('');
+    username.value = props.parent_id;
+     watch(()=>props.parent_id, ()=>{
+             console.log('watch=' + props.parent_id);
+              username.value = props.parent_id
+              })
+    // let username = computed(
+    //   ()=>props.parent_id
+    // )
+    
+
+    const changeRoom = (e)=> {
+      selected.value = e.target.value
+    }
+
+
+    const enterRoom = () => {
+      console.log("selected.value=" + selected.value)
+      context.emit('child-room', selected.value)
+      context.emit('user-to-room', username.value)
+      
+    }
+
+    const store = useStore();
+    const users = computed(
+      ()=> store.state.users
+    );
+
+return{
+  username, selected, enterRoom, changeRoom
+}
   }
+  
+
+
+ 
 }
 </script>
 
-<style>
+<style scoped>
+
 </style>
