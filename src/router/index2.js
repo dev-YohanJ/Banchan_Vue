@@ -8,7 +8,7 @@ import Wish from '../components/mypage/wish.vue';
 import Buy from '../components/mypage/buy.vue';
 import Sell from '../components/mypage/sell.vue';
 import Update from '../components/mypage/update';
-import Secession from '../components/mypage/secession';
+import Secession from '../pages/mypage/secession';
 import Notice_List from '../pages/admin/notice_list.vue';
 import Notice_Detail from '../pages/admin/notice_detail.vue'
 import Notice_Write from '../pages/admin/notice_write.vue';
@@ -27,6 +27,7 @@ import Error_404 from '../components/error/404Do.vue';
 import Chat from '../components/chat/App.vue'
 import EnterRoom from '../components/chat/EnterRoom.vue'
 import ChatRoom from '../components/chat/ChatRoom.vue'
+import Update_Check from '../components/mypage/update_check.vue';
 
 const router = createRouter({
 	history : createWebHistory(),
@@ -83,6 +84,11 @@ const router = createRouter({
 		path: '/banchan/update',
 		name: 'Update',
 		component: Update
+	},
+	{
+		path: '/banchan/update_check',
+		name: 'Update_Check',
+		component: Update_Check
 	},
 	{
 		path: '/banchan/secession',

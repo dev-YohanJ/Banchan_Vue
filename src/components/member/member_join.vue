@@ -402,6 +402,14 @@ button:focus{
   float: left;
   width: 50%;
 }
+.submitbtn {
+  border-top-left-radius: 0.25rem;
+  border-bottom-left-radius: 0.25rem;
+}
+.cancelbtn {
+  border-top-right-radius: 0.25rem;
+  border-bottom-right-radius: 0.25rem;
+}
 form {
     background-color: #fefefe;
     margin: 5% auto 15% auto; 
