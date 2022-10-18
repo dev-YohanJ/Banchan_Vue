@@ -11,7 +11,7 @@
                             <li><router-link class="nav-item nav-link active" :to="{name:'Wish'}">찜 목록</router-link></li>
                             <li><router-link class="nav-item nav-link" :to="{name:'Buy'}">구매 목록</router-link></li>
                             <li><router-link class="nav-item nav-link" :to="{name:'Sell'}">판매 목록</router-link></li>
-                            <li><router-link class="nav-item nav-link" :to="{name:'Update'}">개인정보수정</router-link></li>
+                            <li><router-link class="nav-item nav-link" :to="{name:'Update_Check'}">개인정보수정</router-link></li>
                             <li><router-link class="nav-item nav-link" :to="{name:'Secession'}">회원탈퇴</router-link></li>
                             <li><router-link class="nav-item nav-link" :to="{name:'Mypage'}">공지사항</router-link></li>
                             <li><router-link class="nav-item nav-link" :to="{name:'Mypage'}">문의게시판</router-link></li>
@@ -33,11 +33,14 @@
                             <img v-if="item.image" :src="require(`C:/upload/${item.image[0]}`)">
                         </div>
                         <div class="info">
-                                <div class="title">{{item.name}}</div>
-                                <div><span class="price">{{item.price}}</span><span>원</span></div>
-                                <input class="checkbtn" type="checkbox" v-model="selectedAllValue[index]" />
-                                <hr>
-                                <div class="address">{{item.location}}</div>
+                            <div class="title">{{item.name}}</div>
+                            <div><span class="price">{{item.price}}</span><span>원</span></div>
+                            <input class="checkbtn" type="checkbox" v-model="selectedAllValue[index]" />
+                            <hr>
+                            <div class="address">{{item.location}}</div>
+                            <div v-if="item.status == 1" class="filter">
+                                <div class="filter-text">판매완료</div>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -139,7 +142,7 @@ export default {
                     message.value = "찜한 목록이 없습니다"
                 } else {
                     if (listcount.value > list.value.length) {
-                        message.value = "찜 더보기";
+                        message.value = "더보기";
                         imgst.value = "inline";
                     } else {
                         message.value = "";
@@ -214,6 +217,19 @@ export default {
 </script>
 
 <style scoped>
+.filter-text {
+    color: rgb(255 255 255);
+    text-align: center;
+    line-height: 150px;
+}
+.filter {
+    position: relative;
+    right: 151px;
+    bottom: 129px;
+    width: 150px;
+    height: 150px;
+    background: rgba(0, 0, 0, 0.6);
+}
 .nav-link.active,
   .show > .nav-link {
     background: #c64832;

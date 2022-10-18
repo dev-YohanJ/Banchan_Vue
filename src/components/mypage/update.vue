@@ -2,7 +2,7 @@
   <!-- 왼쪽 네비게이션 -->
    <div style="margin-top:100px; margin-bottom:100px">
       <div class="row">
-        <div>
+        <div class="buble">
             <div>
                 <aside>
                     <h3>오늘의 반찬</h3>
@@ -11,7 +11,7 @@
                         <li><router-link class="nav-item nav-link" :to="{name:'Wish'}">찜 목록</router-link></li>
                         <li><router-link class="nav-item nav-link" :to="{name:'Buy'}">구매 목록</router-link></li>
                         <li><router-link class="nav-item nav-link" :to="{name:'Sell'}">판매 목록</router-link></li>
-                        <li><router-link class="nav-item nav-link active" :to="{name:'Update'}">개인정보수정</router-link></li>
+                        <li><router-link class="nav-item nav-link active" :to="{name:'Update_Check'}">개인정보수정</router-link></li>
                         <li><router-link class="nav-item nav-link" :to="{name:'Secession'}">회원탈퇴</router-link></li>
                         <li><router-link class="nav-item nav-link" :to="{name:'Mypage'}">공지사항</router-link></li>
                         <li><router-link class="nav-item nav-link" :to="{name:'Mypage'}">문의게시판</router-link></li>
@@ -87,8 +87,7 @@
             </b>
 
             <div class="clearfix">
-                <button type="submit" class="submitbtn">회원가입</button>
-                <button type="reset" class="cancelbtn">돌아가기</button>
+                <button  type="submit" class="submitbtn">수정</button>
             </div>
         </form>
       </div>
@@ -350,6 +349,9 @@ export default {
 </script>
 
 <style scoped>
+.buble {
+    margin-right: 20px;
+}
 .red{color:red}
 .green{color:green}
  .msg {   position: relative;
@@ -419,9 +421,11 @@ button:focus{
     background-color: #f44336;
 }
 
-.cancelbtn, .submitbtn {
+.submitbtn {
   float: left;
-  width: 50%;
+  border-radius: 0.25rem;
+  width: 100%;
+  padding: 10px;
 }
 form {
     background-color: #fefefe;
