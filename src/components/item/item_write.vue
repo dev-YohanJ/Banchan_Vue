@@ -101,7 +101,7 @@
 
 <script>
 import {ref} from 'vue'
-import {useRouter} from 'vue-router'
+import {useRouter, useRoute} from 'vue-router'
 import axios from '../../axios/axiossetting.js'
 export default {
     
@@ -115,6 +115,25 @@ export default {
 
   setup(props, context){
     context.emit('parent_getSession')
+
+    const route = useRoute()
+    const memberDetail = async ()=>{
+      try{
+        const res = await axios.get(`items/${route.params.id}`)
+        console.log(res.data)
+        member.value = res.data.member
+        
+        if(member.value==null){
+          console.log('null입니다.')
+          router.push("{name:'404'}")
+          return
+        }
+      }catch(err){
+        console.log(err)
+      }
+    }
+    
+    memberDetail()
 
     const files=ref([]);
     const filesPreview = ref([]);
@@ -220,7 +239,7 @@ export default {
         fileDeleteButton,imageUpload,imageAddUpload,
         files,//업로드용 파일
         filesPreview,
-        uploadImageIndex // 이미지 업로드를 위한 변수
+        uploadImageIndex, // 이미지 업로드를 위한 변수
     }
   }
 }

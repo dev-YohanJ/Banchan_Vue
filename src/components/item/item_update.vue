@@ -70,7 +70,7 @@
           required></textarea>
       </div>
 
-      <div class="form-group" v-if="board.board_RE_LEV==0">
+      <!-- <div class="form-group" v-if="board.board_RE_LEV==0">
         <label for="board_file">파일 첨부</label>
         <label>
           <img src="../../assets/attach.png" alt="파일첨부">
@@ -79,7 +79,7 @@
         <span>{{fileName}}</span>
         <img src="../../assets/remove.png" alt="파일삭제" class="remove" 
           v-if="fileName" @click="remove">
-      </div>
+      </div> -->
 
 
       <div class="form-group buttons">
@@ -146,18 +146,24 @@ export default {
         //     number: i,
         //   })
         // }
+
         uploadnum = -1;
-        for (let i = 0; i < board.value.image.length; i++) {
-          let eachFiles = board.value.image[i]
+        for (let i = 0; i < board.value.image.length-1; i++) {
+          let eachFiles = board.value.image[i] //파일명
             files.value = [
               ...files.value,
               {
-                  file: eachFiles,
+                  file: null,
                   preview: require(`C:/upload/${board.value.image[i]}`),
                   number: i,
+                  name: eachFiles
               }
             ]
           uploadnum = i;
+          // console.log("기존number:"+files.value[i].number)
+          // console.log("기존uploadnum:"+uploadnum)
+          console.log("기존name:"+files.value[i].name)
+          fileName.value += files.value[i].name + ","
         }
       uploadImageIndex.value = uploadnum + 1; //이미지 index의 마지막 값 + 1 저장
       console.log(files.value);
@@ -168,8 +174,7 @@ export default {
           return
         }
         //"board_ORIGINAL":null로 전송된 경우 fileName.value=null이다.
-        fileName.value = board.value.board_Original
-        console.log('파일이름 = ' + fileName.value)
+        // console.log('파일이름 = ' + fileName.value)
       }catch(err){
         console.log(err)
       }
@@ -186,13 +191,25 @@ export default {
     const update = async ()=>{
       console.log("upload start");
       let frm = new FormData()
-      if(files.value.length > 0){
+      if(check==0){ //기존파일 그대로인 경우
+        frm.append('check', fileName.value) //
+        frm.append('image', board.value.image)
+        console.log("boardimg:" + board.value.image)
+      }
+      else if(files.value.length > 0){
+
+        console.log("이미지1:"+board.value.image)
+        frm.append('image', board.value.image)
+
         for(let i=0; i<files.value.length;i++){
                             //같은 이름으로 여러 번 올려야 합니다.
-            
-            console.log(files.value[i].file.name);
+            // console.log("업데이트파일:"+files.value[i].file.name);
+            // console.log("파일1:"+files.value[i].file)
+            // board.value.image += files.value[i].file + ","
             frm.append("uploadfile", files.value[i].file); 
         }
+        console.log("이미지2:"+board.value.image)
+
       }
       frm.append('seller', props.parent_id)
       frm.append('name', board.value.name)
@@ -200,11 +217,7 @@ export default {
       frm.append('description', board.value.description)
       frm.append('id', num)
 
-
-      if(check==0 && fileName.value != null){ //기존파일 그대로인 경우
-        frm.append('check', fileName.value)
-        frm.append('image', board.value.image)
-      }
+      console.log("==================================")
 
       try{
         const res = await axios.patch('items', frm,
@@ -246,9 +259,12 @@ export default {
                     file: eachFiles,
                     preview: URL.createObjectURL(eachFiles),
                     number: i,
+                    name: eachFiles.name,
                 }
               ]
             uploadnum = i;
+            // console.log("이미지number:"+files.value[i].number)
+            // console.log("이미지uploadnum:"+uploadnum)
         }
         uploadImageIndex.value = uploadnum + 1; //이미지 index의 마지막 값 + 1 저장
         console.log(files.value);
@@ -268,17 +284,26 @@ export default {
                     preview: URL.createObjectURL(eachFiles),
                     //삭제및 관리를 위한 number
                     number: i + uploadImageIndex.value,
+                    name: eachFiles.name,
                 }
               ]
             uploadnum = i;
+            // console.log("추가number:"+files.value[i].number)
+            // console.log("추가uploadnum:"+uploadnum)
         }
         uploadImageIndex.value = uploadImageIndex.value + uploadnum + 1;
+        check++
     }
 
     const fileDeleteButton = (e)=> {
-        const name = e.target.getAttribute('name');
-        console.log(name)
+        const name = e.target.getAttribute('name'); //숫자index
+        console.log("name:"+name)
         files.value = files.value.filter(data => data.number !== Number(name));
+        board.value.image="";
+        for(i=0; i<files.value.length; i++){
+          board.value.image += files.value[i].name + ","
+        }
+
     }
 
     return {
