@@ -1,14 +1,14 @@
 <template>
-    <Sidebar/>
+    <!-- <Sidebar/> -->
     <Qna_Write :parent_id="id"/>
 </template>
 
 <script>
-import Sidebar from '../../components/sidebarDo.vue'
+// import Sidebar from '../../components/sidebarDo.vue'
 import Qna_Write from '../../components/admin/qna_write.vue'
 export default {
   components: {
-    Sidebar, Qna_Write
+    Qna_Write
   },
   props: {
     parent_id:{
