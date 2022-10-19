@@ -13,7 +13,7 @@
                             <label class="flex flex-col mt-4">
                               <span class= "px-1 text-gray-600 p-2">대화상대</span>
                               <select  v-on:change="changeRoom()" class="form-select h-10 block w-full rounded">
-                                <option value="Chat Room">테스트용</option>
+                                <option value="Chat Room">판매자</option>
                                 <!-- <option value="Stocks">Stocks</option>
                                 <option value="Real Estate">Real Estate</option>
                                 <option value="Mutual Funds and ETFs">Mutual Funds and ETFs</option> -->
