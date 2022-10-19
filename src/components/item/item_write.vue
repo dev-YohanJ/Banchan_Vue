@@ -105,7 +105,6 @@ export default {
 
   setup(props, context){
     context.emit('parent_getSession')
-
     const member = ref({});
     const load = async() => {
         console.log("load입니다");

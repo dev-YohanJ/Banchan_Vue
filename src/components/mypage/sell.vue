@@ -36,8 +36,8 @@
                             <div class="title">{{item.name}}</div>
                             <div><span class="price">{{item.price}}</span><span>원</span></div>
                             <input class="checkbtn" type="checkbox" v-model="selectedAllValue[index]" />
-                            <div v-if="item.status == 0" class="aws123" @click="sellfn(item.id)">판매완료</div>
-                            <div v-else class="aws123" style="visibility: hidden;" @click="sellfn(item.id)">판매완료</div>
+                            <div v-if="item.status == 0" class="aws123" @click="sellfn(item.id)">판매완료로 변경</div>
+                            <div v-else class="aws123" style="visibility: hidden;" @click="sellfn(item.id)">판매완료로 변경</div>
                             <hr>
                             <div class="address">주소입니다</div> <!-- {{item.location}} -->
                             <div v-if="item.status == 1" class="filter">
@@ -220,6 +220,7 @@ export default {
                     console.log(res.data);
                     if (res.data == 1) {
                         console.log("판매완료");
+                        load(page);
                     }
                 } catch(err) {
                         console.log(err);
@@ -236,7 +237,8 @@ export default {
 
 <style scoped>
 .aws123 {
-    margin-left:180px; margin-top:7px; cursor:pointer;
+    font-size: 13px;
+    margin-left:150px; margin-top:7px; cursor:pointer;
 }
 .filter-text {
     color: rgb(255 255 255);
@@ -246,7 +248,7 @@ export default {
 .filter {
     position: relative;
     right: 151px;
-    bottom: 147px;
+    bottom: 150px;
     width: 150px;
     height: 150px;
     background: rgba(0, 0, 0, 0.6);

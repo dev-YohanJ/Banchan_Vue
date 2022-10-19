@@ -71,14 +71,21 @@ export default {
       console.log("checkProcess = "+id);
       console.log(member.value.password+ "pwcheck=" +pw_check.value);
       if (member.value.password != pw_check.value) {
-        alert("비밀번호를 확인하세요");
+        alert("비밀번호를 확인하세요.");
       } else {
         try {
           const res = await axios.post("members/pwcheck", member.value);
           console.log(res.data);
-          router.push({
+          if (res.data == 1) {
+            router.push({
               name: "Update",
             });
+          } else {
+            alert("비밀번호가 틀렸습니다.");
+            return false;
+          }
+          
+          
         } catch (err) {
           console.log(err);
         }

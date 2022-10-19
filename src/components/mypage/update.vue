@@ -19,20 +19,19 @@
                 </aside>
             </div>
         </div>
-        <form @submit.prevent="joinProcess">
+        <form @submit.prevent="updateProcess">
             <b>아이디</b>
             <input  type="text"
-                    v-model="join.id"
+                    v-model="update.id"
                     placeholder="아이디"
                     readonly
                     maxLength="12">
-            <span :class="id_color" class="msg">{{id_message}}</span>
             
             <b>비밀번호</b>
             <input  type="password"
                     maxlength="30"
                     placeholder="비밀번호"
-                    v-model="join.password"
+                    v-model="update.password"
                     required>
             <span :class="pass_color" class="msg">{{pass_message}}</span>
 
@@ -47,7 +46,7 @@
             <input  type="text"
                     maxLength ="15"
                     placeholder="이름"
-                    v-model="join.name"
+                    v-model="update.name"
                     required>
             <span :class="name_color" class="msg">{{name_message}}</span>
 
@@ -55,7 +54,7 @@
             <input  type="text"
                     maxLength ="20"
                     placeholder="닉네임"
-                    v-model="join.nickname"
+                    v-model="update.nickname"
                     required>
             <span :class="nick_color" class="msg">{{nick_message}}</span>
 
@@ -63,13 +62,13 @@
             <input  type="text"
                     placeholder="예) 01012345678"
                     maxlength="11" 
-                    v-model.lazy="join.phone"
+                    v-model.lazy="update.phone"
                     required>
             <span :class="phone_color" class="msg">{{phone_message}}</span>
             <b>이메일</b>
             <input  type="text"
                     placeholder="이메일"
-                    v-model="join.email"
+                    v-model="update.email"
                     required >
             <span :class="email_color" class="msg">{{email_message}}</span>
 
@@ -99,8 +98,16 @@ import {ref, watch} from 'vue';
 import axios from '../../axios/axiossetting.js';
 import {useRouter} from 'vue-router';
 export default {
-  setup() {
-    const join = ref({
+  props: {
+        parent_id: {
+            type: String,
+            required: true
+        }
+    },
+  emits:['parent_getSession'],
+  setup(props, context) {
+    context.emit("parent_getSession");
+    const update = ref({
      id:'', 
      password:'',
      name: '',
@@ -110,9 +117,7 @@ export default {
      address:''
    });
 
-    const id_message=ref('');
     const email_message=ref('');
-    const id_color=ref('');
     const email_color=ref('');
     const pass_message=ref('');
     const pass_color=ref('');
@@ -125,6 +130,8 @@ export default {
     const phone_color=ref('');
     const phone_message=ref('');
 
+    const nickchk = ref('');
+
     const post = ref('');
     const roadaddr = ref('');
     const detailaddr = ref('');
@@ -133,36 +140,35 @@ export default {
     
     const router = useRouter();
 
-    const addr = ()=> {
-      join.value.address = roadaddr.value + "/" + detailaddr.value
-      console.log(join.value.address);
-    }
-
-    const idcheck = async () => {
-      try {
-        console.log("idcheck=" + join.value.id);
-        //const res = await axios.get(`members/idcheck?id=${join.value.id}`)
-        const res = await axios.get("members/idcheck", { params: { id: join.value.id } });
-        console.log("res.data = " + res.data);
-        if (res.data == 1) {
-          id_message.value = "이미 사용중인 아이디 입니다.";
-          id_color.value = "red";
-        } else {
-          id_message.value = "사용가능한 아이디 입니다.";
-          id_color.value = "green";
-        }
-      } catch (err) {
-        console.log("err" + err);
+    watch( ()=> props.parent_id , ()=>{
+      console.log('watch=' + props.parent_id);
+      if (props.parent_id) {
+        console.log(props.parent_id);
+        load();
       }
-    }; //idcheck end
+    })
+
+    const addr = ()=> {
+      update.value.address = post.value + "/" + roadaddr.value + "/" + detailaddr.value
+      console.log(update.value.address);
+    }
 
     const nickcheck = async () => {
       try {
-        const res = await axios.get("members/nickcheck", { params: { nickname: join.value.nickname } });
+        const id = props.parent_id;
+        console.log("load id="+ id);
+        const res = await axios.get("members/nickcheck", { params: { nickname: update.value.nickname } });
         console.log("res.data = " + res.data);
         if (res.data == 1) {
-          nick_message.value = "이미 사용중인 닉네임 입니다.";
-          nick_color.value = "red";
+
+          const res2 = await axios.get("members/nickcheck2", {params: { id: id, nickname: update.value.nickname }})
+          if(res2.data == 1) {
+            nick_message.value = "원래 사용한 닉네임 입니다.";
+            nick_color.value = "green";
+          } else {
+            nick_message.value = "이미 사용중인 닉네임 입니다.";
+            nick_color.value = "red";
+          }
         } else {
           nick_message.value = "사용가능한 닉네임 입니다.";
           nick_color.value = "green";
@@ -173,23 +179,10 @@ export default {
     }; //nickcheck end
 
     watch(
-      () => join.value.id,
-      () => {
-        var pattern = /^\w{5,12}$/;
-        if (!pattern.test(join.value.id)) {
-          id_message.value = "영문자,숫자,_로 5-12자 가능합니다.";
-          id_color.value = "red";
-        } else {
-          idcheck();
-        }
-      }
-    );
-
-    watch(
-      () => join.value.password,
+      () => update.value.password,
       () => {
         var pattern = /^(?=.*[a-zA-z])(?=.*[0-9])(?=.*[$`~!@$!%*#^?&\\(\\)\-_=+]).{8,20}$/
-        if (!pattern.test(join.value.password)) {
+        if (!pattern.test(update.value.password)) {
           pass_message.value = "영문,숫자,특수문자를 조합하여 입력해주세요.(8-20자)";
           pass_color.value = "red";
         } else {
@@ -207,7 +200,7 @@ export default {
           pass_check_message.value = "비밀번호를 형식에 맞게 입력하세요.";
           pass_check_color.value = "red";
         } else {
-            if (join.value.password != pw_check.value) {
+            if (update.value.password != pw_check.value) {
             pass_check_message.value = "비밀번호가 일치하지 않습니다.";
             pass_check_color.value = "red";
           } else {
@@ -219,10 +212,10 @@ export default {
     )
 
     watch(
-      () => join.value.name,
+      () => update.value.name,
       () => {
         var pattern = /^[가-힣]{2,}$/
-        if (!pattern.test(join.value.name)) {
+        if (!pattern.test(update.value.name)) {
           name_message.value = "한글로 입력해주세요.";
           name_color.value = "red";
         } else {
@@ -233,10 +226,10 @@ export default {
     )
     
     watch(
-      () => join.value.nickname,
+      () => update.value.nickname,
       () => {
         var pattern = /^(?=.*[a-z0-9가-힣])[a-z0-9가-힣]{2,12}$/;
-        if (!pattern.test(join.value.nickname)) {
+        if (!pattern.test(update.value.nickname)) {
           nick_message.value = "한글,영문자,숫자로 2~12자까지 가능합니다.";
           nick_color.value = "red";
         } else {
@@ -247,11 +240,11 @@ export default {
     );
 
     watch(
-      () => join.value.phone,
+      () => update.value.phone,
       () => {
-        console.log(join.value.phone)
+        console.log(update.value.phone)
         var pattern = /^010[0-9]{8}$/
-        if (!pattern.test(join.value.phone)) {
+        if (!pattern.test(update.value.phone)) {
           phone_message.value = "형식에 맞게 입력해주세요.";
           phone_color.value = "red";
         } else {
@@ -262,11 +255,11 @@ export default {
     )
 
     watch(
-      ()=>join.value.email,
+      ()=>update.value.email,
       (next, prev )=>{
         console.log('watch(email)' + prev + "=>" + next);
         var pattern = /^\w+@\w+[.]\w{3}$/;
-        if(!pattern.test(join.value.email)) {
+        if(!pattern.test(update.value.email)) {
           email_message.value = "이메일형식이 맞지 않습니다.";
           email_color.value = 'red';
         } else {
@@ -282,22 +275,23 @@ export default {
       }
     )
 
-    const joinProcess = async () => {
-      if (id_color.value == "red") {
-        alert("아이디를 확인하세요");
-      } else if (join.value.password != pw_check.value) {
+    const updateProcess = async () => {
+      if (update.value.password != pw_check.value) {
         alert("비밀번호를 확인하세요");
+      } else if (update.value.nickname == "red") {
+        alert("닉네임을 확인하세요")
       } else if (email_color.value == "red") {
         alert("email을 확인하세요");
       } else if (post.value == '') {
         alert("주소 검색을 확인하세요")
       } else {
         try {
-          const res = await axios.post("members/new", join.value);
+          const res = await axios.patch("members/update", update.value);
+          console.log("res.data=" + res.data);
           if (res.data == 1) {
-            alert("회원가입을 축하합니다. ");
+            alert("수정되었습니다.");
             router.push({
-              name: "Login",
+              name: "Mypage",
             });
           }
         } catch (err) {
@@ -335,10 +329,34 @@ export default {
                 roadaddr.value = roadAddr;
             }
         }).open();
-    }       
+    }    
+    
+    const load = async() => {
+      const id = props.parent_id;
+      console.log("load id="+ id);
+      try {
+        const res = await axios.get(`members/${id}`)
+        update.value = res.data;
+        update.value.password = "";
+        const adr = update.value.address.split("/");
+        console.log(adr);
+        post.value = adr[0]
+        roadaddr.value = adr[1]
+        detailaddr.value = adr[2]
+
+
+        nickchk.value = update.value.nickname;
+
+      } catch(err) {
+          console.log(err)
+          console.log("여기는 에러")
+      }
+    }
+    
+    load();
 
     return {
-      join, id_message, id_color, email_message, email_color, joinProcess, pw_check,
+      update, email_message, email_color, updateProcess, pw_check,
       addressApi, pass_message, pass_color, pass_check_message, pass_check_color,
       name_color, name_message, nick_color, nick_message, phone_message, phone_color,
       post, roadaddr, detailaddr

@@ -37,7 +37,7 @@
                             <div><span class="price">{{item.price}}</span><span>원</span></div>
                             <input class="checkbtn" type="checkbox" v-model="selectedAllValue[index]" />
                             <hr>
-                            <div class="address">{{item.location}}</div>
+                            <div class="address">주소입니다</div> <!-- {{item.location}} -->
                             <div v-if="item.status == 1" class="filter">
                                 <div class="filter-text">판매완료</div>
                             </div>
@@ -225,7 +225,7 @@ export default {
 .filter {
     position: relative;
     right: 151px;
-    bottom: 129px;
+    bottom: 150px;
     width: 150px;
     height: 150px;
     background: rgba(0, 0, 0, 0.6);
