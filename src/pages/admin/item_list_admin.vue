@@ -1,17 +1,17 @@
 <template>
-  <Sidebar/>
+  <!-- <Sidebar/> -->
   <Item_List/>
   <Paging/>
 </template>
 
 <script>
-import Sidebar from '../../components/sidebarDo.vue'
+// import Sidebar from '../../components/sidebarDo.vue'
 import Item_List from '../../components/admin/item_list_admin.vue'
 import Paging from '../../components/pageDo.vue'
 import {useRouter} from 'vue-router'
 export default {
   components: {
-    Sidebar, Item_List, Paging
+    Item_List, Paging
   },
   props: {
     parent_id:{

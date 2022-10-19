@@ -1,16 +1,16 @@
 <template>
-  <Sidebar/>
+  <!-- <Sidebar/> -->
   <Member_List/>
   <Paging/>
 </template>
 
 <script>
-import Sidebar from '../../components/sidebarDo.vue'
+// import Sidebar from '../../components/sidebarDo.vue'
 import Member_List from '../../components/admin/member_list.vue'
 import Paging from '../../components/pageDo.vue'
 export default {
   components:{
-    Sidebar, Member_List, Paging
+    Member_List, Paging
   },
   props: {
     parent_id: {

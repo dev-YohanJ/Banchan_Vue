@@ -1,18 +1,18 @@
 <template>
-    <Sidebar/>
+    <!-- <Sidebar/> -->
     <Qna_List/>
     <Paging/>
     <button class="btn btn-primary" @click="goWrite">글쓰기</button>
 </template>
 
 <script>
-import Sidebar from '../../components/sidebarDo.vue'
+// import Sidebar from '../../components/sidebarDo.vue'
 import Qna_List from '../../components/admin/qna_list.vue'
 import Paging from '../../components/pageDo.vue'
 import {useRouter} from 'vue-router'
 export default {
   components: {
-    Sidebar, Qna_List, Paging
+    Qna_List, Paging
   },
   props: {
     parent_id:{

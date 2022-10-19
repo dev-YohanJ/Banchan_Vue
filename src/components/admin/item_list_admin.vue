@@ -100,6 +100,12 @@ export default {
 
     getList(1)
 
+    // const item_delete = async ()=>{
+    //   const res = await axios.delete(`items/${item.id}`)
+    //   if(res==1)
+    //     alert('삭제 성공')
+    // }
+      
     return {
       limit, startnum, list, listcount
     }

@@ -1,18 +1,16 @@
 <template>
-  <!-- <Sidebar/> -->
-  <Notice_List/>
-  <Paging/>
-  <button v-if="parent_id == 'admin'" class="btn btn-primary" @click="goWrite">글쓰기</button>
+    <Qna_List/>
+    <Paging/>
+    <button class="btn btn-primary" @click="goWrite">글쓰기</button>
 </template>
 
 <script>
-// import Sidebar from '../../components/sidebarDo.vue'
-import Notice_List from '../../components/admin/notice_list.vue'
+import Qna_List from '../../components/admin/qna_list.vue'
 import Paging from '../../components/pageDo.vue'
 import {useRouter} from 'vue-router'
 export default {
   components: {
-    Notice_List, Paging
+    Qna_List, Paging
   },
   props: {
     parent_id:{
@@ -30,7 +28,7 @@ export default {
     const router = useRouter()
     const goWrite = ()=>{
       router.push({
-        name:'Notice_Write',
+        name:'Qna_Write',
         params:{id:props.parent_id}
       })
     }
