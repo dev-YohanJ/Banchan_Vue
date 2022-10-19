@@ -1,30 +1,4 @@
 <template>
-<!--
-    <nav class="navbar navbar-expand-sm right-block navbar-dark" v-if="parent_id">
-        <ul class="navbar-nav">
-            <li class="nav-link" @click="logout">{{parent_id}}님(로그아웃)</li>
-            <li class="nav-item">
-                <router-link class="nav-link"
-                :to="{name:'Member_Update'}">정보수정</router-link>
-            </li>
-                
-            !-- admin 메뉴 --
-            <div v-if="parent_id=='admin'">
-                !-- Dropdown --
-                <li class="nav-item dropdown"><div
-                    class="nav-link dropdown-toggle" to="#" id="navbardrop"
-                    data-toggle="dropdown">
-                     관리자 </div>
-                    <div class="dropdown-menu">
-                        <router-link class="dropdown-item" :to="{name:'Member_List'}">회원정보</router-link>
-                        <router-link class="dropdown-item" :to="{name:'Board_List'}">게시판</router-link>
-                    </div>
-                </li>
-            </div>
-        </ul>
-    </nav>
--->
-
   
 <!-- 헤더 -->
 <div class="header_top">
@@ -52,35 +26,20 @@
         </div>
         <div class="search_form">
             <form action="#">
-                <input type="text" placeholder="검색어를 입력하세요.">
+                <input 
+                    type="text" 
+                    class="form-control"
+                    v-model.lazy="search_word"
+                    ref="f2"
+                    placeholder="검색어를 입력하세요.">
                 <button type="submit" class="site-btn">검색</button>
             </form>
         </div>
         <div class="float-right">
-                <!-- 로그인 후 이용 가능 -->
-                <router-link class="tab" :to="{name:'Product_Write'}"><i class="fa fa-cutlery"></i> 판매하기 </router-link> <!-- Product_New -->
-                <router-link class="tab" :to="{name:'Mypage'}"><i class="fa fa-user"></i> 마이페이지 </router-link> <!-- Mypage -->
-                <router-link class="tab" :to="{name:'Chat'}"><i class="fa fa-comments"></i> 채팅 </router-link> <!-- Chat -->
-            </div>
-    </div>
-
-        
-<!-- 햄버거메뉴 -->
-    <div class="col-lg-3">
-        <div class="categories">
-            <div class="categories_all">
-                <i class="fa fa-bars"></i>
-                <span> 반찬목록</span>
-            </div>
-            <div class="categories-content">
-                <ul>
-                    <li><router-link class="categorie" :to="{name:'Item_List'}">볶음</router-link></li>
-                    <li><router-link class="categorie" :to="{name:'Item_List'}">조림</router-link></li>
-                    <li><router-link class="categorie" :to="{name:'Item_List'}">국/찌개/탕</router-link></li>
-                    <li><router-link class="categorie" :to="{name:'Item_List'}">김치/절임/젓갈</router-link></li>
-                    <li><router-link class="categorie" :to="{name:'Item_List'}">전/생선</router-link></li>
-                </ul>
-            </div>
+            <!-- 로그인 후 이용 가능 -->
+            <router-link class="tab" :to="{name:'Product_Write'}"><i class="fa fa-cutlery"></i> 판매하기 </router-link> <!-- Product_New -->
+            <router-link class="tab" :to="{name:'Mypage'}"><i class="fa fa-user"></i> 마이페이지 </router-link> <!-- Mypage -->
+            <router-link class="tab" :to="{name:'Chat'}"><i class="fa fa-comments"></i> 채팅 </router-link> <!-- Chat -->
         </div>
     </div>
 </div>
@@ -89,16 +48,9 @@
 <script>
 import axios from '../axios/axiossetting.js'
 import {useRouter} from 'vue-router';
-import { ref, reactive } from 'vue'
+import {useStore} from 'vuex'
+import { ref, watch } from 'vue'
 export default {
-    /*
-        1. 부모 컴포넌트인 App_1.vue에서 전달받은 parent_id를 하위 컴포넌트에서 사용하기 위해서는 아래와 같이 props 사용합니다.
-        2. props는 객체이고 전달 받은 속성의 type(String, Number, Object, Boolean, Array, Date, Function),
-           required 등에 관한 속성을 작성합니다.
-        3. App_1.vue
-            <Nav :parent_id="id" /> 에서 콜론 뒤에 있는 parent_id의 이름으로 하위 컴포넌트인 이곳으로 전달됩니다.
-        4. 부모에게 전달 받은 parent_id의 값은 변경될 수 없습니다.
-    */
     props:{
         parent_id:{
             type:String,
@@ -106,6 +58,7 @@ export default {
         }
     },
     setup() {
+
         //페이지 이동하기 위해 useRouter()를 사용합니다.
         const router = useRouter();
         const logout = async () => {
@@ -122,38 +75,90 @@ export default {
             }
         }
 
-        /*햄버거 메뉴*/
-        const menu  = ref(null)
-        const state = reactive({ isOpened : false })
-
-        function mouseDown() {
-            !state.isOpened ? open() : close()
+        const store = useStore()
+        let option_data = ref([])
+        option_data.value = [
+            {value:'NL', label:'제목 또는 지역'},
+        ]
+        const limit = ref(10)
+        let currentpage = 1
+        let maxpage = 1
+        const list = ref([])
+        const listcount = ref(0)
+        const startnum = ref(0)
+        const search_field = ref('NL')
+        const placeholder_message = ref('아이디를 입력하세요')
+        console.log('search_field2=' + search_field.value)
+        const search_word = ref('')
+        const f2 = ref(null)
+        const search = () => {
+            console.log('search하러 가요')
+            if(search_word.value==''){
+                alert('검색어를 입력하세요')
+                f2.value.focus()
+                return
+            }
+            getList(currentpage)
         }
 
-        function open() {
-            state.isOpened = true
-            window.addEventListener('mousedown', outside)
+        const change_placeholder = () => {
+            option_data.value.filter(item => {
+                if(item.value===search_field.value){
+                placeholder_message.value = item.label + '(를)을 입력하세요'
+                return
+                }
+            })
         }
 
-        function close() {
-            state.isOpened = false
-            window.removeEventListener('mousedown', outside)
+        const getList = async (page) => {
+        try{
+            const res = await axios.get(`item?page=${page}&limit=${limit.value}&search_field=${search_field.value}&search_word=${search_word.value}`);
+            console.log('boardlist1=' + res.data)
+            list.value = res.data.boardlist1
+            maxpage = res.data.maxpage
+            currentpage = res.data.page
+            search_field.value = res.data.search_field
+            search_word.value = res.data.search_word
+            startnum.value = listcount.value - (currentpage-1) * limit.value
+
+            const pagelist = ref([])
+            for(let i=res.data.startpage; i<=res.data.endpage; i++){
+            pagelist.value.push(i)
+            }
+
+            const obj = {maxpage, currentpage, pagelist}
+            store.dispatch('store_obj', obj)
+        }catch(err){
+            console.log(err)
+        }
         }
 
-        function outside(e) {
-            if (e.target !== menu.value) close()
+        getList(1)
+
+        watch(limit, ()=>{
+        store.dispatch('store_limit', limit.value)
+        console.log('(limit)member_list_vue - store.state.page] ' + store.state.page)
+        getList(store.state.page)
+        })
+
+        //pagination에서 페이지 번호를 클릭한 경우 store.state.page의 값이 변경된다.
+        //store.state.page에 해당하는 목록을 가져오기
+        watch(()=>store.state.page, ()=>{
+        getList(store.state.page)
+        })
+
+
+        return {
+            logout,
+            limit, search_field, search_word, search, listcount, list, startnum,
+            placeholder_message, change_placeholder, option_data, f2      
         }
-
-
-        return {logout, menu, state, mouseDown}
-
   }
 
 }
 </script>
 
 <style  scoped>
-/* @import "@/assets/css/bootstrap.min.css"; */
 @import "@/assets/css/elegant-icons.css"; /*아이콘*/
 @import "@/assets/css/font-awesome.min.css"; /*아이콘*/
 @import "@/assets/css/style.css";
@@ -187,34 +192,6 @@ export default {
 
 .nav{
     position: relative
-}
-
-
-/* 햄버거 메뉴 */
-.categories{
-  position : relative;
-}
-
-.categories-content{
-  display : none;
-  position : absolute;
-  z-index : 1; /*다른 요소들보다 앞에 배치*/
-  width: 200px;
-  background-color: white;
-  border: 1px solid #ebebeb;
-  text-align: left;
-}
-
-router-link .categorie{
-  display : block;
-}
-
-.categories:hover .categories-content {
-  display: block;
-}
-
-.nav-link{
-    padding: 0;
 }
 
 .float-right{

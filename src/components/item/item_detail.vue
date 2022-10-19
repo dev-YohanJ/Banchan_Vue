@@ -33,7 +33,7 @@
                     </div>
                   </div>
                   <div class="description">
-                    <div class="item_address"><i class="fa fa-map-marker"></i>서울시 종로구 이화동(미구현)</div>
+                    <div class="item_address"><i class="fa fa-map-marker"></i>{{board.location}}</div>
                     <div class="item_description">{{board.description}}</div>
                   </div>
                   <div class="group" 
@@ -44,10 +44,11 @@
                     <button class="btn btn-danger">끌어올리기</button>
                   </div>
                   <div class="group" v-else>
-                    <router-link :to="{name:'Main'}">
-                      <button class="chat">판매자에게 연락하기</button>
-                    </router-link>
-                    <button class="zzim" @click="AddWish"><i class="fa fa-heart" :style="heart_color"></i>찜하기</button>
+                      <router-link :to="{name:'Chat'}">
+                        <button class="chat">판매자에게 채팅</button>
+                      </router-link>
+                      <button class="buy">구매하기</button>
+                      <button class="zzim"><i class="fa fa-heart"></i>찜하기</button>
                   </div>
                   <!-- <a href="#" class="primary-btn">ADD TO CARD</a> -->
                   <!-- <a href="#" class="heart-icon"><span class="icon_heart_alt"></span></a> -->
@@ -287,12 +288,19 @@ span{
 }
 
 .chat{
-  padding: 13px 70px 12px;
+  width:250px;
+  padding: 13px 0px 12px;
   margin:0 0 0 10px;
 }
 
+.buy{
+  width:250px;
+  padding: 13px 0px 12px;
+}
+
 .zzim{
-  padding: 13px 40px;
+  width:160px;
+  padding: 13px 0px;
 }
 
 .vueperslide__content-wrapper{

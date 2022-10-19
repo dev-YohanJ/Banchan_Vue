@@ -63,7 +63,7 @@
         <label for="board_location">거래지역</label>
         <input 
           type="text"
-          v-model.lazy="board.location"
+          v-model.lazy="member.address"
           maxlength="100"
           class="form-control"
           placeholder="거래 할 동네의 주소를 입력해주세요."
@@ -78,16 +78,6 @@
           placeholder="구매자에게 필요한 정보를 입력해주세요."
           required></textarea>
       </div>
-      <!-- <div class="form-group">
-        <label for="board_allergy">알레르기 성분</label>
-        <input 
-          type="text"
-          v-model.lazy="board.allergy"
-          maxlength="100"
-          class="form-control"
-          placeholder="알레르기 성분을 골라주세요."
-          required>
-      </div> -->
       <div class="form-group buttons">
         <div></div>
         <div>
@@ -101,7 +91,7 @@
 
 <script>
 import {ref} from 'vue'
-import {useRouter, useRoute} from 'vue-router'
+import {useRouter} from 'vue-router'
 import axios from '../../axios/axiossetting.js'
 export default {
     
@@ -115,6 +105,26 @@ export default {
 
   setup(props, context){
     context.emit('parent_getSession')
+    const member = ref({});
+    const load = async() => {
+        console.log("load입니다");
+        const id = props.parent_id;
+        console.log("load() id="+ id);
+        try {
+            const res = await axios.get(`members/${id}`)
+            member.value = res.data;
+            console.log(res.data);
+            if(member.value==null) {
+                console.log('null입니다.');
+                return;
+            }
+        } catch(err) {
+            console.log(err)
+            console.log("여기는 에러")
+        }
+    }
+
+    load();
 
     const files=ref([]);
     const filesPreview = ref([]);
@@ -188,7 +198,7 @@ export default {
       frm.append('seller', props.parent_id)
       frm.append('name', board.value.subject)
       frm.append('price', board.value.price)
-      frm.append('location', board.value.location)
+      frm.append('location', member.value.address)
       frm.append('description', board.value.description)
     //   frm.append('allergy', board.value.allergy)
       if(files.value.length<1){
@@ -221,6 +231,7 @@ export default {
         files,//업로드용 파일
         filesPreview,
         uploadImageIndex, // 이미지 업로드를 위한 변수
+        member
     }
   }
 }

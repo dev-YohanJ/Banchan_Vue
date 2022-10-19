@@ -60,6 +60,16 @@
           required>
       </div>
       <div class="form-group">
+        <label for="board_location">거래지역</label>
+        <input 
+          type="text"
+          v-model.lazy="board.location"
+          maxlength="100"
+          class="form-control"
+          placeholder="거래 할 동네의 주소를 입력해주세요."
+          required>
+      </div>
+      <div class="form-group">
         <label for="board_content">내용</label>
         <textarea
           name="BOARD_CONTENT"
@@ -122,7 +132,6 @@ export default {
     let i = 0
     let slides = ref([])
     let uploadnum = -1
-
 
     const getDetail = async () => {
       try{
@@ -191,26 +200,35 @@ export default {
     const update = async ()=>{
       console.log("upload start");
       let frm = new FormData()
-      if(check==0){ //기존파일 그대로인 경우
-        frm.append('check', fileName.value) //
-        frm.append('image', board.value.image)
-        console.log("boardimg:" + board.value.image)
-      }
-      else if(files.value.length > 0){
-
+      // if(check==0){ //기존파일 그대로인 경우
+      //   console.log("check=0")
+      //   frm.append('check', fileName.value) //
+      //   frm.append('image', board.value.image)
+      //   console.log("boardimg:" + board.value.image)
+      // }
+      // else
+      let image1 = ''
+       if(files.value.length > 0){
+     
         console.log("이미지1:"+board.value.image)
-        frm.append('image', board.value.image)
-
+        // frm.append('image', board.value.image)
         for(let i=0; i<files.value.length;i++){
                             //같은 이름으로 여러 번 올려야 합니다.
             // console.log("업데이트파일:"+files.value[i].file.name);
             // console.log("파일1:"+files.value[i].file)
             // board.value.image += files.value[i].file + ","
-            frm.append("uploadfile", files.value[i].file); 
+            if(files.value[i].file == null){
+              image1 += files.value[i].name + ','
+            }else{
+             frm.append("uploadfile", files.value[i].file); 
+            }
+
         }
         console.log("이미지2:"+board.value.image)
 
       }
+      console.log(image1)
+      frm.append('image', image1)
       frm.append('seller', props.parent_id)
       frm.append('name', board.value.name)
       frm.append('price', board.value.price)
@@ -311,7 +329,7 @@ export default {
       fileDeleteButton, imageUpload ,imageAddUpload, 
       files,//업로드용 파일
       filesPreview,
-      uploadImageIndex // 이미지 업로드를 위한 변수
+      uploadImageIndex, // 이미지 업로드를 위한 변수
     }
   }
 }
