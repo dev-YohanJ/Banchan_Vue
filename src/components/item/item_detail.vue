@@ -47,9 +47,7 @@
                     <router-link :to="{name:'Main'}">
                       <button class="chat">판매자에게 연락하기</button>
                     </router-link>
-                    <router-link :to="{name:'Main'}">
-                      <button class="zzim"><i class="fa fa-heart"></i>찜하기</button>
-                    </router-link>
+                    <button class="zzim" @click="AddWish"><i class="fa fa-heart" :style="heart_color"></i>찜하기</button>
                   </div>
                   <!-- <a href="#" class="primary-btn">ADD TO CARD</a> -->
                   <!-- <a href="#" class="heart-icon"><span class="icon_heart_alt"></span></a> -->
@@ -73,15 +71,58 @@ export default {
       required: true
     }
   },
+  emits:['parent_getSession'],
   components: { VueperSlides, VueperSlide },
-  setup(){
+  setup(props, context){
     //board_list.vue에서 <router-link :to="{name:'Board_Detail', params:{num:`${item.board_NUM}`}}">로
     //이동할 때 사용된 파라미터 num을 가져온다.
+    context.emit("parent_getSession");
     const num = useRoute().params.num
     const board = ref({})
     const router = useRouter()
+    const heart_color = ref("color: white");
     let i = ref("")
     let slides = ref([])
+
+    const AddWish = async() => {
+      const id = props.parent_id;
+      console.log(num);
+      try {
+        const res2 = await axios.get("wish/check", {params: {member_id: id, item_id2: num }})
+
+        if (res2.data == 0) {
+          try {
+            const res = await axios.get("wish/add", {params: {member_id: id, item_id2: num }})
+            if(res.data == 1) {
+              heart_color.value = "color:#FF3232";
+              console.log("추가되었습니다");
+              getDetail()
+            } 
+          } catch(err) {
+              console.log(err)
+              console.log("여기는 에러")
+            }
+        } else {
+          try {
+            const res3 = await axios.delete("wish/delete", {params: {member_id: id, item_id2: num }})
+            if (res3.data == 1) {
+              heart_color.value = "color: white";
+              console.log("삭제되었습니다");
+              getDetail()
+            }
+          } catch(err) {
+              console.log(err)
+              console.log("여기는 에러")
+          }
+        }
+
+      } catch {
+          console.log(err)
+          console.log("여기는 에러")
+      }
+
+    }
+
     const getDetail = async ()=>{
       try{
         const res = await axios.get(`items/${num}`)
@@ -109,6 +150,17 @@ export default {
           router.push("{name:'404'}")
           return
         }
+
+        const id = props.parent_id;
+        try {
+          const res2 = await axios.get("wish/check", {params: {member_id: id, item_id2: num }})
+          if (res2.data == 1) {
+            heart_color.value = "color:#FF3232";
+          }
+        } catch(err){
+        console.log(err)
+        }
+
       }catch(err){
         console.log(err)
       }
@@ -123,7 +175,7 @@ export default {
     })
 
     return {
-      board, count, slides
+      board, count, slides, AddWish, heart_color
     }
   }
 }

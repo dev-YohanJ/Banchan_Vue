@@ -41,7 +41,7 @@
                             <hr>
                             <div class="address">주소입니다</div> <!-- {{item.location}} -->
                             <div v-if="item.status == 1" class="filter">
-                                <div class="filter-text">판매완료</div>
+                                <div class="filter-text">구매완료</div>
                             </div>
                         </div>
                     </div>
@@ -240,7 +240,7 @@ export default {
 .filter {
     position: relative;
     right: 151px;
-    bottom: 147px;
+    bottom: 150px;
     width: 150px;
     height: 150px;
     background: rgba(0, 0, 0, 0.6);

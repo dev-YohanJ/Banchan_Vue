@@ -1,10 +1,10 @@
 <template>
-    <div class="modal1 bg" v-show="display">
-        <div class="modal-dialog">
+    <div class="modal-center modal1 bg" v-show="display">
+        <div class="modal-dialog modal-center">
             <div class="modal-content">
                 <div class="modal-body">
-                    <form @submit.prevent="goDelete(id)">
-                        <div class="form-gorup">
+                    <form @submit.prevent="goDelete()">
+                        <div class="form-group">
                             <h4>정말 탈퇴하시겠습니까?</h4>
                             <div class="context">
                             계정의 모든 정보는 삭제되며<br>
@@ -23,7 +23,7 @@
 </template>
 
 <script>
-import {ref, computed} from 'vue';
+import {watch, ref, computed} from 'vue';
 import {useRoute, useRouter} from 'vue-router';
 import axios from '../axios/axiossetting.js';
 import {useStore} from 'vuex';
@@ -37,7 +37,6 @@ export default {
     emits:['parent_getSession'],
     setup(props, context) {
         context.emit("parent_getSession");
-        const id = props.parent_id;
         const store = useStore();
         const router = useRouter();
         const display = computed(()=> store.state.display);
@@ -46,7 +45,8 @@ export default {
         store.dispatch('display', false)
         }
 
-        const goDelete = async (id)=> {
+        const goDelete = async ()=> {
+            const id = props.parent_id;
             console.log("secession id="+ id);
             const res = await axios.delete(`secession/${id}`)
             if(res.data == -1) {
@@ -61,13 +61,35 @@ export default {
         }
 
         return {
-            hidden, goDelete, display, id
+            hidden, goDelete, display,
         }
     }
 };
 </script>
 
 <style scoped>
+.modal1.modal-center {
+  text-align: center;
+}
+
+@media screen and (min-width: 768px) { 
+  .modal1.modal-center:before {
+    display: inline-block;
+    vertical-align: middle;
+    content: " ";
+    height: 100%;
+  }
+}
+
+.modal-dialog.modal-center {
+  display: inline-block;
+  text-align: left;
+  vertical-align: middle;
+}
+
+button {
+    padding: 0px;
+}
 .btn:active, .btn:focus {
 outline:none !important;
 box-shadow:none !important;
@@ -76,6 +98,8 @@ box-shadow:none !important;
     padding: 0px;
 }
 .btn2 {
+    padding-top: 0px;
+    padding-bottom: 0px;
     display: flex;
     flex-direction: row;
     height: 60px;
@@ -109,7 +133,7 @@ box-shadow:none !important;
 .modal-content {
     border-radius: 15px;
     max-width: 18.5rem;
-    width: 80%;
+    width:100%;
     max-height: 70%;
     background-color: rgb(255, 255, 255);
     z-index: 3102;
@@ -123,7 +147,7 @@ h4 {
     font-weight: bold;
     font-size: 20px;
 }
-.form-gorup {
+.form-group {
     padding: 30px;
     text-align: center;
 }
