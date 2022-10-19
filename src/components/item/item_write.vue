@@ -116,25 +116,6 @@ export default {
   setup(props, context){
     context.emit('parent_getSession')
 
-    const route = useRoute()
-    const memberDetail = async ()=>{
-      try{
-        const res = await axios.get(`items/${route.params.id}`)
-        console.log(res.data)
-        member.value = res.data.member
-        
-        if(member.value==null){
-          console.log('null입니다.')
-          router.push("{name:'404'}")
-          return
-        }
-      }catch(err){
-        console.log(err)
-      }
-    }
-    
-    memberDetail()
-
     const files=ref([]);
     const filesPreview = ref([]);
     const uploadImageIndex=ref(0);

@@ -114,7 +114,7 @@ export default {
     const router = useRouter();
 
     const addr = ()=> {
-      join.value.address = roadaddr.value + "/" + detailaddr.value
+      join.value.address = post.value + "/" + roadaddr.value + "/" + detailaddr.value
       console.log(join.value.address);
     }
 
@@ -267,6 +267,8 @@ export default {
         alert("아이디를 확인하세요");
       } else if (join.value.password != pw_check.value) {
         alert("비밀번호를 확인하세요");
+      } else if (nick_color.value == "red") {
+        alert("닉네임을 확인하세요")
       } else if (email_color.value == "red") {
         alert("email을 확인하세요");
       } else if (post.value == '') {

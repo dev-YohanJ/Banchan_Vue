@@ -1,6 +1,6 @@
 <template>
   <Secession :parent_id="parent_id" />
-  <Modal_secession/>
+  <Modal_secession :parent_id="parent_id"/>
 </template>
 
 <script>
