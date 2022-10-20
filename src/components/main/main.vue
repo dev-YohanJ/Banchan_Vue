@@ -51,7 +51,7 @@ export default {
             {value:'L', label:'지역'},
             {value:'NL', label:'제목 또는 지역'},
         ]
-        const limit = ref(6)
+        const limit = ref(50)
         let currentpage = 1
         let maxpage = 1
         const list = ref([])
