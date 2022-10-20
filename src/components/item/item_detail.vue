@@ -48,7 +48,7 @@
                         <button class="chat">판매자에게 채팅</button>
                       </router-link>
                       <button class="buy">구매하기</button>
-                      <button class="zzim"><i class="fa fa-heart"></i>찜하기</button>
+                      <button class="zzim" @click="AddWish"><i class="fa fa-heart" :style="heart_color"></i>찜하기</button>
                   </div>
                   <!-- <a href="#" class="primary-btn">ADD TO CARD</a> -->
                   <!-- <a href="#" class="heart-icon"><span class="icon_heart_alt"></span></a> -->
@@ -97,7 +97,6 @@ export default {
             if(res.data == 1) {
               heart_color.value = "color:#FF3232";
               console.log("추가되었습니다");
-              getDetail()
             } 
           } catch(err) {
               console.log(err)
@@ -109,7 +108,6 @@ export default {
             if (res3.data == 1) {
               heart_color.value = "color: white";
               console.log("삭제되었습니다");
-              getDetail()
             }
           } catch(err) {
               console.log(err)

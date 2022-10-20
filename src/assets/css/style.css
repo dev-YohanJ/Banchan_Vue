@@ -32,9 +32,6 @@
 
 html,
 body {
-	display:flex;
-	height: 100%;
-	margin: 0 auto;
 	font-family: "GmarketSans", "Cairo", sans-serif;
 	-webkit-font-smoothing: antialiased;
 }
@@ -182,34 +179,6 @@ router-link:focus {
 }
 
 
-/*---------------------
-  Header
------------------------*/
-
-/* 로그인 및 회원가입 - 헤더 */
-
-.header_top{
-	width: 1920px;
-	display: flex;
-	justify-content: space-between;
-	padding: 10px 500px 0px 0px;
-	/* float: right; */
-}
-
-.header_bar {
-	display: inline-block
-}
-
-.header_bar a {
-	display: inline;
-	font-size: 14px;
-	color: #1c1c1c;
-}
-
-.header_bar a i {
-	margin-right: 6px;
-}
-
 
 /*---------------------
   Hero
@@ -317,7 +286,7 @@ router-link:focus {
 
 .search_form form button {
 	position: absolute;
-	right: 0;
+	right: -140px;
 	top: -1px;
 	height: 50px;
 }

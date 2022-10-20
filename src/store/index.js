@@ -7,6 +7,7 @@ export default createStore({
     page:1,
     limit:10,
     users: [],
+    search_data: {},
   },
   getters: {
     allUsers: state => state.users
@@ -33,6 +34,9 @@ export default createStore({
     REMOVE_USER (state, user) {
       state.users.splice(user, 1);
     },
+    search_data (state, search_data) {
+      state.search_data = search_data
+    }
   },
   actions:{ 
     count(context, count){
@@ -55,6 +59,9 @@ export default createStore({
     },
     removeUser({commit}, payload) {
       commit('REMOVE_USER', payload)
+    },
+    search_data(context, payload) {
+      context.commit('search_data', payload)
     },
   }
 })
