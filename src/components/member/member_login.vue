@@ -31,12 +31,12 @@
           placeholder="비밀번호"
           v-model="password"
         />
-        <input type="submit" class="submitbtn fadeIn fourth" value="Log In" />
+        <input type="submit" style="margin:5px; width:222px; height:49px;" class="submitbtn fadeIn fourth" value="Log In" />
       </form>
 
      <section class="test">
        <div v-on:click="kakaoLoginBtn">
-          <img src="../../assets/kakao.png"/>
+          <img style="margin:5px;" src="../../assets/kakao.png"/>
           <br />
       </div>
       </section>
@@ -44,6 +44,8 @@
       <div id="formFooter">
         <router-link class="underlineHover" to="/banchan/join" @click="join">회원가입</router-link>
         <br />
+        <router-link class="underlineHover" to="/forgotPw">아이디 찾기</router-link>
+        <span style="visibility:hidden">공</span>
         <router-link class="underlineHover" to="/banchan/forgotpw" @click="ForgotPw">비밀번호 찾기</router-link>
       </div>
     </div>

@@ -47,8 +47,8 @@
                       <router-link :to="{name:'Chat'}">
                         <button class="chat">판매자에게 채팅</button>
                       </router-link>
-                      <button class="buy">구매하기</button>
-                      <button class="zzim" @click="AddWish"><i class="fa fa-heart" :style="heart_color"></i>찜하기</button>
+                      <button class="buy" :style="box_color2" @click="AddBuy">구매하기</button>
+                      <button class="zzim" :style="box_color" @click="AddWish"><i class="fa fa-heart" :style="heart_color"></i>찜하기</button>
                   </div>
                   <!-- <a href="#" class="primary-btn">ADD TO CARD</a> -->
                   <!-- <a href="#" class="heart-icon"><span class="icon_heart_alt"></span></a> -->
@@ -82,8 +82,47 @@ export default {
     const board = ref({})
     const router = useRouter()
     const heart_color = ref("color: white");
+    const box_color = ref("background: rgb(204, 204, 204)");
+    const box_color2 = ref("background: rgb(204, 204, 204)") //rgb(247, 0, 0);
     let i = ref("")
     let slides = ref([])
+
+    const AddBuy = async() => {
+      const id = props.parent_id;
+      console.log(num);
+      try {
+        const res2 = await axios.get("buy/check", {params: {member_id: id, item_id2: num }})
+
+        if (res2.data == 0) {
+          try {
+            const res = await axios.get("buy/add", {params: {member_id: id, item_id2: num }})
+            if(res.data == 1) {
+              box_color2.value = "background: rgb(247, 0, 0)"
+              console.log("추가되었습니다");
+            } 
+          } catch(err) {
+              console.log(err)
+              console.log("여기는 에러")
+            }
+        } else {
+          try {
+            const res3 = await axios.delete("buy/delete", {params: {member_id: id, item_id2: num }})
+            if (res3.data == 1) {
+              box_color2.value = "background: rgb(204, 204, 204)";
+              console.log("삭제되었습니다");
+            }
+          } catch(err) {
+              console.log(err)
+              console.log("여기는 에러")
+          }
+        }
+
+      } catch {
+          console.log(err)
+          console.log("여기는 에러")
+      }
+
+    }
 
     const AddWish = async() => {
       const id = props.parent_id;
@@ -96,6 +135,7 @@ export default {
             const res = await axios.get("wish/add", {params: {member_id: id, item_id2: num }})
             if(res.data == 1) {
               heart_color.value = "color:#FF3232";
+              box_color.value = "background: rgb(51, 51, 51)"
               console.log("추가되었습니다");
             } 
           } catch(err) {
@@ -107,6 +147,7 @@ export default {
             const res3 = await axios.delete("wish/delete", {params: {member_id: id, item_id2: num }})
             if (res3.data == 1) {
               heart_color.value = "color: white";
+              box_color.value = "background: rgb(204, 204, 204)";
               console.log("삭제되었습니다");
             }
           } catch(err) {
@@ -155,8 +196,18 @@ export default {
           const res2 = await axios.get("wish/check", {params: {member_id: id, item_id2: num }})
           if (res2.data == 1) {
             heart_color.value = "color:#FF3232";
+            box_color.value = "background: rgb(51, 51, 51)"
           }
-        } catch(err){
+        } catch(err) {
+        console.log(err)
+        }
+
+        try {
+          const res2 = await axios.get("buy/check", {params: {member_id: id, item_id2: num }})
+          if (res2.data == 1) {
+            box_color2.value = "background: rgb(247, 0, 0)"
+          }
+        } catch(err) {
         console.log(err)
         }
 
@@ -174,7 +225,7 @@ export default {
     })
 
     return {
-      board, count, slides, AddWish, heart_color
+      board, count, slides, AddWish, heart_color, box_color, AddBuy, box_color2
     }
   }
 }
