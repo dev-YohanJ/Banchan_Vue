@@ -30,23 +30,27 @@
                 <div class="clearfix" v-for="(item,index) in list" :key="index" > <!-- 상품 2개 한 줄 -->
                     <div class="list"> <!-- 반찬 + 가격정보 합치기 div-->
                         <div class="banchan">
+                            <router-link :to="{name:'Item_Detail', params:{num:`${item.id}`}}">
                             <img v-if="item.image" :src="require(`C:/upload/${item.image[0]}`)">
+                            </router-link>
                         </div>
                         <div class="info">
                             <div class="title">{{item.name}}</div>
                             <div><span class="price">{{item.price}}</span><span>원</span></div>
                             <input class="checkbtn" type="checkbox" v-model="selectedAllValue[index]" />
-                            <div v-if="item.status == 0" class="aws123" @click="sellfn(item.id)">리뷰쓰기</div>
-                            <div v-else class="aws123" style="visibility: hidden;" @click="sellfn(item.id)">리뷰쓰기</div>
+                            <router-link class="link" :to="{name:'Chat'}">
+                            <div v-if="item.status == 0" class="aws123" @click="sellfn(item.id)">채팅하기</div>
+                            <div v-else class="aws123" style="visibility: hidden;" @click="sellfn(item.id)">채팅하기</div>
+                            </router-link>
                             <hr>
-                            <div class="address">주소입니다</div> <!-- {{item.location}} -->
+                            <div class="address">{{item.location}}</div> <!-- {{item.location}} -->
                             <div v-if="item.status == 1" class="filter">
                                 <div class="filter-text">구매완료</div>
                             </div>
                         </div>
                     </div>
                 </div>
-                <div style="text-align: center; cursor: pointer;" id="message" @click="more">
+                <div class="moremore" :style="more2" id="message" @click="more">
                     <img src="../../assets/plus.png" class="plus" :style="{display:imgst}"> 
                     {{message}}
                 </div>
@@ -74,6 +78,7 @@ export default {
         const selectedAllValue = ref([]);
         const isAll = ref(false);
         const message = ref('구매 목록이 없습니다');
+        const more2 = ref("");
         const list = ref({});
         const listcount = ref(0);
         const imgst = ref('none');
@@ -142,13 +147,15 @@ export default {
                 console.log("listcount.value=" + listcount.value);
 
                 if (listcount.value == 0) {
-                    message.value = "판매 목록이 없습니다."
+                    message.value = "구매 목록이 없습니다."
                 } else {
                     if (listcount.value > list.value.length) {
                         message.value = "더보기";
+                        more2.value = "cursor:pointer;";
                         imgst.value = "inline";
                     } else {
                         message.value = "";
+                        more2.value = "";
                         imgst.value = "none";
                     }
                 } 
@@ -222,13 +229,20 @@ export default {
         }
 
         return {
-           isAll, all, selectedAllValue, message, more, list, imgst, buy_del, listcount
+           isAll, all, selectedAllValue, message, more, list, imgst, buy_del, listcount, more2
         }
     }
 }
 </script>
 
 <style scoped>
+.link {
+    text-decoration: none; /* 링크의 밑줄 제거 */
+    color: inherit; /* 링크의 색상 제거 */
+}
+.moremore {
+    text-align: center;
+}
 .aws123 {
     margin-left:180px; margin-top:7px; cursor:pointer;
 }

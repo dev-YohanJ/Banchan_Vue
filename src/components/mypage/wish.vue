@@ -30,21 +30,23 @@
                 <div class="clearfix" v-for="(item,index) in list" :key="index" > <!-- 상품 2개 한 줄 -->
                     <div class="list"> <!-- 반찬 + 가격정보 합치기 div-->
                         <div class="banchan">
+                            <router-link :to="{name:'Item_Detail', params:{num:`${item.id}`}}">
                             <img v-if="item.image" :src="require(`C:/upload/${item.image[0]}`)">
+                            </router-link>
                         </div>
                         <div class="info">
                             <div class="title">{{item.name}}</div>
                             <div><span class="price">{{item.price}}</span><span>원</span></div>
                             <input class="checkbtn" type="checkbox" v-model="selectedAllValue[index]" />
                             <hr>
-                            <div class="address">주소입니다</div> <!-- {{item.location}} -->
+                            <div class="address">{{item.location}}</div> <!-- {{item.location}} -->
                             <div v-if="item.status == 1" class="filter">
                                 <div class="filter-text">판매완료</div>
                             </div>
                         </div>
                     </div>
                 </div>
-                <div style="text-align: center; cursor: pointer;" id="message" @click="more">
+                <div class="moremore" :style="more2" id="message" @click="more">
                     <img src="../../assets/plus.png" class="plus" :style="{display:imgst}"> 
                     {{message}}
                 </div>
@@ -72,6 +74,7 @@ export default {
         const selectedAllValue = ref([]);
         const isAll = ref(false);
         const message = ref('찜한 목록이 없습니다');
+        const more2 = ref("");
         const list = ref({});
         const listcount = ref(0);
         const imgst = ref('none');
@@ -143,9 +146,11 @@ export default {
                 } else {
                     if (listcount.value > list.value.length) {
                         message.value = "더보기";
+                        more2.value = "cursor: pointer;"
                         imgst.value = "inline";
                     } else {
                         message.value = "";
+                        more2.value = "";
                         imgst.value = "none";
                     }
                 } 
@@ -210,13 +215,16 @@ export default {
         }
 
         return {
-           isAll, all, selectedAllValue, message, more, list, imgst, wish_del, listcount
+           isAll, all, selectedAllValue, message, more, list, imgst, wish_del, listcount, more2
         }
     }
 }
 </script>
 
 <style scoped>
+.moremore {
+    text-align: center;
+}
 .filter-text {
     color: rgb(255 255 255);
     text-align: center;

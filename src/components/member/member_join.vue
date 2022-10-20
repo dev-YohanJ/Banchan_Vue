@@ -53,11 +53,25 @@
             v-model="join.email"
             required >
     <span :class="email_color" class="msg">{{email_message}}</span>
+    <br>
+    <button type="button" class="email" @click="goemail">인증번호 요청</button>
+    
+    <div v-if="random != 0">
+    <b>인증번호</b>
+    <input  type="text"
+            placeholder="인증번호"
+            v-model="email_check"
+            required >
+    <span :class="email_check_color" class="msg">{{email_check_message}}</span>
+    <br>
+    <button type="button" class="email" @click="mailcheck">인증하기</button>
+    
+    </div>
 
     <b>주소
           <input class="focus:outline-none focus:ring focus:border-blue-600 border-b-2 border-black pt-2 px-2 mb-3 mr-10"  
               type="number" name="post_number" placeholder="우편번호" v-model="post" maxlength="5" readonly>
-          <button class="border-2 border-gray-400 rounded bg-gray-100 p-1 inline-block"
+          <button class="asd border-2 border-gray-400 rounded bg-gray-100 p-1 inline-block"
               type="button" @click="addressApi">검색</button><br>
 
           <input class="mr-10 focus:outline-none focus:ring focus:border-blue-600 border-b-2 border-black pt-2 px-2 mb-3"   
@@ -66,10 +80,13 @@
           <input class="focus:outline-none focus:ring focus:border-blue-600 border-b-2 border-black pt-2 px-2"   
               type="text" id="sample4_detailAddress" name="address4" v-model="detailaddr" placeholder="상세주소" maxlength="30" required>
       </b>
+      <!-- <input style="display:none" v-model="jibun"> -->
 
       <div class="clearfix">
         <button type="submit" class="submitbtn">회원가입</button>
+        <router-link :to="{name:'Login'}">
         <button type="reset" class="cancelbtn">돌아가기</button>
+        </router-link>
       </div>
   </form> 
 </template>
@@ -104,6 +121,11 @@ export default {
     const nick_message=ref('');
     const phone_color=ref('');
     const phone_message=ref('');
+    const email_check = ref('');
+    const random = ref(0);
+    const email_check_color = ref('');
+    const email_check_message = ref('');
+    // const jibun = ref('');
 
     const post = ref('');
     const roadaddr = ref('');
@@ -114,8 +136,36 @@ export default {
     const router = useRouter();
 
     const addr = ()=> {
-      join.value.address = post.value + "/" + roadaddr.value + "/" + detailaddr.value
+      join.value.address = post.value + "/" + roadaddr.value + "/" + detailaddr.value // + "/" + jibun.value
       console.log(join.value.address);
+    }
+
+    const mailcheck = () => {
+      if (email_check.value==random.value) {
+        email_check_color.value = "green";
+        email_check_message.value = "일치합니다.";
+        console.log("같습니다")
+      } else {
+        email_check_color.value = "red";
+        email_check_message.value = "일치하지 않습니다.";
+        console.log("다릅니다")
+      }
+    }
+
+    const goemail = async () => {
+      if (email_color.value == "red") {
+        alert("이메일을 확인하세요.");
+      } else {
+        try {
+          const res = await axios.get("email/naver", {params: {email: join.value.email}});
+          console.log("전송되었습니다.")
+          random.value = res.data;
+          console.log(random.value);
+        } catch (err) {
+        console.log("err" + err);
+        }
+      }
+
     }
 
     const idcheck = async () => {
@@ -128,7 +178,7 @@ export default {
           id_message.value = "이미 사용중인 아이디 입니다.";
           id_color.value = "red";
         } else {
-          id_message.value = "사용가능한 아이디 입니다.";
+          id_message.value = "사용 가능한 아이디 입니다.";
           id_color.value = "green";
         }
       } catch (err) {
@@ -144,13 +194,29 @@ export default {
           nick_message.value = "이미 사용중인 닉네임 입니다.";
           nick_color.value = "red";
         } else {
-          nick_message.value = "사용가능한 닉네임 입니다.";
+          nick_message.value = "사용 가능한 닉네임 입니다.";
           nick_color.value = "green";
         }
       } catch (err) {
         console.log("err" + err);
       }
     }; //nickcheck end
+
+    const emailcheck = async() => {
+      try {
+        const res = await axios.get("members/emailcheck", { params: { email: join.value.email } });
+        console.log("res.data = " + res.data);
+        if (res.data == 1) {
+          email_message.value = "이미 사용중인 이메일 입니다.";
+          email_color.value = "red";
+        } else {
+          email_message.value = "사용 가능한 이메일 입니다.";
+          email_color.value = "green";
+        }
+      } catch (err) {
+        console.log("err" + err);
+      }
+    }
 
     watch(
       () => join.value.id,
@@ -250,8 +316,7 @@ export default {
           email_message.value = "이메일형식이 맞지 않습니다.";
           email_color.value = 'red';
         } else {
-          email_message.value = "이메일형식이 일치합니다.";
-          email_color.value = 'green';
+          emailcheck();
         } // else end
     }) // watch end
 
@@ -271,6 +336,8 @@ export default {
         alert("닉네임을 확인하세요")
       } else if (email_color.value == "red") {
         alert("email을 확인하세요");
+      } else if (email_check_color.value != "green") {
+        alert("email 인증을 해주세요.");
       } else if (post.value == '') {
         alert("주소 검색을 확인하세요")
       } else {
@@ -295,8 +362,15 @@ export default {
 
                 // 도로명 주소의 노출 규칙에 따라 주소를 표시한다.
                 // 내려오는 변수가 값이 없는 경우엔 공백('')값을 가지므로, 이를 참고하여 분기 한다.
-                var roadAddr = data.roadAddress; // 도로명 주소 변수
+                var roadAddr = ''; // 도로명 주소 변수
                 var extraRoadAddr = ''; // 참고 항목 변수
+
+                //사용자가 선택한 주소 타입에 따라 해당 주소 값을 가져온다.
+                if (data.userSelectedType === 'R') { // 사용자가 도로명 주소를 선택했을 경우
+                    roadAddr = data.roadAddress;
+                } else { // 사용자가 지번 주소를 선택했을 경우(J)
+                    roadAddr = data.jibunAddress;
+                }
 
                 // 법정동명이 있을 경우 추가한다. (법정리는 제외)
                 // 법정동의 경우 마지막 문자가 "동/로/가"로 끝난다.
@@ -315,6 +389,7 @@ export default {
                 // 우편번호와 주소 정보를 해당 필드에 넣는다.
                 post.value = data.zonecode;
                 roadaddr.value = roadAddr;
+                // jibun.value = data.jibunAddress;
             }
         }).open();
     }       
@@ -323,7 +398,8 @@ export default {
       join, id_message, id_color, email_message, email_color, joinProcess, pw_check,
       addressApi, pass_message, pass_color, pass_check_message, pass_check_color,
       name_color, name_message, nick_color, nick_message, phone_message, phone_color,
-      post, roadaddr, detailaddr
+      post, roadaddr, detailaddr, email_check, goemail, random, email_check_color, email_check_message,
+      mailcheck
     }
   }
 
@@ -368,7 +444,7 @@ input[type=text]:focus, input[type=password]:focus {
   box-shadow: 0 0 0 0.2rem rgba(0,123,255,.25);
     outline: none;
 }
-button[type=button] {
+.asd {
     background:#1263CE;
     width: 100%;
     height: 40px;
@@ -440,4 +516,10 @@ b {
 }
 
 span{display:inline-block;margin-top:-20px;font-size:10px}
+
+.email {
+  border-radius: 0.25rem;
+  width: 120px;
+  padding: 5px;
+}
 </style>
