@@ -2,6 +2,7 @@ import {createRouter, createWebHistory} from 'vue-router';
 import Main from '../pages/main/main.vue';
 import Login from '../components/member/member_login.vue';
 import Join from '../components/member/member_join.vue';
+import ForgotPw from '../components/member/member_forgotpw.vue';
 import Product_Write from '../components/item/item_write.vue';
 import Mypage from '../components/mypage/mypage.vue';
 import Wish from '../components/mypage/wish.vue';
@@ -57,6 +58,11 @@ const router = createRouter({
 		name : 'Join',
 		component : Join
 	},
+	{
+		path: '/banchan/forgotPw',
+		name: 'ForgotPw',
+		component: ForgotPw
+	}, 
 	{
 		path:'/banchan/product_new',
 		name : 'Product_Write',
