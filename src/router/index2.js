@@ -4,6 +4,7 @@ import Login from '../components/member/member_login.vue';
 import Join from '../components/member/member_join.vue';
 import ForgotId from '../components/member/member_forgotid.vue';
 import ForgotPw from '../components/member/member_forgotpw.vue';
+import ForgotPw2 from '../components/member/member_forgotpw2.vue';
 import Product_Write from '../components/item/item_write.vue';
 import Mypage from '../components/mypage/mypage.vue';
 import Wish from '../components/mypage/wish.vue';
@@ -69,6 +70,11 @@ const router = createRouter({
 		path: '/banchan/forgotPw',
 		name: 'ForgotPw',
 		component: ForgotPw
+	}, 
+	{
+		path: '/banchan/forgotPw2',
+		name: 'ForgotPw2',
+		component: ForgotPw2
 	}, 
 	{
 		path:'/banchan/product_new',
