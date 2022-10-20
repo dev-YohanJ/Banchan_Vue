@@ -14,16 +14,28 @@
         <td>{{m.name}}</td>
       </tr>
       <tr>
-        <td>나이</td>
-        <td>{{m.age}}</td>
-      </tr>
-      <tr>
-        <td>성별</td>
-        <td>{{m.gender}}</td>
+        <td>전화번호</td>
+        <td>{{m.phone}}</td>
       </tr>
       <tr>
         <td>이메일 주소</td>
         <td>{{m.email}}</td>
+      </tr>
+      <tr>
+        <td>주소</td>
+        <td>{{m.address}}</td>
+      </tr>
+      <tr>
+        <td>별점</td>
+        <td>{{m.rating}}</td>
+      </tr>
+      <tr>
+        <td>닉네임</td>
+        <td>{{m.nickname}}</td>
+      </tr>
+      <tr>
+        <td>자기소개</td>
+        <td>{{m.intro}}</td>
       </tr>
       <tr>
         <td colspan="2">
