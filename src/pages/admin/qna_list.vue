@@ -1,12 +1,12 @@
 <template>
-    <!-- <Sidebar/> -->
+  <div class="container w-75">
     <Qna_List/>
     <Paging/>
     <button class="btn btn-primary" @click="goWrite">글쓰기</button>
+  </div>
 </template>
 
 <script>
-// import Sidebar from '../../components/sidebarDo.vue'
 import Qna_List from '../../components/admin/qna_list.vue'
 import Paging from '../../components/pageDo.vue'
 import {useRouter} from 'vue-router'

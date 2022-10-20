@@ -1,11 +1,11 @@
 <template>
-  <!-- <Sidebar/> -->
-  <Member_List/>
-  <Paging/>
+  <div class="container w-75">
+    <Member_List/>
+    <Paging/>
+  </div>
 </template>
 
 <script>
-// import Sidebar from '../../components/sidebarDo.vue'
 import Member_List from '../../components/admin/member_list.vue'
 import Paging from '../../components/pageDo.vue'
 export default {

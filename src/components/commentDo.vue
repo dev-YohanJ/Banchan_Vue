@@ -1,6 +1,6 @@
 <template>
   <div id="comment">
-    <button class="btn btn-info float-left">{{count_message}}</button>
+    <button class="btn btn-dark float-left">{{count_message}}</button>
     <button class="btn btn-info float-right" @click="add">{{button_message}}</button>
     <textarea rows="3"
               class="form-control"

@@ -1,10 +1,10 @@
 <template>
-    <!-- <Sidebar/> -->
-    <Notice_Update :parent_id="id"/>
+    <div class="container w-75">
+      <Notice_Update :parent_id="id"/>
+    </div>
 </template>
 
 <script>
-// import Sidebar from '../../components/sidebarDo.vue'
 import Notice_Update from '../../components/admin/notice_update.vue'
 export default {
   components: {

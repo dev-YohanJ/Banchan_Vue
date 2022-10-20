@@ -27,7 +27,7 @@
           :placeholder="placeholder_message"
           v-model.lazy="search_word"
           ref="f2">
-        <button class="btn btn-primary" type="submit">검색</button>
+        <button class="btn btn-secondary" type="submit">검색</button>
       </div>
     </form>
 
@@ -50,7 +50,7 @@
 	    <tbody>
         <tr v-for="(item, index) in list" :key="index">
 		      <td>{{startnum-index}}</td>
-		      <td><img src="@/assets/profile.png"></td>
+		      <td><img v-if="item.picture" class="profile" :src="require(`C:/upload/${item.picture}`)"/></td>
           <td>
             <router-link :to="{name:'Member_Info', params:{id:`${item.id}`}}">
               {{item.id}}
@@ -193,4 +193,8 @@ select{
 .container{width:60%}
 td:nth-child(1){width:10%}
 .input-group{margin-bottom:3em}
+.profile{
+  width: 50px;
+  height: 50px;
+}
 </style>

@@ -1,10 +1,10 @@
 <template>
-    <!-- <Sidebar/> -->
+  <div class="container w-75">
     <Qna_Update :parent_id="id"/>
+  </div>
 </template>
 
 <script>
-// import Sidebar from '../../components/sidebarDo.vue'
 import Qna_Update from '../../components/admin/qna_update.vue'
 export default {
   components: {

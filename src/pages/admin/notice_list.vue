@@ -1,12 +1,12 @@
 <template>
-  <!-- <Sidebar/> -->
-  <Notice_List/>
-  <Paging/>
-  <button v-if="parent_id == 'admin'" class="btn btn-primary" @click="goWrite">글쓰기</button>
+  <div class="container w-75">
+    <Notice_List/>
+    <Paging/>
+    <button v-if="parent_id == 'admin'" class="btn btn-primary" @click="goWrite">글쓰기</button>
+  </div>
 </template>
 
 <script>
-// import Sidebar from '../../components/sidebarDo.vue'
 import Notice_List from '../../components/admin/notice_list.vue'
 import Paging from '../../components/pageDo.vue'
 import {useRouter} from 'vue-router'

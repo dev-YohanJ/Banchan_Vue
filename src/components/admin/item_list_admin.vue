@@ -21,6 +21,7 @@
 		    </tr>
 		    <tr>
 		      <th><div>번호</div></th>
+          <th><div>판매글 사진</div></th>
 		      <th><div>제목</div></th>
 		      <th><div>작성자</div></th>
 		      <th><div>날짜</div></th>
@@ -30,6 +31,7 @@
 	    <tbody>
         <tr v-for="(item, index) in list" :key="index">
 		      <td>{{startnum-index}}</td>
+          <td><img v-if="item.image" class="picture" :src="require(`C:/upload/${item.image}`)"/></td>
 		      <td>
             <router-link :to="{name:'Item_Detail', params:{num:`${item.id}`}}">
               <span>{{item.name}}</span>
@@ -85,6 +87,12 @@ export default {
         startnum.value = listcount.value-(currentpage-1)*limit.value
         console.log('page의 startnum.value = ' + startnum.value)
 
+        for (let i=0; i < list.value.length; i++) {
+          console.log(list.value[i].image)
+          list.value[i].image = list.value[i].image.split(',')
+          list.value[i].image = list.value[i].image[0]
+        }
+
         const pagelist = ref([])
         for(let i=res.data.startpage; i<=res.data.endpage; i++){
           pagelist.value.push(i)
@@ -119,4 +127,8 @@ select.form-control{
 }
 .rows{text-align:right;}
 .center{text-align:center}
+.picture{
+  width:50px;
+  height:50px
+}
 </style>
