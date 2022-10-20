@@ -1,15 +1,16 @@
 <template>
+    <Nav :parent_id="id" /> <!-- (3) -->
+
 <div class="w-75 p-3 container"> 
-  <Nav :parent_id="id" /> <!-- (3) -->
-  <div class="container">
-    <router-view
-        @parent_getSession="getSession"
-        :parent_id="id" />
-  </div>
-  <div class="footer container">
+    <div class="container"> 
+        <router-view
+            @parent_getSession="getSession"
+            :parent_id="id" />
+    </div>
+</div>
+<div class="footer">
     <Footer />
   </div>
-</div>
 </template>
 
 <script>

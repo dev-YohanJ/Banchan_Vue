@@ -43,7 +43,7 @@
 }
 
 #app > div > div.footer.container > footer > div > div > div > div > a > img{
-	min-width: 200px !important;
+	min-width: 400px !important;
     padding-top: 10px;
 }
 

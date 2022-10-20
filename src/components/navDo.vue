@@ -2,7 +2,7 @@
   
 <!-- 헤더 -->
 <div class="header_top">
-<div class="header__top">
+<div class="header__top w-75 p-1">
     <div></div>
     <div class="header_bar" v-if="!parent_id">
         <router-link class="nav-link" :to="{name:'Login'}"><i class="fa fa-user"></i> 로그인 </router-link>
