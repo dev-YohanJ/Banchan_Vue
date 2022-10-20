@@ -1,47 +1,40 @@
 <template>
-    <!-- 배너 -->
-    <div class="item">
-        <img src="@/assets/img/banner.jpg" class="banner">
-    </div>
- 
-    <!-- 게시글이 존재하는 경우 -->
+  <!-- 배너 -->
+  <div class="item">
+      <img src="@/assets/img/banner.jpg" class="banner">
+  </div>
+  
+  <div class="col-lg-12">
+      <div class="section-title">
+          <h2>오늘의 반찬</h2>
+      </div>
+  </div>
 	<div class="list">
-		<div v-if="listcount>0">
-			<div class="rows">
-				<span>줄보기</span>
-				<select class="form-control" v-model="limit">
-					<option value=1>1</option>
-					<option value=3>3</option>
-					<option value=5>5</option>
-					<option value=7>7</option>
-					<option value=10 selected>10</option>
-				</select>
-			</div>
-			
 			<div class="container">
 				<div class="contents_all" v-for="(item, index) in list" :key="index">
-					<div class="picture">
-					<img v-if="item" :src="require(`C:/upload/${item.image}`)"/>
-					</div>
-					<div class="contents">
-						<div class="first">
-							<router-link :to="{name:'Item_Detail', params:{num:`${item.id}`}}">
-								<div class="title">{{item.name}}</div>
-							</router-link>
-							<div>{{item.location}}</div>
-						</div>
-						<div class="content">
-							<div class="price">{{item.price}}원</div>
-							<div class="regdate">{{item.regdate}}</div>
-						</div>
-					</div>
+          <router-link style=text-decoration:none; :to="{name:'Item_Detail', params:{num:`${item.id}`}}">
+            <div v-if="item.status == 0" class="picture">
+              <img v-if="item" :src="require(`C:/upload/${item.image}`)"/>
+            </div>
+            <div v-if="item.status == 1" class="picture_sell">
+                <img class="pic" v-if="item" :src="require(`C:/upload/${item.image}`)"/>
+                <p v-if="item.status == 1" class="picture_text">판매완료</p>
+            </div>
+
+            <div class="contents">
+              <div class="first">
+                  <div class="title">{{item.name}}</div>
+                <div>{{item.location}}</div>
+              </div>
+              <div class="content">
+                <div class="price">{{item.price}}원</div>
+                <div class="regdate">{{item.regdate}}</div>
+              </div>
+            </div>
+          </router-link>
 				</div>
 			</div>
 		</div>
-		<div v-else class="center">
-			등록된 글이 없습니다.
-		</div>
-	</div>
 
 </template>
 
@@ -52,69 +45,106 @@ import axios from '../../axios/axiossetting.js'
 export default {
   setup(){
     const store = useStore()
-    const limit = ref(10)
-    let currentpage = 1
-    let maxpage = 1
-    const listcount = ref(0)
-    const list = ref([])
-    const startnum = ref(0)
-
-    //줄보기가 바뀌는 경우 getList() 호출한다.
-    watch(limit, ()=>{
-      console.log('[board_list.vue : store.state.page] ' + store.state.page)
-      getList(store.state.page)
-    })
-
-    //pagination의 페이지 번호를 클릭한 경우 pageDo.vue에서 store의 state.page값을 선택한 페이지로 변경
-    //그때 getList() 호출한다.
-    watch(()=>store.state.page, ()=>{
-      console.log('[board_list.vue : store.state.page] ' + store.state.page)
-      getList(store.state.page)
-    })
-    
-    const getList = async (page) => {
-      try {
-        const res = await axios.get(`item?page=${page}&limit=${limit.value}`)
-
-        list.value = res.data.boardlist
-        listcount.value = res.data.listcount
-        maxpage = res.data.maxpage
-        currentpage = res.data.page
-        startnum.value = listcount.value-(currentpage-1)*limit.value
-        console.log('page의 startnum.value = ' + startnum.value)
-
-        for (let i=0; i < list.value.length; i++) {
-          console.log(list.value[i].image)
-          list.value[i].image = list.value[i].image.split(',')
-          list.value[i].image = list.value[i].image[0]
-        }
-        console.log("이미지:"+list.value[0].image[0])
-
-        const pagelist = ref([])
-        for(let i=res.data.startpage; i<=res.data.endpage; i++){
-          pagelist.value.push(i)
+        let option_data = ref([])
+        option_data.value = [
+            {value:'N', label:'제목'},
+            {value:'L', label:'지역'},
+            {value:'NL', label:'제목 또는 지역'},
+        ]
+        const limit = ref(6)
+        let currentpage = 1
+        let maxpage = 1
+        const list = ref([])
+        const listcount = ref(0)
+        const startnum = ref(0)
+        const search_field = ref('NL')
+        const placeholder_message = ref('아이디를 입력하세요')
+        console.log('search_field2=' + search_field.value)
+        const search_word = ref('')
+        const f2 = ref(null)
+        const search = () => {
+            console.log('search하러 가요')
+            if(search_word.value==''){
+                alert('검색어를 입력하세요')
+                f2.value.focus()
+                return
+            }
+            getList(currentpage)
         }
 
-        //pageDo.vue에서 사용하기 위해 store에 저장
-        const obj = {maxpage, currentpage, pagelist}
-        store.dispatch('store_obj', obj)
-      }catch(err){
-        console.log(err)
-      }
-    }
+        const change_placeholder = () => {
+            option_data.value.filter(item => {
+                if(item.value===search_field.value){
+                placeholder_message.value = item.label + '(를)을 입력하세요'
+                return
+                }
+            })
+        }
 
-    getList(1)
+        const getList = async (page) => {
+        try{
+            const res = await axios.get(`item?page=${page}&limit=${limit.value}&search_field=${search_field.value}&search_word=${search_word.value}`);
+            console.log('boardlist1=' + res.data)
+            list.value = res.data.boardlist1
+            maxpage = res.data.maxpage
+            currentpage = res.data.page
+            search_field.value = res.data.search_field
+            search_word.value = res.data.search_word
+            startnum.value = listcount.value - (currentpage-1) * limit.value
 
-    return {
-      limit, startnum, list, listcount
-    }
+            for (let i=0; i < list.value.length; i++) {
+                console.log(list.value[i].image)
+                list.value[i].image = list.value[i].image.split(',')
+                list.value[i].image = list.value[i].image[0]
+            }
+            // console.log("이미지:"+list.value[0].image[0])
+
+            const pagelist = ref([])
+            for(let i=res.data.startpage; i<=res.data.endpage; i++){
+            pagelist.value.push(i)
+            }
+
+            const obj = {maxpage, currentpage, pagelist}
+            store.dispatch('store_obj', obj)
+        }catch(err){
+            console.log(err)
+        }
+        }
+
+        getList(1)
+
+        //watch 검색어가 변경된 경우 
+        watch(()=>store.state.search_data, ()=>{
+
+          search_word.value = store.state.search_data.keyword
+          console.log(search_word.value)
+          search_field.value = store.state.search_data.search_field
+          console.log(search_field.value)
+          getList(1)
+        })
+
+        watch(limit, ()=>{
+        store.dispatch('store_limit', limit.value)
+        console.log('board_list_vue - store.state.page] ' + store.state.page)
+        getList(store.state.page)
+        })
+
+        //pagination에서 페이지 번호를 클릭한 경우 store.state.page의 값이 변경된다.
+        //store.state.page에 해당하는 목록을 가져오기
+        watch(()=>store.state.page, ()=>{
+        getList(store.state.page)
+        })
+
+
+        return {
+            limit, search_field, search_word, search, listcount, list, startnum,
+            placeholder_message, change_placeholder, option_data, f2      
+        }
   }
 }
 </script>
 
 <style scoped>
-
-
 
 .banner{
     width:800px;
@@ -158,6 +188,7 @@ select.form-control{
   display: flex;
   flex-wrap: wrap;
   margin: auto;
+  margin-bottom: 100px;
 }
 
 .contents_all{
@@ -169,11 +200,13 @@ select.form-control{
   padding: 10px;
 }
 
+
 .title{
   font-size:15px;
   padding-bottom: 10px;
   color: red;
   font-weight: bold;
+  text-decoration: none;
 }
 
 .content{
@@ -201,5 +234,36 @@ select.form-control{
 	justify-content: space-between;
 }
 
+.filter-text {
+    color: rgb(255 255 255);
+    text-align: center;
+    line-height: 225px;
+    font-size: 30px;
+}
+.filter {
+    position: relative;
+    bottom: 279px;
+    width: 328px;
+    height: 219px;
+    background: rgba(0, 0, 0, 0.6);
+}
+
+.picture_sell{
+  filter: brightness(100%); 
+}
+
+.pic{
+  filter: brightness(50%); 
+}
+
+.picture_text{
+  position: absolute;
+  top: 46%;
+  width: 100%;
+  font-size: 22px;
+  font-weight: right;
+  text-align:center;
+  color:white !important;
+}
 
 </style>

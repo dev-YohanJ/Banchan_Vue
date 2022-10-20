@@ -405,7 +405,7 @@ export default {
       margin: 20px;
       border: 1px solid #dddddd;
       background-color: #f4f4f4;
-      min-height: 350px;
+      min-height: 500px;
       font-size: 15px;
       color: #888888;
       display: flex;
@@ -429,7 +429,8 @@ width: 100%; */
   }
   
   .image-box {
-      margin-top: 30px;
+      margin-top: 53px;
+      margin-left: 5px;
       padding-bottom: 20px;
       text-align: center;
   }
@@ -449,7 +450,7 @@ width: 100%; */
       background-color: #C64832;
       color: #fff;
       vertical-align: middle;
-      font-size: 15px;
+      font-size: 20px;
       cursor: pointer;
       /* border-radius: 5px; */
   }
@@ -461,8 +462,8 @@ width: 100%; */
   
   .file-preview-wrapper>img {
       position: relative;
-      width: 200px;
-      height: 150px;
+      width: 300px;
+      height: 200px;
       z-index: 10;
   }
   
@@ -493,8 +494,8 @@ width: 100%; */
       margin: 10px;
       padding-top: 20px;
       background-color: #888888;
-      width: 200px;
-      height: 150px;
+      width: 300px;
+      height: 200px;
   }
   
   .room-write-button-wrapper {

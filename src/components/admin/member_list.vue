@@ -58,9 +58,6 @@
           </td>
 		      <td>{{item.name}}</td>
           <td>
-            <button class="btn btn-warning btn-sm">
-              <router-link :to="{name:'Member_Update', params:{id:`${item.id}`}}">수정</router-link>
-            </button>
             <button class="btn btn-danger btn-sm" @click="member_delete(item.id)">삭제</button>
           </td>
 		    </tr>

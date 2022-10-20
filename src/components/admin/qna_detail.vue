@@ -29,7 +29,7 @@
 		  	</tr>
 			  <tr>
 				  <td colspan=2>
-						<div class="group" v-if="parent_id == 'admin'">
+						<div class="group" v-if="parent_id == 'admin' || parent_id == board.board_ID">
               <router-link :to="{name:'Qna_Update'}">
                 <button class="btn btn-warning">수정</button>
               </router-link>

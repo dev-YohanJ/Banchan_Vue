@@ -42,11 +42,11 @@
       </section>
       <!-- Remind Passowrd -->
       <div id="formFooter">
-        <router-link class="underlineHover" to="/signup" @click="join">회원가입</router-link>
+        <router-link class="underlineHover" to="/banchan/join" @click="join">회원가입</router-link>
         <br />
         <router-link class="underlineHover" to="/forgotPw">아이디 찾기</router-link>
         <span style="visibility:hidden">공</span>
-        <router-link class="underlineHover" to="/forgotPw">비밀번호 찾기</router-link>
+        <router-link class="underlineHover" to="/banchan/forgotpw" @click="ForgotPw">비밀번호 찾기</router-link>
       </div>
     </div>
   </div>
@@ -60,50 +60,62 @@ import cookies from "vue-cookies"; // vue에서 쿠키를 사용하기 위한 co
 import {ref} from "vue";
 import axios from "../../axios/axiossetting";
 export default {
-   name: "test",
-  methods: {
-    kakaoLoginBtn:function(){
+  //  name: "test",
+  // methods: {
+  //   kakaoLoginBtn:function(){
 
-      window.Kakao.init('bb4c325a3762f915167df9812ff4c675') // Kakao Developers에서 요약 정보 -> JavaScript 키
+  //     window.Kakao.init('bb4c325a3762f915167df9812ff4c675') // Kakao Developers에서 요약 정보 -> JavaScript 키
 
-      if (window.Kakao.Auth.getAccessToken()) {
-        window.Kakao.API.request({
-          url: '/v1/user/unlink',
-          success: function (response) {
-            console.log(response)
+  //     if (window.Kakao.Auth.getAccessToken()) {
+  //       window.Kakao.API.request({
+  //         url: '/v1/user/unlink',
+  //         success: function (response) {
+  //           console.log(response)
             
-          },
-          fail: function (error) {
-            console.log(error)
-          },
-        })
-        window.Kakao.Auth.setAccessToken(undefined)
-      }
+  //         },
+  //         fail: function (error) {
+  //           console.log(error)
+  //         },
+  //       })
+  //       window.Kakao.Auth.setAccessToken(undefined)
+  //     }
 
 
-      window.Kakao.Auth.login({
-        success: function () {
-          window.Kakao.API.request({
-            url: '/v2/user/me',
-            data: {
-              property_keys: ["kakao_account.nickname"],
-              property_keys: ["kakao_account.email"]
-            },
-            success: async function (response) {
-              console.log(response)
+  //     window.Kakao.Auth.login({
+  //       success: function () {
+  //         window.Kakao.API.request({
+  //           url: '/v2/user/me',
+  //           data: {
+  //             property_keys: ["kakao_account.nickname"],
+  //             property_keys: ["kakao_account.email"]
+  //           },
+  //           success: async function (response) {
+  //             console.log(response)
               
               
-            },
-            fail: function (error) {
-              console.log(error)
-            },
-          })
-        },
-        fail: function (error) {
-          console.log(error)
-        },
-      })
-    }   
+  //           },
+  //           fail: function (error) {
+  //             console.log(error)
+  //           },
+  //         })
+  //       },
+  //       fail: function (error) {
+  //         console.log(error)
+  //       },
+  //     })
+  //   }   
+  // },
+   methods : {
+  
+    kakaoLoginBtn(){
+      axios.get('/main')
+            .then((response) => {
+              console.log(response.data)
+              console.warn("warn : " + response);
+              window.location.href = response.data;
+            })
+    },
+    
   },
     emits: ["parent_getSession"],
     setup(props, context) {

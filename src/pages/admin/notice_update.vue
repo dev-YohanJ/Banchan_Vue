@@ -1,14 +1,14 @@
 <template>
-    <Sidebar/>
+    <!-- <Sidebar/> -->
     <Notice_Update :parent_id="id"/>
 </template>
 
 <script>
-import Sidebar from '../../components/sidebarDo.vue'
+// import Sidebar from '../../components/sidebarDo.vue'
 import Notice_Update from '../../components/admin/notice_update.vue'
 export default {
   components: {
-    Sidebar, Notice_Update
+    Notice_Update
   },
   props: {
     parent_id:{
