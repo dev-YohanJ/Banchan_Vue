@@ -12,150 +12,43 @@
         />
         <h1>SHOP</h1>
       </div>
-
-      <!-- Login Form -->
-      <form @submit.prevent="loginProcess">
-        <input
-          type="text"
-          id="login"
-          class="fadeIn second"
-          name="login"
-          placeholder="아이디"
-          v-model="id"
+      
+      <div class="vue-tempalte">
+        <form>
+          <img
+          src="@/assets/img/forgotpw.png"
+          id="icon"
+          alt="User Icon"
         />
-        <input
-          type="password"
-          id="password"
-          class="fadeIn third"
-          name="login"
-          placeholder="비밀번호"
-          v-model="password"
-        />
-        <input type="submit" style="margin:5px; width:222px; height:49px;" class="submitbtn fadeIn fourth" value="Log In" />
-      </form>
-
-     <section class="test">
-       <div v-on:click="kakaoLoginBtn">
-          <img style="margin:5px;" src="../../assets/kakao.png"/>
-          <br />
-      </div>
-      </section>
-      <!-- Remind Passowrd -->
-      <div id="formFooter">
-        <router-link class="underlineHover" to="/banchan/join" @click="Join">회원가입</router-link>
-        <br />
-        <router-link class="underlineHover" to="/forgotPw">아이디 찾기</router-link>
-        <span style="visibility:hidden">공</span>
-        <router-link class="underlineHover" to="/banchan/forgotpw" @click="ForgotPw">비밀번호 찾기</router-link>
-      </div>
+            <h4>계정의 비밀번호를 재설정합니다.</h4>
+            <div class="formContent">
+            <div id="formFooter">
+              비밀번호를 재설정할 계정의 이메일주소를 입력해 주세요.
+                <div style="display: inline-block">
+                <input type="email" class="form-control form-control-lg" placeholder="****@*****.***"/>
+                </div>
+                <div style="display: inline-block">
+                <button class="btn btn-primary btn-lg">인증</button>
+                </div>
+                
+                <input type="password" class="form-control form-control-lg" style="width:368px" maxlength='6' placeholder="인증번호 6자리 숫자 입력"/>
+                
+            </div>
+            <button type="submit" class="btn btn-dark btn-lg btn-block">비밀번호 초기화</button>
+            </div> 
+        </form>
+     </div>
     </div>
   </div>
 </template>
 
 <script>
-import { useRouter } from "vue-router";
-
-import cookies from "vue-cookies"; // vue에서 쿠키를 사용하기 위한 cookies를 import 합니다.
-
-import {ref} from "vue";
-import axios from "../../axios/axiossetting";
 export default {
-
-    emits: ["parent_getSession"],
-    setup(props, context) {
-        //부모 컴포넌트 App_1.vue에 있는 getSession을 호출합니다.
-        //<router-view @parent_getSession="getSession" : parent_id="id"/>
-        console.log('member_login : setup')
-        context.emit("parent_getSession", "");
-
-        //라우터를 사용할 수 있습니다.
-        const router = useRouter(); // userRouter()는 라우터 인스턴스를 반환합니다.
-        const join = () => {
-        // 이동할 주소는 라우터의 push()를 이용합니다.
-        // https://router.vuejs.org/guide/essentials/navigation.html
-        router.push({
-            name: "Join", // route의 이름이 "Join"의 경로로 이동합니다.
-            });
-        };
-
-        const remember = ref(false);
-        const id = ref("");
-        const password = ref("");
-
-        const getCookie = () => {
-            //이름이 saveid인 쿠키를 가져옵니다.
-            const cookie_value = cookies.get("saveid");
-            console.log("가져온 쿠키값=" + cookie_value);
-            if (cookie_value != null) {
-                remember.value = true; //체크박스 체크합니다.
-                id.value = cookie_value; // 쿠키에 저장된 아이디값 input에 나타납니다.
-            } else {
-                remember.value = false; // 체크박스 해제합니다.
-            }
-        }
-
-        getCookie();
-
-        const loginProcess = async () => {
-            try {
-                const res = await axios.post("members", {
-                    id: id.value,
-                    password: password.value,
-                });
-                console.log("login.vue:res.data=" + res.data);
-                const result = res.data;
-                if (result == -1) {
-                    alert("아이디가 존재하지 않습니다.");
-                } else if (result == 0) {
-                    alert("비밀번호가 일치하지 않습니다.");
-                } else if (result == 1) {
-                    console.log("remember=" + remember.value);
-                    if (remember.value) { // 체크박스 선택한 경우
-                    /*
-                    set(name, value, expire) : expire(만료일)을 갖는 name과 value를 가진 쿠키를 설정합니다.
-                        1s : 1초
-                        1h : 1시간 (60*60)
-                        1d : 1일 (24*60*60)
-                        1m : 1달
-                        new Date(2021,08,30).toUTCString(): 특정 시간
-                                (toUTCString() - 날짜를 UTC(협정 세계시) 형식으로 표현합니다.)
-                    */
-                   cookies.set("saveid", id.value, "id"); // 1일 동안 유효한 쿠키를 설정합니다.
-                   // cookies.set("saveid", id.value, 24*60*60)
-                    } else { // 체크박스 해제한 경우
-                        cookies.remove("saveid"); // 쿠키 제거
-                    }
-
-                    router.push({
-                        name: "Main"
-                    });
-                }
-            } catch (err) {
-                console.log(err);
-            }
-        }; // loginProcess end
-
-         const kakaoLoginBtn=()=>{
-            axios.get('/main')
-            .then((response) => {
-              console.log(response.data)
-              console.warn("warn : " + response);
-              window.location.href = response.data;
-            })
+    data() {
+        return {}
     }
-
-        return {
-        join,
-        id,
-        password,
-        loginProcess,
-        remember,
-        kakaoLoginBtn
-        };
-  },
-};
+}
 </script>
-
 <style scoped>
 /* BASIC */
 html {

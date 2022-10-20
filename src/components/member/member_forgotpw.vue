@@ -23,12 +23,17 @@
             <h4>계정의 비밀번호를 재설정합니다.</h4>
             <div class="formContent">
             <div id="formFooter">
-              비밀번호를 재설정할 계정의 이메일주소를 입력해 주세요.
-               
-                <input type="email" class="form-control form-control-lg" placeholder="****@*****.***"/>
-            </div><br>
-            <button type="submit" class="btn btn-dark btn-lg btn-block">비밀번호 초기화</button>
+              비밀번호를 찾고자 하는 아이디를 입력해 주세요.
+                <div style="display: inline-block">
+                <input type="id" class="form-control form-control-lg" placeholder="오늘의 반찬 계정 아이디"/>
+                </div>
+            <div style="display: inline-block">
+            <router-link :to="{name:'ForgotPw2'}">
+            <button class="btn btn-primary btn-lg btn-block">다음</button>
+            </router-link>
+            </div>
             </div> 
+            </div>
         </form>
      </div>
     </div>
