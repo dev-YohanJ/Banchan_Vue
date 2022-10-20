@@ -78,7 +78,7 @@ export default {
       try {
         const res = await axios.get(`item?page=${page}&limit=${limit.value}`)
 
-        list.value = res.data.boardlist
+        list.value = res.data.boardlist1
         listcount.value = res.data.listcount
         maxpage = res.data.maxpage
         currentpage = res.data.page
