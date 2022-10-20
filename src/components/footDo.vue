@@ -6,9 +6,9 @@
                 <div class="footer__about__logo">
                     <router-link class="nav-link" :to="{name:'Main'}"><img src="@/assets/img/logo.png"></router-link>
                 <ul>
-                    <li>Address: 60-49 Road 11378 New York</li>
-                    <li>Phone: +65 11.188.888</li>
-                    <li>Email: hello@colorlib.com</li>
+                    <li>Address: 서울시 종로구</li>
+                    <li>Phone: +82 02.1234.1234</li>
+                    <li>Email: hello@banchan.com</li>
                 </ul>
                 </div>
             </div>
