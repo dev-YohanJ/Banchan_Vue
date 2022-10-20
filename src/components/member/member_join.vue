@@ -327,6 +327,13 @@ export default {
       }
     )
 
+    watch(
+      ()=> roadaddr.value,
+      () => {
+        addr();
+      }
+    )
+
     const joinProcess = async () => {
       if (id_color.value == "red") {
         alert("아이디를 확인하세요");

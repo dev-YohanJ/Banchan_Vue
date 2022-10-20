@@ -275,6 +275,13 @@ export default {
       }
     )
 
+    watch(
+      ()=> roadaddr.value,
+      () => {
+        addr();
+      }
+    )
+
     const updateProcess = async () => {
       if (update.value.password != pw_check.value) {
         alert("비밀번호를 확인하세요");
