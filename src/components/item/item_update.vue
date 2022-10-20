@@ -518,7 +518,7 @@ textarea{
       margin: 20px;
       border: 1px solid #dddddd;
       background-color: #f4f4f4;
-      min-height: 350px;
+      min-height: 500px;
       font-size: 15px;
       color: #888888;
       display: flex;

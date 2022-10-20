@@ -2,6 +2,7 @@
   
 <!-- 헤더 -->
 <div class="header_top">
+<div class="header__top">
     <div></div>
     <div class="header_bar" v-if="!parent_id">
         <router-link class="nav-link" :to="{name:'Login'}"><i class="fa fa-user"></i> 로그인 </router-link>
@@ -21,20 +22,30 @@
         <router-link class="nav-link" :to="{name:'Qna_List'}">문의게시판</router-link>
     </div>
 </div>
+</div>
 <div class="container">
     <div class="row">
         <div class="header_logo">
             <router-link :to="{name:'Main'}"><img src="@/assets/img/logo.png"></router-link>
         </div>
         <div class="search_form">
-            <form action="#">
-                <input 
-                    type="text" 
-                    class="form-control"
-                    v-model.lazy="search_word"
-                    ref="f2"
-                    placeholder="검색어를 입력하세요.">
-                <button type="submit" class="site-btn">검색</button>
+            <form @submit.prevent="search">
+                <div class="input-group">
+                    <select id="viewcount" 
+                            v-model.lazy="search_field" 
+                            @change="change_placeholder()">
+                        <option v-for="(item,index) in option_data" :key="index" :value="item.value">
+                            {{item.label}}
+                        </option>
+                    </select>
+                    <input 
+                        type="text" 
+                        class="form-control"
+                        v-model.lazy="search_word"
+                        ref="f2"
+                        placeholder="검색어를 입력하세요.">
+                    <button type="submit" class="site-btn">검색</button>
+                </div>
             </form>
         </div>
         <div class="float-right">
@@ -67,7 +78,8 @@ export default {
             try{
                 const res = await axios.post('members/logout');
                 console.log("여기는 logout:" + res.data)
-                
+                alert="로그아웃 했습니"
+
                 //route의 이름이 'Login'인 경로로 이동합니다.
                 router.push({
                     name:'Login'
@@ -80,14 +92,11 @@ export default {
         const store = useStore()
         let option_data = ref([])
         option_data.value = [
-            {value:'NL', label:'제목 또는 지역'},
+            {value:'NL', label:'전체'},
+            {value:'N', label:'제목'},
+            {value:'L', label:'지역'},
         ]
-        const limit = ref(10)
-        let currentpage = 1
-        let maxpage = 1
-        const list = ref([])
-        const listcount = ref(0)
-        const startnum = ref(0)
+        let search_data = {}
         const search_field = ref('NL')
         const placeholder_message = ref('아이디를 입력하세요')
         console.log('search_field2=' + search_field.value)
@@ -100,7 +109,16 @@ export default {
                 f2.value.focus()
                 return
             }
-            getList(currentpage)
+            console.log("필드:"+search_field.value)
+            console.log("워드:"+search_word.value)
+
+            search_data = {
+                search_field: search_field.value,
+                keyword: search_word.value,
+            }
+
+            store.dispatch('search_data', search_data)
+           //store에 검색어 입력
         }
 
         const change_placeholder = () => {
@@ -112,48 +130,9 @@ export default {
             })
         }
 
-        const getList = async (page) => {
-        try{
-            const res = await axios.get(`item?page=${page}&limit=${limit.value}&search_field=${search_field.value}&search_word=${search_word.value}`);
-            console.log('boardlist1=' + res.data)
-            list.value = res.data.boardlist1
-            maxpage = res.data.maxpage
-            currentpage = res.data.page
-            search_field.value = res.data.search_field
-            search_word.value = res.data.search_word
-            startnum.value = listcount.value - (currentpage-1) * limit.value
-
-            const pagelist = ref([])
-            for(let i=res.data.startpage; i<=res.data.endpage; i++){
-            pagelist.value.push(i)
-            }
-
-            const obj = {maxpage, currentpage, pagelist}
-            store.dispatch('store_obj', obj)
-        }catch(err){
-            console.log(err)
-        }
-        }
-
-        getList(1)
-
-        watch(limit, ()=>{
-        store.dispatch('store_limit', limit.value)
-        console.log('(limit)member_list_vue - store.state.page] ' + store.state.page)
-        getList(store.state.page)
-        })
-
-        //pagination에서 페이지 번호를 클릭한 경우 store.state.page의 값이 변경된다.
-        //store.state.page에 해당하는 목록을 가져오기
-        watch(()=>store.state.page, ()=>{
-        getList(store.state.page)
-        })
-
-
         return {
             logout,
-            limit, search_field, search_word, search, listcount, list, startnum,
-            placeholder_message, change_placeholder, option_data, f2      
+            search, change_placeholder, search_field, option_data, search_word   
         }
   }
 
@@ -177,6 +156,43 @@ export default {
 }
 
 
+/* 헤더 */
+
+.header_top{
+	justify-content: space-between;
+	margin: 10px 0 0 0;
+	border-bottom: 1px solid rgb(238, 238, 238);
+	height: 32px;
+    padding: 0 15% 0 0;
+}
+
+.header__top{
+	display: flex;
+	justify-content: space-between;
+}
+
+
+.header_bar a {
+	display: inline;
+	font-size: 14px;
+	color: #1c1c1c;
+}
+
+.header_bar a i {
+	margin-right: 6px;
+}
+
+.nav-link{
+    display:inline-block;
+    padding: 0;
+}
+
+/* 검색창 */
+#viewcount{
+    width: 100px;
+    padding: 10px;
+}
+
 /* 기타 */
 .tab{
     padding: 10px;
@@ -190,7 +206,6 @@ export default {
 .tabs{
     padding: 0 0 0px;
 }
-
 
 .nav{
     position: relative
@@ -206,4 +221,56 @@ export default {
     padding:3px 3px 0 0;
 }
 
+select.form-control{
+  width:auto;margin-bottom:2em;display:inline-block;
+}
+.rows{text-align:right;}
+.center{text-align:center}
+
+.container{
+  display: flex;
+  flex-wrap: wrap;
+  margin: auto;
+}
+
+.contents_all{
+  width: 350px;
+  margin-right:10px;
+  margin-bottom: 11px;
+  border: 1px solid #dddddd;
+  display: block;
+  padding: 10px;
+}
+
+.title{
+  font-size:15px;
+  padding-bottom: 10px;
+  color: red;
+  font-weight: bold;
+}
+
+.content{
+  display:flex;
+  justify-content: space-between;
+}
+
+.price{
+  font-size:18px;
+  font-weight:bold;
+}
+
+.regdate{
+  font-size:14px;
+  color: grey;
+}
+
+.list{
+	margin: 0 auto;
+	margin-top:100px;
+}
+
+.first{
+	display:flex;
+	justify-content: space-between;
+}
 </style>
