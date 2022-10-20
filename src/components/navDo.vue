@@ -18,8 +18,6 @@
         <div class="nav-link" @click="logout">{{parent_id}}님(로그아웃)</div>
             |
         <router-link class="nav-link" :to="{name:'Mypage'}">정보수정</router-link>
-        <router-link class="nav-link" :to="{name:'Notice_List'}">공지사항</router-link>
-        <router-link class="nav-link" :to="{name:'Qna_List'}">문의게시판</router-link>
     </div>
 </div>
 </div>
@@ -53,6 +51,8 @@
             <router-link class="tab" :to="{name:'Product_Write'}"><i class="fa fa-cutlery"></i> 판매하기 </router-link> <!-- Product_New -->
             <router-link class="tab" :to="{name:'Mypage'}"><i class="fa fa-user"></i> 마이페이지 </router-link> <!-- Mypage -->
             <router-link class="tab" :to="{name:'Chat'}"><i class="fa fa-comments"></i> 채팅 </router-link> <!-- Chat -->
+            <router-link class="tab_" :to="{name:'Notice_List'}">공지사항</router-link>
+            <router-link class="tab_" :to="{name:'Qna_List'}">문의게시판</router-link>
         </div>
     </div>
 </div>
@@ -160,10 +160,13 @@ export default {
 
 .header_top{
 	justify-content: space-between;
-	margin: 10px 0 0 0;
 	border-bottom: 1px solid rgb(238, 238, 238);
 	height: 32px;
-    padding: 0 15% 0 0;
+    width:100%;
+}
+
+.container{
+    justify-content: center;
 }
 
 .header__top{
@@ -187,18 +190,31 @@ export default {
     padding: 0;
 }
 
+
+
 /* 검색창 */
 #viewcount{
     width: 100px;
     padding: 10px;
 }
 
-/* 기타 */
+/* 메뉴 */
 .tab{
     padding: 10px;
     font-size: 20px;
     font-weight: bold;
     color:#1c1c1c;
+    display:inline-block;
+    display: flex;
+}
+
+.tab_{
+    padding: 10px;
+    margin: 0 0 0 3px;
+    line-height: 200%;
+    font-size: 15px;
+    font-weight: bold;
+    color:#2b2b2b;
     display:inline-block;
     display: flex;
 }
@@ -273,4 +289,6 @@ select.form-control{
 	display:flex;
 	justify-content: space-between;
 }
+
+
 </style>

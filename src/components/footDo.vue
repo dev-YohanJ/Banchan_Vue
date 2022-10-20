@@ -1,69 +1,53 @@
 <template>
-  <!-- Footer Section Begin -->
-    <footer class="footer spad">
-        <div class="container">
-            <div class="row">
-                <div class="col-lg-3 col-md-6 col-sm-6">
-                    <div class="footer__about">
-                        <div class="footer__about__logo">
-                            <router-link class="nav-link" :to="{name:'Main'}"><img src="@/assets/img/logo.png"></router-link>
-                        </div>
-                        <ul>
-                            <li>Address: 60-49 Road 11378 New York</li>
-                            <li>Phone: +65 11.188.888</li>
-                            <li>Email: hello@colorlib.com</li>
-                        </ul>
-                    </div>
-                </div>
-                <div class="col-lg-4 col-md-6 col-sm-6 offset-lg-1">
-                    <div class="footer__widget">
-                        <h6>Useful Links</h6>
-                        <ul>
-                            <li><a href="#">About Us</a></li>
-                            <li><a href="#">About Our Shop</a></li>
-                            <li><a href="#">Secure Shopping</a></li>
-                            <li><a href="#">Delivery infomation</a></li>
-                            <li><a href="#">Privacy Policy</a></li>
-                            <li><a href="#">Our Sitemap</a></li>
-                        </ul>
-                        <ul>
-                            <li><a href="#">Who We Are</a></li>
-                            <li><a href="#">Our Services</a></li>
-                            <li><a href="#">Projects</a></li>
-                            <li><a href="#">Contact</a></li>
-                            <li><a href="#">Innovation</a></li>
-                            <li><a href="#">Testimonials</a></li>
-                        </ul>
-                    </div>
-                </div>
-                <div class="col-lg-4 col-md-12">
-                    <div class="footer__widget">
-                        <h6>Join Our Newsletter Now</h6>
-                        <p>Get E-mail updates about our latest shop and special offers.</p>
-                        <form action="#">
-                            <input type="text" placeholder="Enter your mail">
-                            <button type="submit" class="site-btn">Subscribe</button>
-                        </form>
-                        <div class="footer__widget__social">
-                            <a href="#"><i class="fa fa-facebook"></i></a>
-                            <a href="#"><i class="fa fa-instagram"></i></a>
-                            <a href="#"><i class="fa fa-twitter"></i></a>
-                            <a href="#"><i class="fa fa-pinterest"></i></a>
-                        </div>
-                    </div>
+<footer class="footer spad">
+    <div class="container">
+        <div class="col-lg-3 col-md-6 col-sm-6">
+            <div class="footer__about">
+                <div class="footer__about__logo">
+                    <router-link class="nav-link" :to="{name:'Main'}"><img src="@/assets/img/logo.png"></router-link>
+                <ul>
+                    <li>Address: 60-49 Road 11378 New York</li>
+                    <li>Phone: +65 11.188.888</li>
+                    <li>Email: hello@colorlib.com</li>
+                </ul>
                 </div>
             </div>
         </div>
-    </footer>
-    <!-- Footer Section End -->
+    </div>
+</footer>
 </template>
 
 <script>
-export default {
-
-}
 </script>
 
-<style>
+<style scoped>
+.footer {
+	background: #F3F6FA;
+	width:100%;
+}
 
+.footer__about {
+	margin-bottom: 30px;
+}
+
+.footer__about ul li {
+	font-size: 16px;
+	color: #1c1c1c;
+	line-height: 36px;
+	list-style: none;
+}
+
+.footer__about__logo{
+	margin-bottom: 15px;
+    display: flex;
+}
+
+#app > div > div.footer.container > footer > div > div > div > div > a > img{
+	min-width: 200px !important;
+    padding-top: 10px;
+}
+
+.footer__about__logo a {
+	display: inline-block;
+}
 </style>
