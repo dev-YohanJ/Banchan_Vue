@@ -14,7 +14,7 @@
 	  <table class="table table-striped">
 	    <thead>
 		    <tr>
-		      <th colspan=3>문의게시판</th>
+		      <th colspan=5>문의게시판</th>
 		      <th>		
 		        <span>글 개수 : {{listcount}}</span>
 		      </th>
