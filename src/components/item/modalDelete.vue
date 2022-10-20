@@ -37,11 +37,15 @@ export default {
     
     const goDelete = async ()=>{
       const res = await axios.delete(`items/${num}`)
-        alert('삭제 성공')
-        store.dispatch('display', false)
-        router.push({
-          name : 'Item_List'
-        })
+        if(res.data==0){
+          alert('삭제 실패 입니다.')
+        }else{
+          alert('삭제 성공')
+          store.dispatch('display', false)
+          router.push({
+            name : 'Main'
+          })
+        }
       }
       return {
         goDelete, display, hidden
@@ -58,9 +62,27 @@ export default {
     outline: 0;
  }
  .bg{
+  position: absolute;
 	width:100%;
 	height:100%;
 	background:rgba(0,0,0,0.5);
-	position:fixed;padding:20px
+	position:fixed;padding:20px;
+  z-index: 100;
 	}
+
+  .btn{
+    border-radius: 0;
+    margin: 10px;
+  }
+
+  form{
+    text-align: center;
+    padding: 10px;
+    padding-top: 30px;
+  }
+
+  label{
+    font-size: 18px;
+    margin-bottom: 0;
+  }
 </style>

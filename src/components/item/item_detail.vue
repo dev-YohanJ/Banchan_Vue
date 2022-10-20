@@ -1,15 +1,25 @@
 <template>
+<div class="line">
   <div class="container">
       <div class="row">
           <div class="col-lg-6 col-md-6">
-              <vueper-slides fade :touchable="false" fixed-height = "400px">
+            <div v-if="board.status == 0" class="picture">
+              <vueper-slides fade :touchable="false" :slide-content-outside="false" fixed-height = "450px">
                 <vueper-slide
                   v-for="(slide, i) in slides"
                   :key="i"
                   :image="slide.image" />
               </vueper-slides>
-            <!-- <img v-if="image1" :src="require(`C:/upload/${image1}`)"/> 
-            {{image1}}  -->
+            </div>
+            <div v-if="board.status == 1" :slide-content-outside="false" class="picture_sell">
+              <vueper-slides fade :touchable="false" fixed-height = "450px">
+                <vueper-slide
+                  v-for="(slide, i) in slides"
+                  :key="i"
+                  :image="slide.image"
+                   />
+              </vueper-slides>
+            </div>
           </div>
           <div class="col-lg-6 col-md-6">
               <div class="product__details__text">
@@ -23,32 +33,40 @@
                   </div>
                   <div class="second_con">
                     <div class="product__details__price">{{board.price}}원</div>
-                    <div class="product__details__rating">
-                        <span>(별점 미구현)</span>
-                        <i class="fa fa-star fa-2x"></i>
-                        <i class="fa fa-star fa-2x"></i>
-                        <i class="fa fa-star fa-2x"></i>
-                        <i class="fa fa-star fa-2x"></i>
-                        <i class="fa fa-star-half-o fa-2x"></i>
+                    <div class="seller">
+                        판매자:{{board.seller}}
                     </div>
                   </div>
                   <div class="description">
                     <div class="item_address"><i class="fa fa-map-marker"></i>{{board.location}}</div>
                     <div class="item_description">{{board.description}}</div>
                   </div>
-                  <div class="group" 
-                      v-if="board.seller == parent_id || parent_id == 'admin'">
-                    <router-link :to="{name:'Item_Update'}">
-                      <button class="btn btn-danger modify">내 반찬 관리하기</button>
-                    </router-link> 
-                    <button class="btn btn-danger">끌어올리기</button>
+                  <div class="group" v-if="board.seller == parent_id || parent_id == 'admin'">
+                    <div class="buttons">
+                      <div class="modify_">
+                      <router-link :to="{name:'Item_Update'}">
+                        <button class="btn btn-danger modify">내 반찬 관리하기</button>
+                      </router-link> 
+                      </div>
+                    </div>
+                  </div>
+                  <div v-else-if="board.status == 1">
+                    <div class="buttons">
+                      <button class="sold">판매가 완료된 상품입니다.</button>
+                    </div>
                   </div>
                   <div class="group" v-else>
-                      <router-link :to="{name:'Chat'}">
-                        <button class="chat">판매자에게 채팅</button>
+                    <div class="buttons">
+                      <router-link class="chat" :to="{name:'Chat'}">
+                        <button class="chat_ btn btn-danger">판매자에게 채팅</button>
                       </router-link>
-                      <button class="buy" :style="box_color2" @click="AddBuy">구매하기</button>
-                      <button class="zzim" :style="box_color" @click="AddWish"><i class="fa fa-heart" :style="heart_color"></i>찜하기</button>
+                    </div>
+                    <div class="buttons">
+                      <button class="buy btn btn-danger" :style="box_color2" @click="AddBuy">&nbsp;구매하기&nbsp; </button>
+                    </div>
+                    <div class="buttons">
+                      <button class="zzim btn btn-secondary" :style="box_color" @click="AddWish"><i class="fa fa-heart" :style="heart_color"></i>찜하기</button>
+                    </div>
                   </div>
                   <!-- <a href="#" class="primary-btn">ADD TO CARD</a> -->
                   <!-- <a href="#" class="heart-icon"><span class="icon_heart_alt"></span></a> -->
@@ -56,6 +74,7 @@
           </div>
       </div>
   </div>
+</div>
 </template>
 
 <script>
@@ -180,7 +199,7 @@ export default {
         for(i=0; i<board.value.image.length-1; i++){
           console.log(board.value.image[i])
           slides.value.push({
-            image: require(`C:/upload/${board.value.image[i]}`)
+            image: require(`C:/upload/${board.value.image[i]}`),
           })
         }
       
@@ -246,7 +265,7 @@ td:nth-child(1) {
 
 
 table > tbody >tr:nth-child(5)>td:nth-child(2)>a {
-	color: black
+	color: #252525;
 }
 
 
@@ -279,6 +298,8 @@ button{
 
 .container{
   margin:100px 0;
+  margin-bottom: 150px;
+  height: 500px;
 }
 
 img{
@@ -289,7 +310,7 @@ img{
 
 .description{
   border: 1px solid #dddddd;
-  padding: 10px 10px 140px 10px;
+  padding: 10px 10px 190px 10px;
 }
 
 .item_address{
@@ -310,16 +331,26 @@ button{
 	background: #C64832;
   border:none;
   border-radius:0;
+  margin-left: 0 !important;
+
 }
 
 .group{
-  margin:20px 0 0 0;
+  align-items: center;
+  display:flex;
+}
+
+.buttons{
+  margin: 10px auto;
+  margin-top: 20px;
 }
 
 .modify{
   margin-left:10px;
-  padding: 13px 70px 12px;
+  width:100%;
+  padding: 13px 250px 12px;
   background: #FCAB01;
+  padding: 0 auto;
 }
 
 ::before{
@@ -334,26 +365,55 @@ span{
 .second_con{
   display:flex;
   justify-content: space-between;
+  align-items: center;
 }
 
-.chat{
-  width:250px;
-  padding: 13px 0px 12px;
-  margin:0 0 0 10px;
+.sold{
+  background: rgb(204, 204, 204);
+  width:100%;
+}
+
+.sold:active{
+  outline:none !important;
+  box-shadow:none !important;  
 }
 
 .buy{
-  width:250px;
-  padding: 13px 0px 12px;
+  width:100%;
+  display: flex;
+  justify-content: center;
 }
 
 .zzim{
-  width:160px;
-  padding: 13px 0px;
+  width:100%;
+  margin-left:0px;
 }
 
-.vueperslide__content-wrapper{
+
+.line{
+  border-top: 1px solid rgb(238, 238, 238);
+  display: flex;
+  align-items: center;
+}
+
+.row{
+  display: flex;
+  align-content: space-around;
   height: 500px;
+}
+
+.picture_sell{
+  filter: brightness(100%); 
+}
+
+.picture_text{
+  position: absolute;
+  top: 99%;
+  width: 100%;
+  font-size: 22px;
+  font-weight: right;
+  text-align:center;
+  color:red !important;
 }
 
 

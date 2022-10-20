@@ -80,17 +80,6 @@
           required></textarea>
       </div>
 
-      <!-- <div class="form-group" v-if="board.board_RE_LEV==0">
-        <label for="board_file">파일 첨부</label>
-        <label>
-          <img src="../../assets/attach.png" alt="파일첨부">
-          <input type="file" name="uploadfile" v-show="false" @change="change">
-        </label>
-        <span>{{fileName}}</span>
-        <img src="../../assets/remove.png" alt="파일삭제" class="remove" 
-          v-if="fileName" @click="remove">
-      </div> -->
-
 
       <div class="form-group buttons">
         <div></div>
@@ -147,14 +136,6 @@ export default {
         console.log("length:"+board.value.image.length)
         console.log(board.value.image)
 
-        // for(i=0; i<board.value.image.length-1; i++){
-        //   console.log(board.value.image[i])
-        //   files.value.push({
-        //     file: board.value.image[i],
-        //     preview: require(`C:/upload/${board.value.image[i]}`),
-        //     number: i,
-        //   })
-        // }
 
         uploadnum = -1;
         for (let i = 0; i < board.value.image.length-1; i++) {
@@ -200,23 +181,13 @@ export default {
     const update = async ()=>{
       console.log("upload start");
       let frm = new FormData()
-      // if(check==0){ //기존파일 그대로인 경우
-      //   console.log("check=0")
-      //   frm.append('check', fileName.value) //
-      //   frm.append('image', board.value.image)
-      //   console.log("boardimg:" + board.value.image)
-      // }
-      // else
+      
       let image1 = ''
        if(files.value.length > 0){
      
         console.log("이미지1:"+board.value.image)
-        // frm.append('image', board.value.image)
         for(let i=0; i<files.value.length;i++){
-                            //같은 이름으로 여러 번 올려야 합니다.
-            // console.log("업데이트파일:"+files.value[i].file.name);
-            // console.log("파일1:"+files.value[i].file)
-            // board.value.image += files.value[i].file + ","
+                           
             if(files.value[i].file == null){
               image1 += files.value[i].name + ','
             }else{
@@ -232,6 +203,7 @@ export default {
       frm.append('seller', props.parent_id)
       frm.append('name', board.value.name)
       frm.append('price', board.value.price)
+      frm.append('location', board.value.location)
       frm.append('description', board.value.description)
       frm.append('id', num)
 
@@ -291,6 +263,7 @@ export default {
 
     const imageAddUpload = (event) => {
         // uploadnum = -1;
+        if(files.value.length < 3){
           for (let i = 0; i < event.target.files.length; i++) {
             let eachFiles = event.target.files[i]
               files.value=[
@@ -308,9 +281,12 @@ export default {
             uploadnum = i;
             // console.log("추가number:"+files.value[i].number)
             // console.log("추가uploadnum:"+uploadnum)
+          }
+          uploadImageIndex.value = uploadImageIndex.value + uploadnum + 1;
+          check++
+        } else {
+          alert('사진은 최대 3개까지 올릴 수 있습니다.')
         }
-        uploadImageIndex.value = uploadImageIndex.value + uploadnum + 1;
-        check++
     }
 
     const fileDeleteButton = (e)=> {
@@ -542,7 +518,8 @@ width: 100%; */
   }
   
   .image-box {
-      margin-top: 30px;
+      margin-top: 45px;
+      margin-left: 5px;
       padding-bottom: 20px;
       text-align: center;
   }
@@ -562,7 +539,7 @@ width: 100%; */
       background-color: #C64832;
       color: #fff;
       vertical-align: middle;
-      font-size: 15px;
+      font-size: 17px;
       cursor: pointer;
       /* border-radius: 5px; */
   }
@@ -574,9 +551,9 @@ width: 100%; */
   
   .file-preview-wrapper>img {
       position: relative;
-      width: 200px;
-      height: 150px;
-      z-index: 10;
+      width: 250px;
+      height: 180px;
+      /* z-index: 10; */
   }
   
   .file-close-button {
@@ -606,8 +583,8 @@ width: 100%; */
       margin: 10px;
       padding-top: 20px;
       background-color: #888888;
-      width: 200px;
-      height: 150px;
+      width: 250px;
+      height: 180px;
   }
   
   .room-write-button-wrapper {

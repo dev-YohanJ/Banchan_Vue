@@ -41,8 +41,9 @@
                         class="form-control"
                         v-model.lazy="search_word"
                         ref="f2"
+                        size=31
                         placeholder="검색어를 입력하세요.">
-                    <button type="submit" class="site-btn">검색</button>
+                    <button type="submit" class="site-btn btn btn-danger">검색</button>
                 </div>
             </form>
         </div>
@@ -179,6 +180,7 @@ export default {
 	display: inline;
 	font-size: 14px;
 	color: #1c1c1c;
+    cursor: pointer;
 }
 
 .header_bar a i {
@@ -188,6 +190,7 @@ export default {
 .nav-link{
     display:inline-block;
     padding: 0;
+    cursor: pointer;
 }
 
 

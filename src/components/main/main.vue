@@ -9,6 +9,8 @@
           <h2>오늘의 반찬</h2>
       </div>
   </div>
+  <div class="container_all">
+
 	<div class="list">
 			<div class="container">
 				<div class="contents_all" v-for="(item, index) in list" :key="index">
@@ -17,25 +19,25 @@
               <img v-if="item" :src="require(`C:/upload/${item.image}`)"/>
             </div>
             <div v-if="item.status == 1" class="picture_sell">
-                <img class="pic" v-if="item" :src="require(`C:/upload/${item.image}`)"/>
-                <p v-if="item.status == 1" class="picture_text">판매완료</p>
+              <img class="pic" v-if="item" :src="require(`C:/upload/${item.image}`)"/>
+              <p v-if="item.status == 1" class="picture_text">판매완료</p>
             </div>
 
             <div class="contents">
               <div class="first">
                   <div class="title">{{item.name}}</div>
-                <div>{{item.location}}</div>
+                <div class="regdate"><i class="fa fa-clock-o" aria-hidden="true"></i>{{item.regdate}}</div>
               </div>
               <div class="content">
                 <div class="price">{{item.price}}원</div>
-                <div class="regdate">{{item.regdate}}</div>
+                <div class="location"><i class="fa fa-map-marker" aria-hidden="true"></i>{{item.location}}</div>
               </div>
             </div>
           </router-link>
 				</div>
 			</div>
 		</div>
-
+  </div>
 </template>
 
 <script>
@@ -51,7 +53,7 @@ export default {
             {value:'L', label:'지역'},
             {value:'NL', label:'제목 또는 지역'},
         ]
-        const limit = ref(6)
+        const limit = ref(50)
         let currentpage = 1
         let maxpage = 1
         const list = ref([])
@@ -166,18 +168,6 @@ export default {
 	
 }
 
-.banchan > div> img{
-    padding: 5px;
-    width:300px;
-    height: 230px;
-	object-fit: cover;
-}
-
-.banchan > div {
-	white-space: nowrap;
-	text-align:center;
-}
-
 select.form-control{
   width:auto;margin-bottom:2em;display:inline-block;
 }
@@ -187,12 +177,12 @@ select.form-control{
 .container{
   display: flex;
   flex-wrap: wrap;
-  margin: auto;
-  margin-bottom: 100px;
+  margin-bottom: 50px;
+  width: 100%;
 }
 
 .contents_all{
-  width: 350px;
+  width: 24.1%;
   margin-right:10px;
   margin-bottom: 11px;
   border: 1px solid #dddddd;
@@ -202,10 +192,8 @@ select.form-control{
 
 
 .title{
-  font-size:15px;
-  padding-bottom: 10px;
-  color: red;
-  font-weight: bold;
+  font-size:16px;
+  color: #252525;;
   text-decoration: none;
 }
 
@@ -220,18 +208,23 @@ select.form-control{
 }
 
 .regdate{
+  display:flex;
   font-size:14px;
   color: grey;
 }
 
 .list{
+  display: block;
+  width: 100%;
 	margin: 0 auto;
-	margin-top:100px;
 }
 
 .first{
 	display:flex;
 	justify-content: space-between;
+  align-items: center;
+  margin-top:10px;
+  padding-bottom: 10px;
 }
 
 .filter-text {
@@ -246,6 +239,18 @@ select.form-control{
     width: 328px;
     height: 219px;
     background: rgba(0, 0, 0, 0.6);
+}
+
+.picture > img{
+  width:100%;
+  height: 200px;
+  object-fit: cover;
+}
+
+.picture_sell > img{
+  width:100%;
+  height: 200px;
+  object-fit: cover
 }
 
 .picture_sell{
@@ -264,6 +269,29 @@ select.form-control{
   font-weight: right;
   text-align:center;
   color:white !important;
+}
+
+.img{
+  width:100%;
+  height: 80%;
+}
+
+a{
+  color: #252525;
+}
+
+
+.fa-map-marker{
+  padding: 0 5px 5px 0;
+}
+
+.fa-clock-o{
+  padding: 1px 5px 0px 0;
+}
+
+.location{
+  display:flex;
+  align-items: center;
 }
 
 </style>

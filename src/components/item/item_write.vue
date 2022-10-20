@@ -114,6 +114,11 @@ export default {
             const res = await axios.get(`members/${id}`)
             member.value = res.data;
             console.log(res.data);
+
+            console.log("주소1:"+member.value.address)
+            member.value.address = member.value.address.split(' ')
+            member.value.address = member.value.address[0] + " " + member.value.address[1]
+            // console.log(member.value.address)
             if(member.value==null) {
                 console.log('null입니다.');
                 return;
@@ -150,6 +155,7 @@ export default {
 
     const imageAddUpload = (event) => {
         let num = -1;
+        if(files.value.length < 3){
           for (let i = 0; i < event.target.files.length; i++) {
             let eachFiles = event.target.files[i]
               files.value=[
@@ -164,8 +170,11 @@ export default {
                 }
               ]
             num = i;
+          }
+          uploadImageIndex.value = uploadImageIndex.value + num + 1;
+        } else {
+          alert('사진은 최대 3개까지 올릴 수 있습니다.')
         }
-        uploadImageIndex.value = uploadImageIndex.value + num + 1;
     }
 
     const fileDeleteButton = (e)=> {
@@ -429,7 +438,7 @@ width: 100%; */
   }
   
   .image-box {
-      margin-top: 53px;
+      margin-top: 45px;
       margin-left: 5px;
       padding-bottom: 20px;
       text-align: center;
@@ -444,13 +453,13 @@ width: 100%; */
       border: 0;
   }
   
-  .image-box label {
+  .image-box label { 
       display: inline-block;
       padding: 13px 30px 12px;
       background-color: #C64832;
       color: #fff;
       vertical-align: middle;
-      font-size: 20px;
+      font-size: 17px;
       cursor: pointer;
       /* border-radius: 5px; */
   }
@@ -462,8 +471,8 @@ width: 100%; */
   
   .file-preview-wrapper>img {
       position: relative;
-      width: 300px;
-      height: 200px;
+      width: 250px;
+      height: 180px;
       z-index: 10;
   }
   
@@ -494,8 +503,8 @@ width: 100%; */
       margin: 10px;
       padding-top: 20px;
       background-color: #888888;
-      width: 300px;
-      height: 200px;
+      width: 250px;
+      height: 180px;
   }
   
   .room-write-button-wrapper {
