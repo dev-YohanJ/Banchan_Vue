@@ -1,5 +1,6 @@
 import {createRouter, createWebHistory} from 'vue-router';
 import Main from '../pages/main/main.vue';
+import Main_Search from '../components/main/main_search.vue';
 import Login from '../components/member/member_login.vue';
 import Join from '../components/member/member_join.vue';
 import ForgotId from '../components/member/member_forgotid.vue';
@@ -49,6 +50,11 @@ const router = createRouter({
 		path:'/banchan/main',
 		name : 'Main',
 		component : Main
+	},
+	{
+		path:'/banchan/main_search',
+		name : 'Main_Search',
+		component : Main_Search
 	},
 	{
 		path:'/banchan/login',

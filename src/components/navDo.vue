@@ -50,7 +50,8 @@
                         v-model.lazy="search_word"
                         ref="f2"
                         size=31
-                        placeholder="검색어를 입력하세요.">
+                        placeholder="검색어를 입력하세요."
+                        @click="search_move">
                     <button type="submit" class="site-btn btn btn-danger">검색</button>
                 </div>
             </form>
@@ -111,6 +112,7 @@ export default {
         console.log('search_field2=' + search_field.value)
         const search_word = ref('')
         const f2 = ref(null)
+
         const search = () => {
             console.log('search하러 가요')
             if(search_word.value==''){
@@ -128,6 +130,17 @@ export default {
 
             store.dispatch('search_data', search_data)
            //store에 검색어 입력
+
+           search_word.value=''
+            router.push({
+                name : 'Main_Search'
+            })
+        }
+
+        const search_move = ()=>{
+            router.push({
+                name : 'Main_Search'
+            })
         }
 
         const change_placeholder = () => {
@@ -141,7 +154,7 @@ export default {
 
         return {
             logout,
-            search, change_placeholder, search_field, option_data, search_word   
+            search, change_placeholder, search_field, option_data, search_word, search_move   
         }
   }
 
