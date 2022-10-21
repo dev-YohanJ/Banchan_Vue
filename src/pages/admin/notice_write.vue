@@ -1,10 +1,10 @@
 <template>
-    <!-- <Sidebar/> -->
-    <Notice_Write :parent_id="id"/>
+    <div class="container w-75">
+      <Notice_Write :parent_id="id"/>
+    </div>
 </template>
 
 <script>
-// import Sidebar from '../../components/sidebarDo.vue'
 import Notice_Write from '../../components/admin/notice_write.vue'
 export default {
   components: {

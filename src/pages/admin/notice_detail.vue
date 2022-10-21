@@ -1,13 +1,13 @@
 <template>
-  <Notice_Detail :parent_id="parent_id"/>
-  <Modal/>
-  <!-- <Comment :parent_id="parent_id"/> -->
+  <div class="container w-75">
+    <Notice_Detail :parent_id="parent_id"/>
+    <Modal/>
+  </div>
 </template>
 
 <script>
 import Notice_Detail from '../../components/admin/notice_detail.vue'
 import Modal from '../../components/modalDo_Notice.vue'
-//import Comment from '../../components/commentDo.vue'
 export default {
   components: {
     Notice_Detail, Modal

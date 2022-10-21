@@ -1,10 +1,10 @@
 <template>
-    <!-- <Sidebar/> -->
+  <div class="container w-75">
     <Qna_Write :parent_id="id"/>
+  </div>
 </template>
 
 <script>
-// import Sidebar from '../../components/sidebarDo.vue'
 import Qna_Write from '../../components/admin/qna_write.vue'
 export default {
   components: {

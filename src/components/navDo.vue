@@ -11,8 +11,16 @@
     </div>
     <div class="header_bar" v-else-if="parent_id == 'admin'">
         <div class="nav-link" @click="logout">{{parent_id}}님(로그아웃)</div>
-            |
-        <router-link class="nav-link" :to="{name:'Admin_Page'}">관리자 기능</router-link>
+        <!-- <router-link class="nav-link" :to="{name:'Admin_Page'}">관리자 기능</router-link> -->
+        <div class="dropdown">
+            <button class="btn btn-success dropdown-toggle" type="button" data-toggle="dropdown">관리자 기능<span class="caret"></span></button>
+            <ul class="dropdown-menu">
+                <li><router-link class="nav-link" :to="{name:'Notice_List'}">공지사항</router-link></li>
+                <li><router-link class="nav-link" :to="{name:'Qna_List'}">문의게시판</router-link></li>
+                <li><router-link class="nav-link" :to="{name:'Item_List_Admin'}">판매글 관리</router-link></li>
+                <li><router-link class="nav-link" :to="{name:'Member_List'}">회원 관리</router-link></li>
+            </ul>
+        </div>
     </div>
     <div class="header_bar" v-else-if="parent_id">
         <div class="nav-link" @click="logout">{{parent_id}}님(로그아웃)</div>

@@ -1,7 +1,9 @@
 <template>
-  <Qna_Detail :parent_id="parent_id"/>
-  <Modal/>
-  <Comment :parent_id="parent_id"/>
+  <div class="container w-75">
+    <Qna_Detail :parent_id="parent_id"/>
+    <Modal/>
+    <Comment :parent_id="parent_id"/>
+  </div>
 </template>
 
 <script>

@@ -1,6 +1,6 @@
 <template>
 <!-- 게시글이 존재하는 경우 -->
-  <div v-if="listcount>0" class="component w-75">  
+  <div v-if="listcount>0" class="component">  
     <div class="rows">
 	    <span>줄보기</span>
 	    <select class="form-control" v-model="limit">
