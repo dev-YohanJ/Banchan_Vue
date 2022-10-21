@@ -59,7 +59,7 @@
     <div v-if="random != 0">
     <b>인증번호</b>
     <input  type="text"
-            placeholder="인증번호"
+            placeholder="인증번호 9자리 숫자 입력"
             v-model="email_check"
             required >
     <span :class="email_check_color" class="msg">{{email_check_message}}</span>
@@ -159,6 +159,7 @@ export default {
         try {
           const res = await axios.get("email/naver", {params: {email: join.value.email}});
           console.log("전송되었습니다.")
+          alert("전송되었습니다.");
           random.value = res.data;
           console.log(random.value);
         } catch (err) {

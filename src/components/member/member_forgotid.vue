@@ -1,55 +1,141 @@
 <template>
+<div v-if="abs==0">
   <div class="wrapper fadeInDown">
     <div id="formContent">
       <!-- Tabs Titles -->
-
-      <!-- Icon -->
-      <div class="fadeIn first">
-        <img
-          src="@/assets/img/logo.png"
-          id="icon"
-          alt="User Icon"
-        />
-        <h1>SHOP</h1>
-      </div>
-      
       <div class="vue-tempalte">
-        <form>
-          <img
-          src="@/assets/img/forgotpw.png"
-          id="icon"
-          alt="User Icon"
-        />
-            <h4>계정의 비밀번호를 재설정합니다.</h4>
-            <div class="formContent">
-            <div id="formFooter">
-              비밀번호를 재설정할 계정의 이메일주소를 입력해 주세요.
-                <div style="display: inline-block">
-                <input type="email" class="form-control form-control-lg" placeholder="****@*****.***"/>
-                </div>
-                <div style="display: inline-block">
-                <button class="btn btn-primary btn-lg">인증</button>
-                </div>
-                
-                <input type="password" class="form-control form-control-lg" style="width:368px" maxlength='6' placeholder="인증번호 6자리 숫자 입력"/>
-                
+        <form @submit.prevent="process">
+        <h4>아이디 찾기</h4>
+        <div class="formContent">
+        <div id="formFooter">
+          <div style="font-size:12px;">가입한 이름과 이메일 주소가 같아야, 인증번호를 받을 수 있습니다.</div>
+            <div class="naem">이름</div><input type="name" v-model="check.name" class="form-control form-control-lg"/>
+            <div class="naem">이메일</div><input type="email" v-model="check.email" class="form-control form-control-lg"/>
+            <div class="naem">
+              <button type="button" class="qkerl" @click="goemail">인증번호 받기</button>
             </div>
-            <button type="submit" class="btn btn-dark btn-lg btn-block">비밀번호 초기화</button>
-            </div> 
+            <div class="naem">인증번호</div><input v-model="dlswmd" class="form-control form-control-lg" placeholder="인증번호 9자리 숫자 입력"/>
+        </div>
+        <button type="submit" class="btn btn-dark btn-lg btn-block" >인증하기</button>
+        </div> 
         </form>
      </div>
+    </div>
+  </div>
+</div>
+
+  <div v-if="abs == 1">
+    <div class="wrapper fadeInDown">
+      <div id="formContent">
+        <!-- Tabs Titles -->
+        <div class="vue-tempalte">
+          <form @submit.prevent="gologin">
+            <h4>아이디 찾기</h4>
+            <div class="formContent">
+              <div id="formFooter">
+                <div style="float:left;">아이디는</div>
+                <div>" {{id}} "입니다.</div>
+              </div>
+              <button type="submit" class="btn btn-dark btn-lg btn-block">로그인</button>
+            </div> 
+          </form>
+      </div>
+      </div>
     </div>
   </div>
 </template>
 
 <script>
+import {ref, watch} from 'vue';
+import axios from '../../axios/axiossetting.js';
+import {useRouter} from 'vue-router';
 export default {
-    data() {
-        return {}
+    setup() {
+      const check = ref({
+        name:'',
+        email:''
+      });
+      const random = ref(0);
+      const dlswmd = ref("");
+      const router = useRouter();
+      const abs = ref(0);
+      const id = ref('');
+
+      const goemail = async () => {
+        var pattern = /^\w+@\w+[.]\w{3}$/;
+        if (!pattern.test(check.value.email)) {
+          window.alert("이메일 형식이 잘못 되었습니다.");
+        } else {
+          try {
+            const res = await axios.get("id/find",
+                        {params:{name: check.value.name, email: check.value.email}});
+            if (res.data == -1 ) {
+              window.alert("실패했습니다.");
+            } else {
+              console.log("전송되었습니다.")
+              window.alert("전송되었습니다.");
+              random.value = res.data;
+              console.log(random.value);
+            }
+          } catch (err) {
+          console.log("err" + err);
+          }
+        }
+      }
+
+      const process = async () => {
+        if (dlswmd.value == random.value) {
+          try {
+            const email = check.value.email;
+            abs.value = 1;
+            const res = await axios.get(`id/find/${email}`)
+            id.value = res.data;
+          } catch(err) {
+            console.log(err);
+          }
+        }
+      }
+
+      const gologin = async () => {
+          try {
+            router.push({
+              name: "Login",
+          });
+          } catch(err) {
+            console.log(err);
+          }
+      }
+
+      return {
+        goemail, check, process, dlswmd, abs, id, gologin
+      }
     }
 }
 </script>
 <style scoped>
+.qkerl:hover {
+  color: #888d91;
+}
+.qkerl {
+  font-weight: bold;
+  color: #212529;;
+  border: 0;
+  outline: 0;
+  background: #f6f6f6;
+}
+input {
+  font-size: 13px;
+}
+.next {
+  padding-top:8px;
+}
+.naem {
+  font-weight: bold;
+  margin: 5px;
+}
+h4 {
+  margin: 20px;
+}
 /* BASIC */
 html {
   background-color: #56baed;
