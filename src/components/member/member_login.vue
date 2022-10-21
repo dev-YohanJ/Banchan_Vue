@@ -42,11 +42,11 @@
       </section>
       <!-- Remind Passowrd -->
       <div id="formFooter">
-        <router-link class="underlineHover" to="/banchan/join" @click="Join">회원가입</router-link>
+        <router-link class="underlineHover" to="/banchan/join">회원가입</router-link>
         <br />
-        <router-link class="underlineHover" to="/banchan/forgotid" @click="forgotid">아이디 찾기</router-link>
+        <router-link class="underlineHover" to="/banchan/forgotid">아이디 찾기</router-link>
         <span style="visibility:hidden">공</span>
-        <router-link class="underlineHover" to="/banchan/forgotpw" @click="ForgotPw">비밀번호 찾기</router-link>
+        <router-link class="underlineHover" to="/banchan/forgotpw">비밀번호 찾기</router-link>
       </div>
     </div>
   </div>
@@ -145,12 +145,11 @@ export default {
     }
 
         return {
-        join,
         id,
         password,
         loginProcess,
         remember,
-        kakaoLoginBtn
+        kakaoLoginBtn,
         };
   },
 };

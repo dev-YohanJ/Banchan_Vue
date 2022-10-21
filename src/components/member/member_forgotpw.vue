@@ -1,46 +1,48 @@
 <template>
-<div v-if="abs==0">
-  <div class="wrapper fadeInDown">
-    <div id="formContent">
-      <div class="vue-tempalte">
-        <form @submit.prevent="process">
-        <h4>비밀번호 찾기</h4>
-        <div class="formContent">
-        <div id="formFooter">
-          <div style="font-size:12px;">가입한 아이디와 이메일 주소가 같아야, 인증번호를 받을 수 있습니다.</div>
-            <div class="naem">아이디</div><input type="name" v-model="check.id" class="form-control form-control-lg"/>
-            <div class="naem">이메일</div><input type="email" v-model="check.email" class="form-control form-control-lg"/>
-            <div class="naem">
-              <button type="button" class="qkerl" @click="goemail">인증번호 받기</button>
-            </div>
-            <div class="naem">인증번호</div><input v-model="dlswmd" class="form-control form-control-lg" placeholder="인증번호 9자리 숫자 입력"/>
-        </div>
-        <button type="submit" class="btn btn-dark btn-lg btn-block" >인증하기</button>
-        </div> 
-        </form>
-     </div>
-    </div>
-  </div>
-</div>
-
-  <div v-if="abs == 1">
-    <div class="wrapper fadeInDown">
-      <div id="formContent">
-        <!-- Tabs Titles -->
-        <div class="vue-tempalte">
-          <form @submit.prevent="gologin">
+  <div>
+    <div v-if="abs==0">
+      <div class="wrapper fadeInDown">
+        <div id="formContent">
+          <div class="vue-tempalte">
+            <form @submit.prevent="process">
             <h4>비밀번호 찾기</h4>
             <div class="formContent">
-              <div id="formFooter">
-                <div class="naem">새 비밀번호</div><input type="password" v-model="check.password" class="form-control form-control-lg"/>
-                <span :class="pass_color" class="msg">{{pass_message}}</span>
-                <div class="naem">새 비밀번호 확인</div><input type="password" v-model="pw_check" class="form-control form-control-lg"/>
-                <span :class="pass_check_color" class="msg">{{pass_check_message}}</span>
-              </div>
-              <button type="submit" class="btn btn-dark btn-lg btn-block">변경하기</button>
+            <div id="formFooter">
+              <div style="font-size:12px;">가입한 아이디와 이메일 주소가 같아야, 인증번호를 받을 수 있습니다.</div>
+                <div class="naem">아이디</div><input type="name" v-model="check.id" class="form-control form-control-lg" required/>
+                <div class="naem">이메일</div><input type="email" v-model="check.email" class="form-control form-control-lg" required/>
+                <div class="naem">
+                  <button type="button" class="qkerl" @click="goemail">인증번호 받기</button>
+                </div>
+                <div class="naem">인증번호</div><input v-model="dlswmd" class="form-control form-control-lg" placeholder="인증번호 9자리 숫자 입력" required/>
+            </div>
+            <button type="submit" class="btn btn-dark btn-lg btn-block" >인증하기</button>
             </div> 
-          </form>
+            </form>
+        </div>
+        </div>
       </div>
+    </div>
+
+    <div v-if="abs == 1">
+      <div class="wrapper fadeInDown">
+        <div id="formContent">
+          <!-- Tabs Titles -->
+          <div class="vue-tempalte">
+            <form @submit.prevent="gologin">
+              <h4>비밀번호 찾기</h4>
+              <div class="formContent">
+                <div id="formFooter">
+                  <div class="naem">새 비밀번호</div><input type="password" v-model="check.password" class="form-control form-control-lg" required>
+                  <span :class="pass_color" class="msg">{{pass_message}}</span>
+                  <div class="naem">새 비밀번호 확인</div><input type="password" v-model="pw_check" class="form-control form-control-lg" required/>
+                  <span :class="pass_check_color" class="msg">{{pass_check_message}}</span>
+                </div>
+                <button type="submit" class="btn btn-dark btn-lg btn-block">변경하기</button>
+              </div> 
+            </form>
+        </div>
+        </div>
       </div>
     </div>
   </div>
@@ -51,6 +53,13 @@ import {ref, watch} from 'vue';
 import axios from '../../axios/axiossetting.js';
 import {useRouter} from 'vue-router';
 export default {
+  props: {
+    parent_id: {
+      type: String,
+      required: false
+    }
+  },
+  emits:[],
     setup() {
       const check = ref({
         id:'',
@@ -78,10 +87,10 @@ export default {
             const res = await axios.get("id/find3",
                         {params:{id: check.value.id, email: check.value.email}});
             if (res.data == -1 ) {
-              window.alert("실패했습니다.");
+              alert("실패했습니다.");
             } else {
               console.log("전송되었습니다.")
-              window.alert("전송되었습니다.");
+              alert("전송되었습니다.");
               random.value = res.data;
               console.log(random.value);
             }
@@ -91,18 +100,18 @@ export default {
         }
       }
 
-      const process = async () => {
+      const process =() => {
         if (dlswmd.value == random.value) {
-          try {
-            abs.value = 1;
-          } catch(err) {
-            console.log(err);
-          }
+              abs.value = 1;
+        } else {
+          return false;
         }
       }
 
       const gologin = async () => {
-          if (check.value.password != pw_check.value) {
+          if (check.value.password != pw_check.value ||
+              pass_color.value == "red" ||
+              pass_check_message.value == "red") {
           alert("비밀번호를 확인하세요");
         } else {
           try {
@@ -149,7 +158,21 @@ export default {
         } else {
           pass_message.value = "영문,숫자,특수문자를 조합하여 입력해주세요.(8-20자)";
           pass_color.value = "green";
+        }
 
+        if(pw_check.value != "") {
+          if (pass_color.value == "red") {
+              pass_check_message.value = "비밀번호를 형식에 맞게 입력하세요.";
+              pass_check_color.value = "red";
+            } else {
+              if (check.value.password != pw_check.value) {
+              pass_check_message.value = "비밀번호가 일치하지 않습니다.";
+              pass_check_color.value = "red";
+            } else {
+              pass_check_message.value = "비밀번호가 일치합니다.";
+              pass_check_color.value = "green";
+            }
+          }
         }
       }
     );

@@ -1,45 +1,47 @@
 <template>
-<div v-if="abs==0">
-  <div class="wrapper fadeInDown">
-    <div id="formContent">
-      <!-- Tabs Titles -->
-      <div class="vue-tempalte">
-        <form @submit.prevent="process">
-        <h4>아이디 찾기</h4>
-        <div class="formContent">
-        <div id="formFooter">
-          <div style="font-size:12px;">가입한 이름과 이메일 주소가 같아야, 인증번호를 받을 수 있습니다.</div>
-            <div class="naem">이름</div><input type="name" v-model="check.name" class="form-control form-control-lg"/>
-            <div class="naem">이메일</div><input type="email" v-model="check.email" class="form-control form-control-lg"/>
-            <div class="naem">
-              <button type="button" class="qkerl" @click="goemail">인증번호 받기</button>
-            </div>
-            <div class="naem">인증번호</div><input v-model="dlswmd" class="form-control form-control-lg" placeholder="인증번호 9자리 숫자 입력"/>
-        </div>
-        <button type="submit" class="btn btn-dark btn-lg btn-block" >인증하기</button>
-        </div> 
-        </form>
-     </div>
-    </div>
-  </div>
-</div>
-
-  <div v-if="abs == 1">
-    <div class="wrapper fadeInDown">
-      <div id="formContent">
-        <!-- Tabs Titles -->
-        <div class="vue-tempalte">
-          <form @submit.prevent="gologin">
+  <div>
+    <div v-if="abs==0">
+      <div class="wrapper fadeInDown">
+        <div id="formContent">
+          <!-- Tabs Titles -->
+          <div class="vue-tempalte">
+            <form @submit.prevent="process">
             <h4>아이디 찾기</h4>
             <div class="formContent">
-              <div id="formFooter">
-                <div style="float:left;">아이디는</div>
-                <div>" {{id}} "입니다.</div>
-              </div>
-              <button type="submit" class="btn btn-dark btn-lg btn-block">로그인</button>
+            <div id="formFooter">
+              <div style="font-size:12px;">가입한 이름과 이메일 주소가 같아야, 인증번호를 받을 수 있습니다.</div>
+                <div class="naem">이름</div><input type="name" v-model="check.name" class="form-control form-control-lg" required/>
+                <div class="naem">이메일</div><input type="email" v-model="check.email" class="form-control form-control-lg" required/>
+                <div class="naem">
+                  <button type="button" class="qkerl" @click="goemail">인증번호 받기</button>
+                </div>
+                <div class="naem">인증번호</div><input v-model="dlswmd" class="form-control form-control-lg" placeholder="인증번호 9자리 숫자 입력" required/>
+            </div>
+            <button type="submit" class="btn btn-dark btn-lg btn-block" >인증하기</button>
             </div> 
-          </form>
+            </form>
+        </div>
+        </div>
       </div>
+    </div>
+
+    <div v-if="abs == 1">
+      <div class="wrapper fadeInDown">
+        <div id="formContent">
+          <!-- Tabs Titles -->
+          <div class="vue-tempalte">
+            <form @submit.prevent="gologin">
+              <h4>아이디 찾기</h4>
+              <div class="formContent">
+                <div id="formFooter">
+                  <div style="float:left;">아이디는</div>
+                  <div>" {{id}} "입니다.</div>
+                </div>
+                <button type="submit" class="btn btn-dark btn-lg btn-block">로그인</button>
+              </div> 
+            </form>
+        </div>
+        </div>
       </div>
     </div>
   </div>
@@ -50,6 +52,13 @@ import {ref, watch} from 'vue';
 import axios from '../../axios/axiossetting.js';
 import {useRouter} from 'vue-router';
 export default {
+    props: {
+    parent_id: {
+      type: String,
+      required: false
+      }
+    },
+    emits:[],
     setup() {
       const check = ref({
         name:'',
@@ -64,16 +73,16 @@ export default {
       const goemail = async () => {
         var pattern = /^\w+@\w+[.]\w{3}$/;
         if (!pattern.test(check.value.email)) {
-          window.alert("이메일 형식이 잘못 되었습니다.");
+          alert("이메일 형식이 잘못 되었습니다.");
         } else {
           try {
             const res = await axios.get("id/find",
                         {params:{name: check.value.name, email: check.value.email}});
             if (res.data == -1 ) {
-              window.alert("실패했습니다.");
+              alert("실패했습니다.");
             } else {
               console.log("전송되었습니다.")
-              window.alert("전송되었습니다.");
+              alert("전송되었습니다.");
               random.value = res.data;
               console.log(random.value);
             }
@@ -87,9 +96,12 @@ export default {
         if (dlswmd.value == random.value) {
           try {
             const email = check.value.email;
-            abs.value = 1;
             const res = await axios.get(`id/find/${email}`)
-            id.value = res.data;
+            if (res.data != -1) {
+              id.value = res.data;
+              abs.value = 1;
+            }
+            
           } catch(err) {
             console.log(err);
           }

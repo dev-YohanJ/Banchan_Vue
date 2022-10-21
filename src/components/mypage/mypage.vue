@@ -1,11 +1,10 @@
 <template>
   <!-- 왼쪽 네비게이션 -->
-   <div style="margin-top:100px; margin-bottom:100px">
+   <div style="margin-top:30px; margin-bottom:100px">
       <div class="row">
          <div class="buble">
                 <div>
                     <aside>
-                        <h3>오늘의 반찬</h3>
                         <ul class="nav nav-pills flex-column">
                             <li><router-link class="nav-item nav-link active" :to="{name:'Mypage'}">마이페이지</router-link></li>
                             <li><router-link class="nav-item nav-link" :to="{name:'Wish'}">찜 목록</router-link></li>
@@ -13,14 +12,12 @@
                             <li><router-link class="nav-item nav-link" :to="{name:'Sell'}">판매 목록</router-link></li>
                             <li><router-link class="nav-item nav-link" :to="{name:'Update_Check'}">개인정보수정</router-link></li>
                             <li><router-link class="nav-item nav-link" :to="{name:'Secession'}">회원탈퇴</router-link></li>
-                            <li><router-link class="nav-item nav-link" :to="{name:'Notice_List'}">공지사항</router-link></li>
-                            <li><router-link class="nav-item nav-link" :to="{name:'Qna_List'}">문의게시판</router-link></li>
                         </ul>
                     </aside>
                 </div>
          </div>
 
-            <div style="margin-left: 40px;">
+            <div style="margin-left: 150px;">
                 <div class="pic">
                     <div class="user-warp">
                         <div class="user-image">
@@ -42,11 +39,11 @@
             </div>
             <div class="text-area">
                 <div class="nick-area">
-                    <span v-show="btn == '수정'" class="nick">{{member.nickname}}</span>
+                    <span v-show="btn == '수정'" class="nick" style="color:#495057;">{{member.nickname}}</span>
                     <input type="textarea" v-show="btn == '확인'" class="nick" v-model.lazy="member.nickname">
                     <button style="margin-left: 10px; color:#212529;" @click="nchange">{{btn}}</button>
                 </div>
-                <div class="showintro" v-show="ibtn == '소개글수정'" style="margin-top:30px; margin-bottom:25px;">
+                <div class="showintro" v-show="ibtn == '소개글수정'" style="margin-top:30px; margin-bottom:25px; color:#495057;">
                     {{member.intro}}
                 </div>
                 <textarea   rows="9" cols="45"
@@ -203,6 +200,9 @@ export default {
 </script>
 
 <style scoped>
+.showintro {
+    border: 1px solid rgba(229, 231, 235, var(--tw-border-opacity));
+}
 .nav-link.active,
   .show > .nav-link {
     background: #c64832;
