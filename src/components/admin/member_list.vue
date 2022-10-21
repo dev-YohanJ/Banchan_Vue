@@ -34,8 +34,8 @@
 	  <table class="table table-striped">
 	    <thead>
 		    <tr>
-		      <th colspan=3>회원 목록</th>
-		      <th colspan=2>		
+		      <th colspan=4>회원 목록</th>
+		      <th colspan=1>		
 		        <span>회원 수 : {{listcount}}</span>
 		      </th>
 		    </tr>

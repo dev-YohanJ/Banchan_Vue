@@ -14,8 +14,8 @@
 	  <table class="table table-striped">
 	    <thead>
 		    <tr>
-		      <th colspan=3>판매글 목록(관리자 모드)</th>
-		      <th colspan=2>		
+		      <th colspan=5>판매글 목록(관리자 모드)</th>
+		      <th colspan=1>		
 		        <span>상품 개수 : {{listcount}}</span>
 		      </th>
 		    </tr>
