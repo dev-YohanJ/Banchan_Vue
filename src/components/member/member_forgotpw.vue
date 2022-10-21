@@ -1,53 +1,203 @@
 <template>
+<div v-if="abs==0">
   <div class="wrapper fadeInDown">
     <div id="formContent">
-      <!-- Tabs Titles -->
-
-      <!-- Icon -->
-      <div class="fadeIn first">
-        <img
-          src="@/assets/img/logo.png"
-          id="icon"
-          alt="User Icon"
-        />
-        <h1>SHOP</h1>
-      </div>
-      
       <div class="vue-tempalte">
-        <form>
-          <img
-          src="@/assets/img/forgotpw.png"
-          id="icon"
-          alt="User Icon"
-        />
-            <h4>계정의 비밀번호를 재설정합니다.</h4>
-            <div class="formContent">
-            <div id="formFooter">
-              비밀번호를 찾고자 하는 아이디를 입력해 주세요.
-                <div style="display: inline-block">
-                <input type="id" class="form-control form-control-lg" placeholder="오늘의 반찬 계정 아이디"/>
-                </div>
-            <div style="display: inline-block">
-            <router-link :to="{name:'ForgotPw2'}">
-            <button class="btn btn-primary btn-lg btn-block">다음</button>
-            </router-link>
+        <form @submit.prevent="process">
+        <h4>비밀번호 찾기</h4>
+        <div class="formContent">
+        <div id="formFooter">
+          <div style="font-size:12px;">가입한 아이디와 이메일 주소가 같아야, 인증번호를 받을 수 있습니다.</div>
+            <div class="naem">아이디</div><input type="name" v-model="check.id" class="form-control form-control-lg"/>
+            <div class="naem">이메일</div><input type="email" v-model="check.email" class="form-control form-control-lg"/>
+            <div class="naem">
+              <button type="button" class="qkerl" @click="goemail">인증번호 받기</button>
             </div>
-            </div> 
-            </div>
+            <div class="naem">인증번호</div><input v-model="dlswmd" class="form-control form-control-lg" placeholder="인증번호 9자리 숫자 입력"/>
+        </div>
+        <button type="submit" class="btn btn-dark btn-lg btn-block" >인증하기</button>
+        </div> 
         </form>
      </div>
+    </div>
+  </div>
+</div>
+
+  <div v-if="abs == 1">
+    <div class="wrapper fadeInDown">
+      <div id="formContent">
+        <!-- Tabs Titles -->
+        <div class="vue-tempalte">
+          <form @submit.prevent="gologin">
+            <h4>비밀번호 찾기</h4>
+            <div class="formContent">
+              <div id="formFooter">
+                <div class="naem">새 비밀번호</div><input type="password" v-model="check.password" class="form-control form-control-lg"/>
+                <span :class="pass_color" class="msg">{{pass_message}}</span>
+                <div class="naem">새 비밀번호 확인</div><input type="password" v-model="pw_check" class="form-control form-control-lg"/>
+                <span :class="pass_check_color" class="msg">{{pass_check_message}}</span>
+              </div>
+              <button type="submit" class="btn btn-dark btn-lg btn-block">변경하기</button>
+            </div> 
+          </form>
+      </div>
+      </div>
     </div>
   </div>
 </template>
 
 <script>
+import {ref, watch} from 'vue';
+import axios from '../../axios/axiossetting.js';
+import {useRouter} from 'vue-router';
 export default {
-    data() {
-        return {}
+    setup() {
+      const check = ref({
+        id:'',
+        email:'',
+        password:''
+      });
+      const random = ref(0);
+      const dlswmd = ref("");
+      const router = useRouter();
+      const abs = ref(0);
+      const id = ref('');
+      const pw_check = ref('');
+
+      const pass_message=ref('');
+      const pass_color=ref('');
+      const pass_check_message=ref('');
+      const pass_check_color=ref('');
+
+      const goemail = async () => {
+        var pattern = /^\w+@\w+[.]\w{3}$/;
+        if (!pattern.test(check.value.email)) {
+          alert("이메일 형식이 잘못 되었습니다.");
+        } else {
+          try {
+            const res = await axios.get("id/find3",
+                        {params:{id: check.value.id, email: check.value.email}});
+            if (res.data == -1 ) {
+              window.alert("실패했습니다.");
+            } else {
+              console.log("전송되었습니다.")
+              window.alert("전송되었습니다.");
+              random.value = res.data;
+              console.log(random.value);
+            }
+          } catch (err) {
+          console.log("err" + err);
+          }
+        }
+      }
+
+      const process = async () => {
+        if (dlswmd.value == random.value) {
+          try {
+            abs.value = 1;
+          } catch(err) {
+            console.log(err);
+          }
+        }
+      }
+
+      const gologin = async () => {
+          if (check.value.password != pw_check.value) {
+          alert("비밀번호를 확인하세요");
+        } else {
+          try {
+            const res = await axios.patch("password/change", check.value)
+            if (res.data == 1) {
+              alert("변경되었습니다.");
+              router.push({
+                name: "Login",
+              });
+            }
+          } catch(err) {
+            console.log(err);
+          }
+            
+        }
+          
+      }
+
+      watch(
+      () => pw_check.value,
+      () => {
+        if (pass_color.value == "red") {
+          pass_check_message.value = "비밀번호를 형식에 맞게 입력하세요.";
+          pass_check_color.value = "red";
+        } else {
+            if (check.value.password != pw_check.value) {
+            pass_check_message.value = "비밀번호가 일치하지 않습니다.";
+            pass_check_color.value = "red";
+          } else {
+            pass_check_message.value = "비밀번호가 일치합니다.";
+            pass_check_color.value = "green";
+          }
+        }
+      }
+    )
+
+     watch(
+      () => check.value.password,
+      () => {
+        var pattern = /^(?=.*[a-zA-z])(?=.*[0-9])(?=.*[$`~!@$!%*#^?&\\(\\)\-_=+]).{8,20}$/
+        if (!pattern.test(check.value.password)) {
+          pass_message.value = "영문,숫자,특수문자를 조합하여 입력해주세요.(8-20자)";
+          pass_color.value = "red";
+        } else {
+          pass_message.value = "영문,숫자,특수문자를 조합하여 입력해주세요.(8-20자)";
+          pass_color.value = "green";
+
+        }
+      }
+    );
+
+
+      return {
+        goemail, check, process, dlswmd, abs, id, gologin, pw_check, pass_message, pass_check_message, pass_color, pass_check_color
+      }
     }
 }
 </script>
 <style scoped>
+.nm2 {
+  margin: 0px;
+  border: 1px;
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 16px;
+  padding-right: 16px;
+}
+span{display:inline-block;margin-top:-20px;font-size:10px}
+.red{color:red}
+.green{color:green}
+ .msg {   position: relative;
+ }
+.qkerl:hover {
+  color: #888d91;
+}
+.qkerl {
+  font-weight: bold;
+  color: #212529;;
+  border: 0;
+  outline: 0;
+  background: #f6f6f6;
+}
+input {
+  font-size: 13px;
+}
+.next {
+  padding-top:8px;
+}
+.naem {
+  font-weight: bold;
+  margin: 5px;
+}
+h4 {
+  margin: 20px;
+}
 /* BASIC */
 html {
   background-color: #56baed;
@@ -149,26 +299,6 @@ input[type='reset']:active {
   transform: scale(0.95);
 }
 input[type='text'],
-input[type='password'] {
-  background-color: #f6f6f6;
-  border: none;
-  color: #0d0d0d;
-  padding: 15px 32px;
-  text-align: center;
-  text-decoration: none;
-  display: inline-block;
-  font-size: 16px;
-  margin: 5px;
-  width: 85%;
-  border: 2px solid #f6f6f6;
-  -webkit-transition: all 0.5s ease-in-out;
-  -moz-transition: all 0.5s ease-in-out;
-  -ms-transition: all 0.5s ease-in-out;
-  -o-transition: all 0.5s ease-in-out;
-  transition: all 0.5s ease-in-out;
-  -webkit-border-radius: 5px 5px 5px 5px;
-  border-radius: 5px 5px 5px 5px;
-}
 input[type='text']:focus {
   background-color: #fff;
   border-bottom: 2px solid #5fbae9;

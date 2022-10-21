@@ -1,4 +1,5 @@
 <template>
+<div v-if="abs==0">
   <div class="wrapper fadeInDown">
     <div id="formContent">
       <!-- Tabs Titles -->
@@ -8,14 +9,38 @@
         <div class="formContent">
         <div id="formFooter">
           <div style="font-size:12px;">가입한 이름과 이메일 주소가 같아야, 인증번호를 받을 수 있습니다.</div>
-            <div class="naem">이름</div><input type="email" v-model="check.name" class="form-control form-control-lg"/>
+            <div class="naem">이름</div><input type="name" v-model="check.name" class="form-control form-control-lg"/>
             <div class="naem">이메일</div><input type="email" v-model="check.email" class="form-control form-control-lg"/>
-            <button @click="goemail">인증번호 받기</button>
-        </div><br>
-        <button class="btn btn-dark btn-lg btn-block">인증하기</button>
+            <div class="naem">
+              <button type="button" class="qkerl" @click="goemail">인증번호 받기</button>
+            </div>
+            <div class="naem">인증번호</div><input v-model="dlswmd" class="form-control form-control-lg" placeholder="인증번호 9자리 숫자 입력"/>
+        </div>
+        <button type="submit" class="btn btn-dark btn-lg btn-block" >인증하기</button>
         </div> 
         </form>
      </div>
+    </div>
+  </div>
+</div>
+
+  <div v-if="abs == 1">
+    <div class="wrapper fadeInDown">
+      <div id="formContent">
+        <!-- Tabs Titles -->
+        <div class="vue-tempalte">
+          <form @submit.prevent="gologin">
+            <h4>아이디 찾기</h4>
+            <div class="formContent">
+              <div id="formFooter">
+                <div style="float:left;">아이디는</div>
+                <div>" {{id}} "입니다.</div>
+              </div>
+              <button type="submit" class="btn btn-dark btn-lg btn-block">로그인</button>
+            </div> 
+          </form>
+      </div>
+      </div>
     </div>
   </div>
 </template>
@@ -31,31 +56,79 @@ export default {
         email:''
       });
       const random = ref(0);
-      
+      const dlswmd = ref("");
+      const router = useRouter();
+      const abs = ref(0);
+      const id = ref('');
 
       const goemail = async () => {
         var pattern = /^\w+@\w+[.]\w{3}$/;
         if (!pattern.test(check.value.email)) {
-          alert("이메일 형식이 잘못 되었습니다.");
+          window.alert("이메일 형식이 잘못 되었습니다.");
         } else {
           try {
-            const res = await axios.get("email/naver", check.value);
-            console.log("전송되었습니다.")
-            random.value = res.data;
-            console.log(random.value);
+            const res = await axios.get("id/find",
+                        {params:{name: check.value.name, email: check.value.email}});
+            if (res.data == -1 ) {
+              window.alert("실패했습니다.");
+            } else {
+              console.log("전송되었습니다.")
+              window.alert("전송되었습니다.");
+              random.value = res.data;
+              console.log(random.value);
+            }
           } catch (err) {
           console.log("err" + err);
           }
         }
       }
 
+      const process = async () => {
+        if (dlswmd.value == random.value) {
+          try {
+            const email = check.value.email;
+            abs.value = 1;
+            const res = await axios.get(`id/find/${email}`)
+            id.value = res.data;
+          } catch(err) {
+            console.log(err);
+          }
+        }
+      }
+
+      const gologin = async () => {
+          try {
+            router.push({
+              name: "Login",
+          });
+          } catch(err) {
+            console.log(err);
+          }
+      }
+
       return {
-        goemail, check
+        goemail, check, process, dlswmd, abs, id, gologin
       }
     }
 }
 </script>
 <style scoped>
+.qkerl:hover {
+  color: #888d91;
+}
+.qkerl {
+  font-weight: bold;
+  color: #212529;;
+  border: 0;
+  outline: 0;
+  background: #f6f6f6;
+}
+input {
+  font-size: 13px;
+}
+.next {
+  padding-top:8px;
+}
 .naem {
   font-weight: bold;
   margin: 5px;
