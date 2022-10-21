@@ -1,11 +1,10 @@
 <template>
   <!-- 왼쪽 네비게이션 -->
-   <div style="margin-top:100px; margin-bottom:100px">
+   <div style="margin-top:30px; margin-bottom:100px">
       <div class="row">
         <div class="buble">
             <div>
                 <aside>
-                    <h3>오늘의 반찬</h3>
                     <ul class="nav nav-pills flex-column">
                         <li><router-link class="nav-item nav-link" :to="{name:'Mypage'}">마이페이지</router-link></li>
                         <li><router-link class="nav-item nav-link" :to="{name:'Wish'}">찜 목록</router-link></li>
@@ -17,7 +16,7 @@
                 </aside>
             </div>
         </div>
-        <form @submit.prevent="updateProcess">
+        <form @submit.prevent="updateProcess" style="margin-left:270px">
             <b>아이디</b>
             <input  type="text"
                     v-model="update.id"

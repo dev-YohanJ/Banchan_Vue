@@ -1,11 +1,10 @@
 <template>
   <!-- 왼쪽 네비게이션 -->
-   <div style="margin-top:100px; margin-bottom:100px">
+   <div style="margin-top:30px; margin-bottom:100px">
       <div class="row">
         <div>
             <div>
                 <aside>
-                    <h3>오늘의 반찬</h3>
                     <ul class="nav nav-pills flex-column">
                         <li><router-link class="nav-item nav-link" :to="{name:'Mypage'}">마이페이지</router-link></li>
                         <li><router-link class="nav-item nav-link" :to="{name:'Wish'}">찜 목록</router-link></li>
@@ -17,7 +16,7 @@
                 </aside>
             </div>
         </div>
-        <div class="text-area">
+        <div class="text-area" style="margin-left:350px">
                     <h4>탈퇴 전 유의사항</h4>
                     <ul class="ul">
                         <li>탈퇴 후 7일간 재가입이 불가능합니다.</li>
@@ -74,10 +73,11 @@ button:hover {
     background: #993423;
 }
 .qwer {
-    text-align: center;
+    margin-left: 30%;
 }
 h4{
     font-weight: 700;
+    margin-left: 27%;
     margin-bottom: 30px;
 }
 .text-area{
@@ -85,8 +85,8 @@ h4{
 }
 .ul {
     width:600px;
-    padding-inline-start: 40px;
-    margin-bottom: 60px;
+    padding-inline-start: 20px;
+    margin-bottom: 0 auto;
     color: rgb(102, 102, 102);
 }
 .nav-link.active,
