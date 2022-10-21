@@ -39,7 +39,7 @@ export default {
       const res = await axios.delete(`items/${num}`)
         if(res.data==0){
           alert('삭제 실패 입니다.')
-        }else{
+        }else if(res.data==1){
           alert('삭제 성공')
           store.dispatch('display', false)
           router.push({
