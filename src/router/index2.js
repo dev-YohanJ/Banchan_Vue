@@ -29,7 +29,7 @@ import Member_Info from '../pages/admin/member_info.vue';
 import Item_List from '../pages/item/item_list.vue';
 import Item_Detail from '../pages/item/item_detail.vue';
 import Item_Update from '../pages/item/item_update.vue';
-import Error_404 from '../components/error/404Do.vue';
+// import Error_404 from '../components/error/404Do.vue';
 import Chat from '../components/chat/App.vue'
 import EnterRoom from '../components/chat/EnterRoom.vue'
 import ChatRoom from '../components/chat/ChatRoom.vue'
@@ -205,11 +205,11 @@ const router = createRouter({
 	// 	path:'/:pathMatch(.*)*',
 	// 	redirect : '/banchan/404'
 	// },
-	{
-		path:'/banchan/404',
-		name : '404',
-		component : Error_404
-	},
+	// {
+	// 	path:'/banchan/404',
+	// 	name : '404',
+	// 	component : Error_404
+	// },
 	{
 		path: '/banchan/chat',
 		name: 'Chat',
