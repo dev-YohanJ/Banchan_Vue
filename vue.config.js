@@ -8,10 +8,10 @@
 
 module.exports = ({
   //vue build시 build된 파일 경로
-  outputDir: "C:/Users/Yohan/Desktop/Spring-boot/Vue_Board/src/main/resources/static",
+  outputDir: "C:/Users/Yohan/git/Banchan_SpringBoot/Banchan_SpringBoot/src/main/resources/static",
 
   //index.html 경로
-  indexPath: "C:/Users/Yohan/Desktop/Spring-boot/Vue_Board/src/main/resources/templates/index.html",
+  indexPath: "C:/Users/Yohan/git/Banchan_SpringBoot/Banchan_SpringBoot/src/main/resources/templates/index.html",
 
   //기본 시작 경로 - <link rel="icon" href="<%= BASE_URL %>icecream.ico>"의 <%= BASE_URL %>에 해당 값
   publicPath: "/banchan/",
